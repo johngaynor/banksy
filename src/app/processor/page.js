@@ -6,10 +6,11 @@ import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import styled from "@emotion/styled";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import CustomizedSnackbars from "../components/flashMsg";
+import { apiCall } from "../components/api/api";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -27,6 +28,38 @@ export default function Processor() {
   const [file, setFile] = useState(null);
   const [openMsg, setOpenMsg] = useState(false);
   const [msgContent, setMsgContent] = useState({});
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    if (file) {
+      console.log("running fn");
+      const formData = new FormData();
+      formData.append("csv_file", file);
+
+      console.log("getting data");
+      const fetchData = async () => {
+        try {
+          // const jsonFromCsv = await apiCall(
+          //   "post",
+          //   "http://localhost:8000/api/hello/",
+          //   formData
+          // );
+          const jsonFromCsv = await apiCall(
+            "post",
+            "http://localhost:8000/api/hello/",
+            formData
+          );
+          setData(jsonFromCsv);
+          console.log("data set", jsonFromCsv);
+        } catch (error) {
+          console.log("error:", error);
+        }
+      };
+      if (data == null) {
+        fetchData();
+      }
+    }
+  }, [file]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
