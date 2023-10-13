@@ -8,7 +8,7 @@ import Image from "next/image";
 export default function Navbar() {
   return (
     <Box
-      container
+      // container
       paddingLeft={4}
       paddingRight={4}
       sx={{
@@ -17,7 +17,7 @@ export default function Navbar() {
         backgroundColor: "#242424",
       }}
     >
-      <Grid container>
+      {/* <Grid container>
         <Grid
           item
           xs={4}
@@ -58,7 +58,7 @@ export default function Navbar() {
             <Link href="/db">DATABASE</Link>
           </Grid>
         </Grid>
-      </Grid>
+      </Grid> */}
     </Box>
   );
 }

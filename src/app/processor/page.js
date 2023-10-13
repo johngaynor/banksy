@@ -39,14 +39,9 @@ export default function Processor() {
       console.log("getting data");
       const fetchData = async () => {
         try {
-          // const jsonFromCsv = await apiCall(
-          //   "post",
-          //   "http://localhost:8000/api/hello/",
-          //   formData
-          // );
           const jsonFromCsv = await apiCall(
-            "post",
-            "http://localhost:8000/api/hello/",
+            "get",
+            "http://localhost:8000/api/crsf/",
             formData
           );
           setData(jsonFromCsv);
@@ -83,7 +78,7 @@ export default function Processor() {
         display: "flex",
       }}
     >
-      <Grid container spacing={1}>
+      {/* <Grid container spacing={1}>
         <Grid
           item
           xs={6}
@@ -112,7 +107,6 @@ export default function Processor() {
             <VisuallyHiddenInput type="file" onChange={handleFileChange} />
           </Button>
           <Box
-            container
             sx={{
               display: "flex",
               marginTop: "20px",
@@ -146,9 +140,10 @@ export default function Processor() {
             alt="Description of the image"
             width={600}
             height={600}
+            priority
           />
         </Grid>
-      </Grid>
+      </Grid> */}
       <CustomizedSnackbars
         open={openMsg}
         setOpen={setOpenMsg}

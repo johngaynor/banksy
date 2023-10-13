@@ -1,8 +1,19 @@
 import axios from "axios";
 
 export function apiCall(method, path, data) {
-  return new Promise((resolve, reject) => {
-    return axios[method.toLowerCase()](path, data)
+  return new Promise(async (resolve, reject) => {
+    const fullPath = "http://localhost:8000/" + path;
+    const headers = {};
+
+    if (method.toLowerCase() === "post") {
+      const csrf = await getCSRFToken();
+      headers["X-CSRFToken"] = csrf;
+    }
+
+    return axios[method.toLowerCase()](fullPath, data, {
+      headers,
+      withCredentials: true,
+    })
       .then((res) => {
         return resolve(res.data);
       })
@@ -17,5 +28,28 @@ export function apiCall(method, path, data) {
           );
         }
       });
+  });
+}
+
+export function getCSRFToken() {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios.get("http://localhost:8000/api/csrf");
+
+      const htmlContent = response.data;
+      const match = htmlContent.match(
+        /name="csrfmiddlewaretoken" value="(.+?)"/
+      );
+      const csrfToken = match ? match[1] : null;
+
+      console.log("CRSF TOKEN:", csrfToken);
+
+      // write it to the cookies
+      document.cookie = `csrftoken=${csrfToken}; path=/; SameSite=Lax; Secure`;
+
+      resolve(csrfToken);
+    } catch (error) {
+      reject("Failed to obtain CSRF token");
+    }
   });
 }

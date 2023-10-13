@@ -6,6 +6,9 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import Navbar from "@/navbar/page";
 
+import axios from "axios";
+axios.defaults.withCredentials = true;
+
 const inter = Inter({ subsets: ["latin"] });
 
 import "@fortawesome/fontawesome-svg-core/styles.css";
