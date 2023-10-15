@@ -22,7 +22,7 @@ export function assignCategories(data, categoryKeys) {
   return new Promise(async (resolve, reject) => {
     try {
       console.log("assigning categories");
-      let idx = 0;
+      const flaggedTransactions = {};
       for (const transaction of data) {
         const desc = transaction.Description.toLowerCase();
 
@@ -40,7 +40,16 @@ export function assignCategories(data, categoryKeys) {
         }
       }
 
-      console.log(data);
+      for (const t in data) {
+        if (data[t].Category === 400) {
+          console.log(data[t].Description);
+          flaggedTransactions[t] = data[t];
+        }
+      }
+
+      console.log(flaggedTransactions);
+
+      // console.log(data);
       resolve("Categories assigned successfully");
     } catch (error) {
       reject(error);
