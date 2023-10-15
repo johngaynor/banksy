@@ -1,3 +1,4 @@
+import { DataUsage } from "@mui/icons-material";
 import Papa from "papaparse";
 
 export function initUpload(file) {
@@ -22,7 +23,6 @@ export function assignCategories(data, categoryKeys) {
   return new Promise(async (resolve, reject) => {
     try {
       console.log("assigning categories");
-      const flaggedTransactions = {};
       for (const transaction of data) {
         const desc = transaction.Description.toLowerCase();
 
@@ -40,17 +40,12 @@ export function assignCategories(data, categoryKeys) {
         }
       }
 
-      for (const t in data) {
-        if (data[t].Category === 400) {
-          console.log(data[t].Description);
-          flaggedTransactions[t] = data[t];
-        }
-      }
+      const retObj = {
+        good: data.filter((t) => t.Category !== 400),
+        bad: data.filter((t) => t.Category === 400),
+      };
 
-      console.log(flaggedTransactions);
-
-      // console.log(data);
-      resolve("Categories assigned successfully");
+      resolve(retObj);
     } catch (error) {
       reject(error);
     }

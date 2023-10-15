@@ -9,6 +9,7 @@ export default function Categories({ data, setData }) {
       const processData = async () => {
         try {
           const categories = await assignCategories(data, categoryKeys);
+          console.log(categories);
         } catch (error) {
           console.log("error:", error);
         }
