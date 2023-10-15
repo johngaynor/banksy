@@ -1,4 +1,3 @@
-import { DataUsage } from "@mui/icons-material";
 import Papa from "papaparse";
 
 export function initUpload(file) {
