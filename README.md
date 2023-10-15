@@ -1,19 +1,5 @@
-Processor functions
+# Todo
 
-import Papa from "papaparse";
+- Place for custom filters (for example, don't mark gas station purchases under $10 because it was probably a convenience store purchase)
 
-export function initUpload(file) {
-return new Promise(async (resolve, reject) => {
-try {
-Papa.parse(file, {
-header: true,
-complete: function (results) {
-const transactions = results.data;
-resolve(transactions);
-},
-});
-} catch (error) {
-reject(error);
-}
-});
-}
+- Section to take notes (if you know for sure that a specific charge on your account will be marked wrong)

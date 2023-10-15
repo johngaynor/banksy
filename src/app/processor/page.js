@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 
 import Home from "./components/home";
+import Categories from "./components/categories";
 import { initUpload } from "./components/processorFunctions";
 
 export default function Processor() {
@@ -41,7 +42,7 @@ export default function Processor() {
         setFormStep={setFormStep}
       />
     );
-  } else {
-    return <h1>next step</h1>;
+  } else if (formStep === 1) {
+    return <Categories data={data} setData={setData} />;
   }
 }
