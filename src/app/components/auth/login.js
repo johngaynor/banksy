@@ -8,19 +8,31 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
+import axios from "axios";
 
 export default function LoginForm({ openLogin, setOpenLogin }) {
   const onClose = () => {
     setOpenLogin(false);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const email = data.get("email");
+    const password = data.get("password");
+    try {
+      const response = await axios.get(
+        `/api/auth?action=login&email=${email}&password=${password}`
+      );
+      if (response.status === 200) {
+        console.log("Login successful:", response.data.user);
+        setOpenLogin(false);
+      } else {
+        console.error("Login failed:", response.data.error);
+      }
+    } catch (error) {
+      console.error("Login failed:", error.response.data.error);
+    }
   };
 
   return (

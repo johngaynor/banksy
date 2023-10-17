@@ -4,12 +4,9 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff";
-import Button from "@mui/material/Button";
-
 import Link from "next/link";
-import Image from "next/image";
 
-import LoginForm from "@/app/components/login";
+import LoginForm from "@/app/components/auth/login";
 
 export default function Navbar() {
   const [openLogin, setOpenLogin] = useState(false);
@@ -75,22 +72,6 @@ export default function Navbar() {
               LOGIN
             </Link>
           </Grid>
-
-          {/* <Dialog open={openLogin} onClose={handleClose}>
-              <DialogTitle>Sign In</DialogTitle>
-              <DialogContent>
-                <form onSubmit={handleSubmit}>
-                  <input type="text" placeholder="Email" />
-                  <input type="password" placeholder="Password" />
-                </form>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button type="submit" variant="contained" onClick={handleClose}>
-                  Sign In
-                </Button>
-              </DialogActions>
-            </Dialog> */}
         </Grid>
       </Grid>
       <LoginForm openLogin={openLogin} setOpenLogin={setOpenLogin} />
