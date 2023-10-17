@@ -10,7 +10,12 @@ import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import axios from "axios";
 
-export default function LoginForm({ openLogin, setOpenLogin }) {
+export default function LoginForm({
+  openLogin,
+  setOpenLogin,
+  setMsgContent,
+  setOpenMsg,
+}) {
   const onClose = () => {
     setOpenLogin(false);
   };
@@ -27,12 +32,15 @@ export default function LoginForm({ openLogin, setOpenLogin }) {
       if (response.status === 200) {
         console.log("Login successful:", response.data.user);
         setOpenLogin(false);
+        setMsgContent({ type: "success", msg: "Successfully logged in!" });
       } else {
         console.error("Login failed:", response.data.error);
       }
     } catch (error) {
       console.error("Login failed:", error.response.data.error);
     }
+
+    setOpenMsg(true);
   };
 
   return (

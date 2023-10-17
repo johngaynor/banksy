@@ -18,7 +18,11 @@ export default function CustomizedSnackbars({ open, setOpen, msgContent }) {
   if (!msgContent) return;
 
   return (
-    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+    <Snackbar
+      open={open}
+      autoHideDuration={msgContent.time ? msgContent.time : 6000}
+      onClose={handleClose}
+    >
       <Alert
         onClose={handleClose}
         severity={msgContent.type}

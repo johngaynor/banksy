@@ -22,9 +22,11 @@ export default function Processor() {
           const transactions = await initUpload(file);
           setData(transactions);
           console.log("data set", transactions);
+          setMsgContent({ type: "success", msg: "data set!" });
           setLoading(false);
         } catch (error) {
           console.log("error:", error);
+          setMsgContent({ type: "error", msg: error });
         }
       };
 
