@@ -1,19 +1,39 @@
 import axios from "axios";
 
+// export function apiCall(method, path, data) {
+//   return new Promise(async (resolve, reject) => {
+//     const fullPath = "http://localhost:8000/" + path;
+//     const headers = {};
+
+//     if (method.toLowerCase() === "post") {
+//       const csrf = await getCSRFToken();
+//       headers["X-CSRFToken"] = csrf;
+//     }
+
+//     return axios[method.toLowerCase()](fullPath, data, {
+//       headers,
+//       withCredentials: true,
+//     })
+//       .then((res) => {
+//         return resolve(res.data);
+//       })
+//       .catch((err) => {
+//         if (err && err.response && err.response.data._unauthorized) {
+//           window.location.reload(false);
+//         } else if (err.response) {
+//           return reject(err.response.data.error);
+//         } else {
+//           return reject(
+//             "Error retrieving data from the server. Please try again in a moment."
+//           );
+//         }
+//       });
+//   });
+// }
+
 export function apiCall(method, path, data) {
   return new Promise(async (resolve, reject) => {
-    const fullPath = "http://localhost:8000/" + path;
-    const headers = {};
-
-    if (method.toLowerCase() === "post") {
-      const csrf = await getCSRFToken();
-      headers["X-CSRFToken"] = csrf;
-    }
-
-    return axios[method.toLowerCase()](fullPath, data, {
-      headers,
-      withCredentials: true,
-    })
+    return axios[method.toLowerCase()](path, data)
       .then((res) => {
         return resolve(res.data);
       })
