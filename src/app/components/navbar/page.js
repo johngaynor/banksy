@@ -8,11 +8,13 @@ import Link from "next/link";
 
 import LoginForm from "@/app/components/auth/login";
 import CustomizedSnackbars from "../flashMsg";
+import { useGlobalState } from "../globalContext/globalContext";
 
 export default function Navbar() {
   const [openLogin, setOpenLogin] = useState(false);
   const [openMsg, setOpenMsg] = useState(false);
   const [msgContent, setMsgContent] = useState({});
+  const { user } = useGlobalState();
 
   return (
     <Box
@@ -72,7 +74,7 @@ export default function Navbar() {
             }}
           >
             <Link href="#" onClick={() => setOpenLogin(true)}>
-              LOGIN
+              {user ? user.name : "LOGIN"}
             </Link>
           </Grid>
         </Grid>
