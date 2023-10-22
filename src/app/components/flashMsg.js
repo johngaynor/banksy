@@ -16,12 +16,9 @@ export default function FlashMsg() {
   // console.log(msg);
 
   useEffect(() => {
-    if (!msg.length) {
-      // nothing in the queue, do nothing
-    } else if (!currentMsg) {
-      // set curentMsg to the first item in queue
-      const newMsg = msg[0];
-      // remove that msg from the queue
+    if (msg.length > 0 && !currentMsg) {
+      // set currentMsg to the first item in queue
+      const newMsg = msg[0]; // remove that msg from the queue
       const newArr = [...msg];
       newArr.shift(); // newArr now doesn't have msg
       setCurrentMsg(newMsg);
