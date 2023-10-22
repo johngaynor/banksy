@@ -110,22 +110,6 @@ export default function Home({ file, setFile, setFormStep }) {
             height={600}
             priority
           />
-          <Button
-            component="label"
-            variant="contained"
-            onClick={() => {
-              addMsg("success", "btn 1");
-            }}
-          >
-            Test
-          </Button>
-          <Button
-            component="label"
-            variant="contained"
-            onClick={() => addMsg("error", "btn 2")}
-          >
-            Test
-          </Button>
         </Grid>
       </Grid>
     </Box>
