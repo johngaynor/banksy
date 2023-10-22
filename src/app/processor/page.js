@@ -6,10 +6,11 @@ import Categories from "./components/categories";
 import { initUpload } from "./components/processorFunctions";
 import CircularProgress from "@mui/material/CircularProgress";
 
+import { useGlobalState } from "../components/globalContext";
+
 export default function Processor() {
+  const { addMsg } = useGlobalState();
   const [file, setFile] = useState(null);
-  const [openMsg, setOpenMsg] = useState(false);
-  const [msgContent, setMsgContent] = useState({});
   const [data, setData] = useState(null);
   const [formStep, setFormStep] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -22,11 +23,11 @@ export default function Processor() {
           const transactions = await initUpload(file);
           setData(transactions);
           console.log("data set", transactions);
-          setMsgContent({ type: "success", msg: "data set!" });
+          addMsg("success", "data set!");
           setLoading(false);
         } catch (error) {
           console.log("error:", error);
-          setMsgContent({ type: "error", msg: error });
+          addMsg("error", error);
         }
       };
 
@@ -39,21 +40,7 @@ export default function Processor() {
   }
 
   if (formStep === 0) {
-    return (
-      <Home
-        data={data}
-        setData={setData}
-        setOpenMsg={setOpenMsg}
-        openMsg={openMsg}
-        file={file}
-        setFile={setFile}
-        msgContent={msgContent}
-        setMsgContent={setMsgContent}
-        setFormStep={setFormStep}
-        loading={loading}
-        setLoading={setLoading}
-      />
-    );
+    return <Home file={file} setFile={setFile} setFormStep={setFormStep} />;
   } else if (formStep === 1) {
     return <Categories data={data} loading={loading} setLoading={setLoading} />;
   }

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useCallback } from "react";
 
 const GlobalContext = createContext();
 
@@ -6,8 +6,12 @@ const GlobalContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [msg, setMsg] = useState([]);
 
+  const addMsg = useCallback((type, msgContent) => {
+    setMsg((prevArr) => [...prevArr, { type, msg: msgContent }]);
+  });
+
   return (
-    <GlobalContext.Provider value={{ user, setUser, msg, setMsg }}>
+    <GlobalContext.Provider value={{ user, setUser, msg, setMsg, addMsg }}>
       {children}
     </GlobalContext.Provider>
   );

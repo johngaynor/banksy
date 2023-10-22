@@ -22,15 +22,16 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function Home({ file, setFile, setFormStep }) {
-  const { msg, setMsg } = useGlobalState();
+  const { addMsg } = useGlobalState();
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
 
     if (file && file.name.endsWith(".csv")) {
       setFile(file);
-      // setMsgContent({ type: "success", msg: "CSV uploaded successfully!" });
+      addMsg("success", "CSV uploaded successfully!");
     } else {
-      // setMsgContent({ type: "error", msg: "Please select a valid .csv file." });
+      addMsg("error", "Please select a valid .csv file.");
     }
   };
 
@@ -113,10 +114,7 @@ export default function Home({ file, setFile, setFormStep }) {
             component="label"
             variant="contained"
             onClick={() => {
-              setMsg((prevMsg) => [
-                ...prevMsg,
-                { type: "success", msg: "btn 1" },
-              ]);
+              addMsg("success", "btn 1");
             }}
           >
             Test
@@ -124,12 +122,7 @@ export default function Home({ file, setFile, setFormStep }) {
           <Button
             component="label"
             variant="contained"
-            onClick={() => {
-              setMsg((prevMsg) => [
-                ...prevMsg,
-                { type: "error", msg: "btn 2" },
-              ]);
-            }}
+            onClick={() => addMsg("error", "btn 2")}
           >
             Test
           </Button>
