@@ -4,10 +4,10 @@ const GlobalContext = createContext();
 
 const GlobalContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [error, setError] = useState(null);
+  const [msg, setMsg] = useState([]);
 
   return (
-    <GlobalContext.Provider value={{ user, setUser, error, setError }}>
+    <GlobalContext.Provider value={{ user, setUser, msg, setMsg }}>
       {children}
     </GlobalContext.Provider>
   );

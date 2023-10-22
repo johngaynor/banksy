@@ -7,8 +7,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import styled from "@emotion/styled";
 
 import Image from "next/image";
-
-import CustomizedSnackbars from "../../components/flashMsg";
+import { useGlobalState } from "@/app/components/globalContext";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -22,25 +21,17 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-export default function Home({
-  file,
-  setFile,
-  msgContent,
-  setMsgContent,
-  openMsg,
-  setOpenMsg,
-  setFormStep,
-}) {
+export default function Home({ file, setFile, setFormStep }) {
+  const { msg, setMsg } = useGlobalState();
   const handleFileChange = (e) => {
     const file = e.target.files[0];
 
     if (file && file.name.endsWith(".csv")) {
       setFile(file);
-      setMsgContent({ type: "success", msg: "CSV uploaded successfully!" });
+      // setMsgContent({ type: "success", msg: "CSV uploaded successfully!" });
     } else {
-      setMsgContent({ type: "error", msg: "Please select a valid .csv file." });
+      // setMsgContent({ type: "error", msg: "Please select a valid .csv file." });
     }
-    setOpenMsg(true);
   };
 
   return (
@@ -118,13 +109,32 @@ export default function Home({
             height={600}
             priority
           />
+          <Button
+            component="label"
+            variant="contained"
+            onClick={() => {
+              setMsg((prevMsg) => [
+                ...prevMsg,
+                { type: "success", msg: "btn 1" },
+              ]);
+            }}
+          >
+            Test
+          </Button>
+          <Button
+            component="label"
+            variant="contained"
+            onClick={() => {
+              setMsg((prevMsg) => [
+                ...prevMsg,
+                { type: "error", msg: "btn 2" },
+              ]);
+            }}
+          >
+            Test
+          </Button>
         </Grid>
       </Grid>
-      <CustomizedSnackbars
-        open={openMsg}
-        setOpen={setOpenMsg}
-        msgContent={msgContent}
-      />
     </Box>
   );
 }

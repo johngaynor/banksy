@@ -7,13 +7,10 @@ import CreditCardOffIcon from "@mui/icons-material/CreditCardOff";
 import Link from "next/link";
 
 import LoginForm from "@/app/components/auth/login";
-import CustomizedSnackbars from "../flashMsg";
-import { useGlobalState } from "../globalContext/globalContext";
+import { useGlobalState } from "../globalContext";
 
 export default function Navbar() {
   const [openLogin, setOpenLogin] = useState(false);
-  const [openMsg, setOpenMsg] = useState(false);
-  const [msgContent, setMsgContent] = useState({});
   const { user } = useGlobalState();
 
   return (
@@ -79,17 +76,7 @@ export default function Navbar() {
           </Grid>
         </Grid>
       </Grid>
-      <LoginForm
-        openLogin={openLogin}
-        setOpenLogin={setOpenLogin}
-        setMsgContent={setMsgContent}
-        setOpenMsg={setOpenMsg}
-      />
-      <CustomizedSnackbars
-        open={openMsg}
-        setOpenMsg={setOpenMsg}
-        msgContent={msgContent}
-      />
+      <LoginForm openLogin={openLogin} setOpenLogin={setOpenLogin} />
     </Box>
   );
 }

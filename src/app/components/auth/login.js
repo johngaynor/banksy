@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -8,15 +8,13 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import axios from "axios";
-import { useGlobalState } from "../globalContext/globalContext";
+import { useGlobalState } from "../globalContext";
 
-export default function LoginForm({
-  openLogin,
-  setOpenLogin,
-  setMsgContent,
-  setOpenMsg,
-}) {
-  const { user, setUser } = useGlobalState();
+import FlashMsg from "../flashMsg";
+
+export default function LoginForm({ openLogin, setOpenLogin }) {
+  const { user, setUser, msg, setMsg } = useGlobalState();
+
   const onClose = () => {
     setOpenLogin(false);
   };
@@ -34,53 +32,57 @@ export default function LoginForm({
         console.log("Login successful:", response.data.user);
         setOpenLogin(false);
         setUser(response.data.user);
+        setMsg([...msg, "Successfully set user!"]);
       } else {
-        console.error("Login failed:", response.data.error);
+        // console.error("Login failed:", response.data.error);
+        setMsg([...msg, `Login failed: ${response.data.error}`]);
       }
     } catch (error) {
-      console.error("Login failed:", error.response.data.error);
+      // console.error("Login failed:", error.response.data.error);
+      setMsg([...msg, `Login failed: ${error.response.data.error}`]);
     }
-
-    setOpenMsg(true);
   };
 
   return (
-    <Dialog open={openLogin} onClose={onClose}>
-      <DialogTitle>Sign In</DialogTitle>
-      <DialogContent>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button type="submit" variant="contained" fullWidth>
-            Sign In
-          </Button>
-        </form>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-      </DialogActions>
-    </Dialog>
+    <React.Fragment>
+      <Dialog open={openLogin} onClose={onClose}>
+        <DialogTitle>Sign In</DialogTitle>
+        <DialogContent>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button type="submit" variant="contained" fullWidth>
+              Sign In
+            </Button>
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+      {/* <FlashMsg /> */}
+    </React.Fragment>
   );
 }
