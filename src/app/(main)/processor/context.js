@@ -4,9 +4,12 @@ const ProcessorContext = createContext();
 
 const ProcessorContextProvider = ({ children }) => {
   const [file, setFile] = useState(null);
+  const [userBanks, setUserBanks] = useState(null);
 
   return (
-    <ProcessorContext.Provider value={{ file, setFile }}>
+    <ProcessorContext.Provider
+      value={{ file, setFile, userBanks, setUserBanks }}
+    >
       {children}
     </ProcessorContext.Provider>
   );
