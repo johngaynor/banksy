@@ -7,7 +7,9 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import styled from "@emotion/styled";
 
 import Image from "next/image";
+
 import { useGlobalState } from "@/app/context";
+import { useProcessorState } from "../context";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -21,12 +23,12 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-export default function Home({ file, setFile, setFormStep }) {
+export default function Home({ setFormStep }) {
   const { addMsg } = useGlobalState();
+  const { file, setFile } = useProcessorState();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-
     if (file && file.name.endsWith(".csv")) {
       setFile(file);
       addMsg("success", "CSV uploaded successfully!");
