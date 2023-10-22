@@ -1,11 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import Home from "../components/home";
 import Categories from "../components/categories";
 import { initUpload } from "../components/processorFunctions";
-import CircularProgress from "@mui/material/CircularProgress";
-
 import { useGlobalState } from "../../../context";
 import { useProcessorState } from "../context";
 
