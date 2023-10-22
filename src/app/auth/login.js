@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -10,10 +10,8 @@ import Checkbox from "@mui/material/Checkbox";
 import axios from "axios";
 import { useGlobalState } from "../context";
 
-import FlashMsg from "../components/flashMsg";
-
 export default function LoginForm({ openLogin, setOpenLogin }) {
-  const { user, setUser, msg, setMsg } = useGlobalState();
+  const { setUser, addMsg } = useGlobalState();
 
   const onClose = () => {
     setOpenLogin(false);
@@ -29,17 +27,15 @@ export default function LoginForm({ openLogin, setOpenLogin }) {
         `/api/auth?action=login&email=${email}&password=${password}`
       );
       if (response.status === 200) {
-        console.log("Login successful:", response.data.user);
+        // console.log("Login successful:", response.data.user);
         setOpenLogin(false);
         setUser(response.data.user);
-        setMsg([...msg, "Successfully set user!"]);
+        addMsg("success", "Successfully logged in!");
       } else {
-        // console.error("Login failed:", response.data.error);
-        setMsg([...msg, `Login failed: ${response.data.error}`]);
+        addMsg("error", `Login failed: ${response.data.error}`);
       }
     } catch (error) {
-      // console.error("Login failed:", error.response.data.error);
-      setMsg([...msg, `Login failed: ${error.response.data.error}`]);
+      addMsg("error", `Login failed: ${error.response.data.error}`);
     }
   };
 
@@ -82,7 +78,6 @@ export default function LoginForm({ openLogin, setOpenLogin }) {
           <Button onClick={onClose}>Cancel</Button>
         </DialogActions>
       </Dialog>
-      {/* <FlashMsg /> */}
     </React.Fragment>
   );
 }
