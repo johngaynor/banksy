@@ -3,6 +3,7 @@
 - Define structure for database
 - Connect to postgres
 - Create UI for handling flagged transactions
+- Set up JSDoc comments for custom functions
 
 <h1 align="center">Welcome to Banksy 👋</h1>
 <p>

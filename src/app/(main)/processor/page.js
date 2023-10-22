@@ -6,7 +6,7 @@ import Categories from "./components/categories";
 import { initUpload } from "./components/processorFunctions";
 import CircularProgress from "@mui/material/CircularProgress";
 
-import { useGlobalState } from "../components/globalContext";
+import { useGlobalState } from "../../context";
 
 export default function Processor() {
   const { addMsg } = useGlobalState();

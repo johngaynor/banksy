@@ -6,8 +6,8 @@ import Grid from "@mui/material/Grid";
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff";
 import Link from "next/link";
 
-import LoginForm from "@/app/components/auth/login";
-import { useGlobalState } from "../globalContext";
+import LoginForm from "@/app/auth/login";
+import { useGlobalState } from "../context";
 
 export default function Navbar() {
   const [openLogin, setOpenLogin] = useState(false);

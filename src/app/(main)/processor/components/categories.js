@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 import { assignCategories } from "./processorFunctions";
-import { categoryKeys } from "@/app/components/userData";
+import { categoryKeys } from "@/app/(main)/processor/components/userData";
 
 export default function Categories({ data, setLoading }) {
   useEffect(() => {
