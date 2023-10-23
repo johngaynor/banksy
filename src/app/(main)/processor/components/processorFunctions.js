@@ -19,34 +19,32 @@ export function initUpload(file) {
 }
 
 export function assignCategories(data, categoryKeys) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      console.log("assigning categories");
-      for (const transaction of data) {
-        const desc = transaction.Description.toLowerCase();
+  try {
+    console.log("assigning categories");
+    for (const transaction of data) {
+      const desc = transaction.Description.toLowerCase();
 
-        for (const categoryName in categoryKeys) {
-          const match = categoryKeys[categoryName].keys.find((key) =>
-            desc.includes(key)
-          );
+      for (const categoryName in categoryKeys) {
+        const match = categoryKeys[categoryName].keys.find((key) =>
+          desc.includes(key)
+        );
 
-          if (match) {
-            transaction["Category"] = categoryKeys[categoryName].ref;
-            break;
-          }
-
-          transaction["Category"] = categoryKeys["flag"].ref;
+        if (match) {
+          transaction["Category"] = categoryKeys[categoryName].ref;
+          break;
         }
+
+        transaction["Category"] = categoryKeys["flag"].ref;
       }
-
-      const retObj = {
-        good: data.filter((t) => t.Category !== 400),
-        bad: data.filter((t) => t.Category === 400),
-      };
-
-      resolve(retObj);
-    } catch (error) {
-      reject(error);
     }
-  });
+
+    const retObj = {
+      good: data.filter((t) => t.Category !== 400),
+      bad: data.filter((t) => t.Category === 400),
+    };
+
+    return retObj;
+  } catch (error) {
+    throw error;
+  }
 }

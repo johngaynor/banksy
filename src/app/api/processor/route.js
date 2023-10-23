@@ -4,16 +4,23 @@ import { NextResponse } from "next/server";
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get("action");
+  const userId = searchParams.get("userId");
 
-  if (!action) {
-    return NextResponse.json({ error: "action is required" }, { status: 400 });
+  if (!action || !userId) {
+    return NextResponse.json(
+      { error: "action and userId is required" },
+      { status: 400 }
+    );
   }
 
-  //   let data;
-
   if (action === "getbanks") {
-    const banks = await GetUserBanks(1);
+    const banks = await GetUserBanks(userId);
     return NextResponse.json({ banks }, { status: "200" });
+  }
+
+  if (action === "getcategories") {
+    const categories = await GetUserCategories(userId);
+    return NextResponse.json({ categories }, { status: "200" });
   }
 }
 
@@ -32,5 +39,13 @@ export async function GetUserBanks(userId) {
     `;
 
   return { rows };
-  //   return rows.length ? rows : null;
+}
+
+export async function GetUserCategories(userId) {
+  const { rows } = await sql`
+    select * from user_processor_categories
+    where user_id = ${userId}
+  `;
+
+  return { rows };
 }
