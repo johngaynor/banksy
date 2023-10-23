@@ -42,10 +42,22 @@ export async function GetUserBanks(userId) {
 }
 
 export async function GetUserCategories(userId) {
-  const { rows } = await sql`
+  const { categories } = await sql`
     select * from user_processor_categories
     where user_id = ${userId}
   `;
 
-  return { rows };
+  const retObj = {};
+  for (const row of categories) {
+    retObj[row.category_name] = {
+      keys: [],
+      ref: row.category_id,
+    };
+  }
+
+  // const {keywords } = await sql`
+
+  // `
+
+  return { retObj };
 }

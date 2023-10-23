@@ -45,8 +45,10 @@ export default function Categories() {
         `/api/processor?action=getcategories&userId=${userId}`
       );
       if (response.status === 200) {
-        setUserCategories(response.data.categories.rows);
-        console.log("got categories", response.data.categories.rows);
+        // setUserCategories(response.data.categories.rows);
+        // console.log("got categories", response.data.categories.rows);
+        console.log("got retObj", response.data.categories.retObj);
+        setUserCategories(12);
       } else {
         console.log("something failed");
       }
