@@ -5,9 +5,9 @@ import axios from "axios";
 
 import Home from "../components/home";
 import Categories from "../components/categories";
-import { initUpload } from "../components/processorFunctions";
 import { useGlobalState } from "../../../context";
 import { useProcessorState } from "../context";
+import TableView from "../components/tableView";
 
 export default function Processor() {
   const { addMsg } = useGlobalState();
@@ -31,13 +31,13 @@ export default function Processor() {
         `/api/processor?action=getbanks&userId=${userId}`
       );
       if (response.status === 200) {
-        // console.log("got banks", response.data);
         setUserBanks(response.data);
+        addMsg("success", "Got user banks.");
       } else {
-        console.log("something failed");
+        addMsg("error", "Something failed, please try again later. (banks)");
       }
     } catch (error) {
-      console.log("error:", error);
+      addMsg("error", `error getting banks: ${error}`);
     }
     setBanksLoading(false);
   };
@@ -49,13 +49,16 @@ export default function Processor() {
         `/api/processor?action=getcategories&userId=${userId}`
       );
       if (response.status === 200) {
-        // console.log("got sorted categories", response.data);
         setUserCategories(response.data);
+        addMsg("success", "Got user categories.");
       } else {
-        console.log("something failed");
+        addMsg(
+          "error",
+          "Something failed, please try again later. (categories)"
+        );
       }
     } catch (error) {
-      console.log("error:", error);
+      addMsg("error", `error getting categories: ${error}`);
     }
     setCategoriesLoading(false);
   };
@@ -79,5 +82,7 @@ export default function Processor() {
   } else if (formStep === 1) {
     // removed && rawFile
     return <Categories />;
+  } else if (formStep === 2) {
+    return <TableView />;
   }
 }

@@ -3,13 +3,11 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { LinearProgress } from "@mui/material";
 
 import { parseRawFile } from "./processorFunctions";
 import { useGlobalState } from "@/app/context";
 import { useProcessorState } from "../context";
-import { ConstructionOutlined } from "@mui/icons-material";
 
 export default function Categories() {
   const { addMsg } = useGlobalState();
@@ -99,7 +97,7 @@ export default function Categories() {
 
       if (flaggedIndex === updatedData.flagged.length - 1) {
         delete updatedData.flagged;
-        addMsg("success", "All transactions hae been processed!");
+        addMsg("success", "All transactions have been processed!");
         setFormStep(2);
         // console.log(updatedData);
       }
