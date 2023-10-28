@@ -7,7 +7,7 @@ const ProcessorContextProvider = ({ children }) => {
   const [data, setData] = useState(null);
   const [userBanks, setUserBanks] = useState(null);
   const [userCategories, setUserCategories] = useState(null);
-  const [formStep, setFormStep] = useState(1); // change this to 1 during dev
+  const [formStep, setFormStep] = useState(0); // change this to 1 during dev
   // loading states
   const [banksLoading, setBanksLoading] = useState(false);
   const [categoriesLoading, setCategoriesLoading] = useState(false);
