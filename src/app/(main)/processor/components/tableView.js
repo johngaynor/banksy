@@ -14,100 +14,14 @@ import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
 
 import { useProcessorState } from "../context";
-
-const testData = [
-  {
-    amount: "202.12",
-    category: "10",
-    date: "08/16/2023",
-    description:
-      "this is a long description that could get longer. If it does get longer, what is going to happen? it doesn't seem to be getting any shorter, and even if it edoes htw hwet uht ewuhtewi hrewh rewiuh h ",
-    type: "deposit",
-  },
-  {
-    amount: "202.12",
-    category: "10",
-    date: "08/16/2023",
-    description: "this is a long de ",
-    type: "deposit",
-  },
-  {
-    amount: "202.12",
-    category: "10",
-    date: "08/16/2023",
-    description:
-      "this is a long description that could get longer. If it does get longer, what is going to happen? it doesn't se ",
-    type: "deposit",
-  },
-  {
-    amount: "202.12",
-    category: "10",
-    date: "08/16/2023",
-    description: "this is a long description ",
-    type: "deposit",
-  },
-  {
-    amount: "202.12",
-    category: "10",
-    date: "08/16/2023",
-    description: "hello",
-    type: "deposit",
-  },
-  {
-    amount: "202.12",
-    category: "10",
-    date: "08/16/2023",
-    description: "hello",
-    type: "deposit",
-  },
-  {
-    amount: "202.12",
-    category: "10",
-    date: "08/16/2023",
-    description: "hello",
-    type: "deposit",
-  },
-  {
-    amount: "202.12",
-    category: "10",
-    date: "08/16/2023",
-    description: "hello",
-    type: "deposit",
-  },
-  {
-    amount: "202.12",
-    category: "10",
-    date: "08/16/2023",
-    description: "hello",
-    type: "deposit",
-  },
-  {
-    amount: "202.12",
-    category: "10",
-    date: "08/16/2023",
-    description: "hello",
-    type: "deposit",
-  },
-  {
-    amount: "202.12",
-    category: "10",
-    date: "08/16/2023",
-    description: "hello",
-    type: "deposit",
-  },
-  {
-    amount: "202.12",
-    category: "10",
-    date: "08/16/2023",
-    description: "hello",
-    type: "deposit",
-  },
-];
+import EditTransaction from "./editTransaction";
 
 export default function TableView() {
-  const { data, userCategories } = useProcessorState(); // need to use data.filtered
+  const { data } = useProcessorState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editedTransaction, setEditedTransaction] = useState(null);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -117,6 +31,13 @@ export default function TableView() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const editMode = (id) => {
+    setEditedTransaction({ ...data.filtered[id], id });
+    setOpenEdit(true);
+  };
+
+  const filteredData = data.filtered.map((row, index) => ({ ...row, index }));
 
   return (
     <Box
@@ -137,7 +58,7 @@ export default function TableView() {
           marginTop: "30px",
         }}
       >
-        <Grid item sx={{ width: "90%" }}>
+        <Grid item sx={{ width: "90%", position: "relative" }}>
           <Typography
             variant="h3"
             sx={{ textAlign: "center", marginBottom: "20px" }}
@@ -180,7 +101,7 @@ export default function TableView() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.filtered
+                {filteredData
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => (
                     <TableRow
@@ -207,6 +128,7 @@ export default function TableView() {
                           component="label"
                           variant="contained"
                           sx={{ width: "25px", height: "30px" }}
+                          onClick={() => editMode(row.index)}
                         >
                           <EditNoteIcon />
                         </Button>
@@ -229,6 +151,11 @@ export default function TableView() {
           </TableContainer>
         </Grid>
       </Grid>
+      <EditTransaction
+        openEdit={openEdit}
+        setOpenEdit={setOpenEdit}
+        transaction={editedTransaction}
+      />
     </Box>
   );
 }
