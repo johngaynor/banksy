@@ -3,17 +3,24 @@ import React, { createContext, useContext, useState, useCallback } from "react";
 const ProcessorContext = createContext();
 
 const ProcessorContextProvider = ({ children }) => {
-  const [file, setFile] = useState(null);
+  const [rawFile, setRawFile] = useState(null);
+  const [data, setData] = useState(null);
   const [userBanks, setUserBanks] = useState(null);
-  const [banksLoading, setBanksLoading] = useState(false);
   const [userCategories, setUserCategories] = useState(null);
+  const [formStep, setFormStep] = useState(0); // change this to 1 during dev
+  // loading states
+  const [banksLoading, setBanksLoading] = useState(false);
   const [categoriesLoading, setCategoriesLoading] = useState(false);
 
   return (
     <ProcessorContext.Provider
       value={{
-        file,
-        setFile,
+        rawFile,
+        setRawFile,
+        data,
+        setData,
+        formStep,
+        setFormStep,
         userBanks,
         setUserBanks,
         banksLoading,

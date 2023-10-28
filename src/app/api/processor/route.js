@@ -1,3 +1,4 @@
+import { CollectionsBookmarkOutlined } from "@mui/icons-material";
 import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 
@@ -15,12 +16,12 @@ export async function GET(request) {
 
   if (action === "getbanks") {
     const banks = await GetUserBanks(userId);
-    return NextResponse.json({ banks }, { status: "200" });
+    return NextResponse.json(banks, { status: "200" });
   }
 
   if (action === "getcategories") {
     const categories = await GetUserCategories(userId);
-    return NextResponse.json({ categories }, { status: "200" });
+    return NextResponse.json(categories, { status: "200" });
   }
 }
 
@@ -38,26 +39,31 @@ export async function GetUserBanks(userId) {
     where b.user_id = ${userId}
     `;
 
-  return { rows };
+  return rows;
 }
 
 export async function GetUserCategories(userId) {
-  const { categories } = await sql`
+  const { rows: categories } = await sql`
     select * from user_processor_categories
-    where user_id = ${userId}
+    where user_id = 0
   `;
 
-  const retObj = {};
-  for (const row of categories) {
-    retObj[row.category_name] = {
-      keys: [],
-      ref: row.category_id,
+  const { rows: keys } = await sql`
+    select * from user_category_keywords
+  `;
+
+  const sortedCategories = {};
+
+  for (const category of categories) {
+    const keyArr = keys
+      .filter((key) => key.category_id === category.category_id)
+      .map((key) => key.keyword);
+
+    sortedCategories[category.category_name] = {
+      keys: keyArr,
+      ref: category.category_id,
     };
   }
 
-  // const {keywords } = await sql`
-
-  // `
-
-  return { retObj };
+  return sortedCategories;
 }

@@ -45,10 +45,8 @@ export default function Categories() {
         `/api/processor?action=getcategories&userId=${userId}`
       );
       if (response.status === 200) {
-        // setUserCategories(response.data.categories.rows);
-        // console.log("got categories", response.data.categories.rows);
         console.log("got retObj", response.data.categories.retObj);
-        setUserCategories(12);
+        setUserCategories(response.data.categories.retObj);
       } else {
         console.log("something failed");
       }
@@ -58,17 +56,17 @@ export default function Categories() {
     setCategoriesLoading(false);
   };
 
-  useEffect(() => {
-    if (!banksLoading && !userBanks && user) {
-      console.log("getting banks");
-      getBanks(user.user_id);
-    }
+  // useEffect(() => {
+  //   if (!banksLoading && !userBanks && user) {
+  //     console.log("getting banks");
+  //     getBanks(user.user_id);
+  //   }
 
-    if (!categoriesLoading && !userCategories && user) {
-      console.log("getting categories");
-      getCategories(user.user_id);
-    }
-  });
+  //   if (!categoriesLoading && !userCategories && user) {
+  //     console.log("getting categories");
+  //     getCategories(user.user_id);
+  //   }
+  // });
 
   return <h1>next step</h1>;
 }
