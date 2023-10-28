@@ -1,4 +1,11 @@
 import { useEffect, useState } from "react";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import styled from "@emotion/styled";
+import Image from "next/image";
 
 import { parseRawFile } from "./processorFunctions";
 import { useGlobalState } from "@/app/context";
@@ -72,5 +79,62 @@ export default function Categories() {
     // use the resulting transactions here for processing
   }, []);
 
-  return <h1>next step</h1>;
+  if (userCategories) {
+    return (
+      <Box
+        sx={{
+          flexGrow: 1,
+          padding: 4,
+          backgroundColor: "#242424",
+          minHeight: "100vh",
+          display: "flex",
+        }}
+      >
+        <Grid
+          container
+          spacing={1}
+          sx={{
+            backgroundColor: "blue",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Grid item>
+            <Typography variant="h2" sx={{ textAlign: "center" }}>
+              Next, let's take a look at some transactions.
+            </Typography>
+
+            <Grid
+              container
+              sx={{
+                width: "70%",
+                margin: "0 auto",
+                display: "flex",
+                justifyContent: "center",
+                backgroundColor: "green",
+              }}
+            >
+              {Object.keys(userCategories).map((cat, index) => (
+                <Button
+                  component="label"
+                  variant="contained"
+                  sx={{ width: "300px", height: "60px", margin: "10px" }}
+                  key={index}
+                >
+                  <Typography variant="h6">{cat}</Typography>
+                </Button>
+              ))}
+            </Grid>
+
+            <Box
+              sx={{
+                display: "flex",
+                marginTop: "20px",
+              }}
+            ></Box>
+          </Grid>
+        </Grid>
+      </Box>
+    );
+  }
 }
