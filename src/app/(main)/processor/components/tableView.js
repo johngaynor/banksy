@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -133,15 +134,16 @@ export default function TableView() {
         sx={{
           display: "flex",
           justifyContent: "center",
-          //   marginTop: "30px",
-          margin: "30px auto 80px auto",
+          marginTop: "30px",
         }}
       >
         <Grid item sx={{ width: "90%" }}>
-          <Typography variant="h3" sx={{ textAlign: "center" }}>
+          <Typography
+            variant="h3"
+            sx={{ textAlign: "center", marginBottom: "20px" }}
+          >
             Transactions
           </Typography>
-
           <TableContainer
             component={Paper}
             sx={{
@@ -200,7 +202,15 @@ export default function TableView() {
                       <TableCell sx={{ color: "white" }}>
                         {row.category}
                       </TableCell>
-                      <TableCell></TableCell>
+                      <TableCell>
+                        <Button
+                          component="label"
+                          variant="contained"
+                          sx={{ width: "25px", height: "30px" }}
+                        >
+                          <EditNoteIcon />
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
               </TableBody>
