@@ -1,23 +1,14 @@
 import { useEffect, useState } from "react";
 
-import Papa from "papaparse";
-
-import { assignCategories } from "./processorFunctions";
-import { categoryKeys } from "@/app/(main)/processor/components/userData";
-
 import { parseRawFile } from "./processorFunctions";
-
 import { useGlobalState } from "@/app/context";
 import { useProcessorState } from "../context";
-import { ConstructionOutlined } from "@mui/icons-material";
 
 export default function Categories() {
-  const { user, addMsg } = useGlobalState();
+  const { addMsg } = useGlobalState();
 
   const { userBanks, userCategories, rawFile } = useProcessorState();
   const [transactions, setTransactions] = useState(null);
-
-  // console.log(userBanks, userCategories);
 
   const parseFile = async () => {
     try {
@@ -30,7 +21,11 @@ export default function Categories() {
   };
 
   useEffect(() => {
-    const findBank = () => {
+    if (!transactions) {
+      return;
+    }
+
+    const initProcess = () => {
       const headers = Object.keys(transactions[0]);
       const bank = userBanks.find(
         (bank) =>
@@ -44,9 +39,32 @@ export default function Categories() {
         addMsg("error", "unable to find a matching bank");
         return;
       }
-    };
 
-    if (transactions) findBank();
+      for (const transaction of transactions) {
+        const desc = transaction[bank.description].toLowerCase();
+
+        for (const categoryName in userCategories) {
+          const match = userCategories[categoryName].keys.find((key) =>
+            desc.includes(key)
+          );
+
+          if (match) {
+            transaction["Category"] = userCategories[categoryName].ref;
+            break;
+          }
+
+          transaction["Category"] = "flag";
+        }
+      }
+
+      const filteredTransactions = {
+        filtered: transactions.filter((t) => t.Category !== "flag"),
+        flagged: transactions.filter((t) => t.Category === "flag"),
+      };
+
+      console.log(filteredTransactions);
+    };
+    initProcess();
   }, [transactions]);
 
   useEffect(() => {
