@@ -24,16 +24,16 @@ const VisuallyHiddenInput = styled("input")({
 
 export default function Home() {
   const { addMsg } = useGlobalState();
-  const { rawFile, setRawFile, setFormStep } = useProcessorState();
+  const { setRawFile, setFormStep } = useProcessorState();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file && file.name.endsWith(".csv")) {
       setRawFile(file);
       setFormStep(1);
-      // addMsg("success", "CSV uploaded successfully!");
+      addMsg("success", "CSV uploaded successfully!");
     } else {
-      // addMsg("error", "Please select a valid .csv file.");
+      addMsg("error", "Please select a valid .csv file.");
     }
   };
 
@@ -80,29 +80,7 @@ export default function Home() {
               display: "flex",
               marginTop: "20px",
             }}
-          >
-            {rawFile ? (
-              <>
-                <p>selected file: {rawFile.name}</p>
-                <Button
-                  component="label"
-                  variant="contained"
-                  sx={{
-                    backgroundColor: "#4caf50",
-                    "&:hover": {
-                      backgroundColor: "#4caf50",
-                    },
-                    margin: "-7px 0 0 15px",
-                  }}
-                  onClick={() => setFormStep(1)}
-                >
-                  Start
-                </Button>
-              </>
-            ) : (
-              ""
-            )}
-          </Box>
+          ></Box>
         </Grid>
         <Grid item xs={6} sx={{ marginTop: "-40px" }}>
           <Image
@@ -117,3 +95,26 @@ export default function Home() {
     </Box>
   );
 }
+
+// CODE FOR CONFIRMATION MESSAGE
+// {rawFile ? (
+//   <>
+//     <p>selected file: {rawFile.name}</p>
+//     <Button
+//       component="label"
+//       variant="contained"
+//       sx={{
+//         backgroundColor: "#4caf50",
+//         "&:hover": {
+//           backgroundColor: "#4caf50",
+//         },
+//         margin: "-7px 0 0 15px",
+//       }}
+//       onClick={() => setFormStep(1)}
+//     >
+//       Start
+//     </Button>
+//   </>
+// ) : (
+//   ""
+// )}

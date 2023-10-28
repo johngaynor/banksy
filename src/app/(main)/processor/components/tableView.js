@@ -104,7 +104,7 @@ const testData = [
 ];
 
 export default function TableView() {
-  const { data } = useProcessorState(); // need to use data.filtered
+  const { data, userCategories } = useProcessorState(); // need to use data.filtered
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -133,10 +133,11 @@ export default function TableView() {
         sx={{
           display: "flex",
           justifyContent: "center",
-          marginTop: "50px",
+          //   marginTop: "30px",
+          margin: "30px auto 80px auto",
         }}
       >
-        <Grid item>
+        <Grid item sx={{ width: "90%" }}>
           <Typography variant="h3" sx={{ textAlign: "center" }}>
             Transactions
           </Typography>
@@ -144,46 +145,72 @@ export default function TableView() {
           <TableContainer
             component={Paper}
             sx={{
-              width: "90%",
               backgroundColor: "#333",
               margin: "0 auto",
-              color: "white",
+              border: "2px solid white",
             }}
           >
-            <Table size="small">
+            <Table size="medium">
               <TableHead>
                 <TableRow>
-                  <TableCell>Date</TableCell>
-                  <TableCell align="right">Amount</TableCell>
-                  <TableCell align="right">Description</TableCell>
-                  <TableCell align="right">Type</TableCell>
-                  <TableCell align="right">Category</TableCell>
+                  <TableCell
+                    sx={{ color: "white", fontSize: "18px", width: "10%" }}
+                  >
+                    Date
+                  </TableCell>
+                  <TableCell
+                    sx={{ color: "white", fontSize: "18px", width: "10%" }}
+                  >
+                    Amount
+                  </TableCell>
+                  <TableCell sx={{ color: "white", fontSize: "18px" }}>
+                    Type
+                  </TableCell>
+                  <TableCell sx={{ color: "white", fontSize: "18px" }}>
+                    Description
+                  </TableCell>
+                  <TableCell
+                    sx={{ color: "white", fontSize: "18px", width: "15%" }}
+                  >
+                    Category
+                  </TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {testData
+                {data.filtered
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => (
                     <TableRow
                       key={index}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                      sx={{
+                        borderBottom: "2px solid #5d5d5d",
+                        backgroundColor:
+                          index % 2 !== 0 ? "#525252" : "#474747",
+                      }}
                     >
-                      <TableCell component="th" scope="row">
-                        {row.date}
+                      <TableCell sx={{ color: "white" }}>{row.date}</TableCell>
+                      <TableCell sx={{ color: "white" }}>
+                        {row.amount}
                       </TableCell>
-                      <TableCell align="right">{row.amount}</TableCell>
-                      <TableCell align="right">{row.description}</TableCell>
-                      <TableCell align="right">{row.type}</TableCell>
-                      <TableCell align="right">{row.category}</TableCell>
+                      <TableCell sx={{ color: "white" }}>{row.type}</TableCell>
+                      <TableCell sx={{ color: "white" }}>
+                        {row.description}
+                      </TableCell>
+                      <TableCell sx={{ color: "white" }}>
+                        {row.category}
+                      </TableCell>
+                      <TableCell></TableCell>
                     </TableRow>
                   ))}
               </TableBody>
             </Table>
 
             <TablePagination
+              sx={{ color: "white" }}
               rowsPerPageOptions={[10, 25, 50]}
               component="div"
-              count={testData.length}
+              count={data.filtered.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

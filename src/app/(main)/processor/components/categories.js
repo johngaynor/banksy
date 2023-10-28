@@ -43,7 +43,7 @@ export default function Categories() {
             );
 
             if (match) {
-              category = userCategories[categoryName].ref;
+              category = categoryName;
               break;
             }
 
@@ -122,7 +122,7 @@ export default function Categories() {
         </Typography>
         <Typography
           variant="h5"
-          sx={{ textAlign: "center", marginTop: "50px" }}
+          sx={{ textAlign: "center", marginTop: "30px" }}
         >
           Which category does this fall under?
         </Typography>
@@ -142,7 +142,7 @@ export default function Categories() {
               variant="contained"
               sx={{ width: "250px", height: "60px", margin: "10px" }}
               key={index}
-              onClick={() => assignCategory(userCategories[cat].ref)}
+              onClick={() => assignCategory(cat)}
             >
               <Typography variant="h6">{cat}</Typography>
             </Button>
