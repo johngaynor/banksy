@@ -1,72 +1,58 @@
-import { useEffect } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
+
+import Papa from "papaparse";
 
 import { assignCategories } from "./processorFunctions";
 import { categoryKeys } from "@/app/(main)/processor/components/userData";
 
+import { parseRawFile } from "./processorFunctions";
+
 import { useGlobalState } from "@/app/context";
 import { useProcessorState } from "../context";
+import { ConstructionOutlined } from "@mui/icons-material";
 
 export default function Categories() {
-  const { user } = useGlobalState();
-  const {
-    userBanks,
-    setUserBanks,
-    banksLoading,
-    setBanksLoading,
-    userCategories,
-    setUserCategories,
-    categoriesLoading,
-    setCategoriesLoading,
-  } = useProcessorState();
+  const { user, addMsg } = useGlobalState();
 
-  const getBanks = async (userId) => {
-    setBanksLoading(true);
+  const { userBanks, userCategories, rawFile } = useProcessorState();
+  const [transactions, setTransactions] = useState(null);
+
+  // console.log(userBanks, userCategories);
+
+  const parseFile = async () => {
     try {
-      const response = await axios.get(
-        `/api/processor?action=getbanks&userId=${userId}`
-      );
-      if (response.status === 200) {
-        setUserBanks(response.data.banks.rows);
-        console.log("got banks", response.data.banks.rows);
-      } else {
-        console.log("something failed");
-      }
+      const transactions = await parseRawFile(rawFile);
+      setTransactions(transactions);
+      console.log("set transactions");
     } catch (error) {
-      console.log("error:", error);
+      addMsg("error", `error: ${error}`);
     }
-    setBanksLoading(false);
   };
 
-  const getCategories = async (userId) => {
-    setCategoriesLoading(true);
-    try {
-      const response = await axios.get(
-        `/api/processor?action=getcategories&userId=${userId}`
+  useEffect(() => {
+    const findBank = () => {
+      const headers = Object.keys(transactions[0]);
+      const bank = userBanks.find(
+        (bank) =>
+          // looking for a bank that has matching headers
+          headers.includes(bank.date) &&
+          headers.includes(bank.description) &&
+          headers.includes(bank.amount)
       );
-      if (response.status === 200) {
-        console.log("got retObj", response.data.categories.retObj);
-        setUserCategories(response.data.categories.retObj);
-      } else {
-        console.log("something failed");
+
+      if (!bank) {
+        addMsg("error", "unable to find a matching bank");
+        return;
       }
-    } catch (error) {
-      console.log("error:", error);
-    }
-    setCategoriesLoading(false);
-  };
+    };
 
-  // useEffect(() => {
-  //   if (!banksLoading && !userBanks && user) {
-  //     console.log("getting banks");
-  //     getBanks(user.user_id);
-  //   }
+    if (transactions) findBank();
+  }, [transactions]);
 
-  //   if (!categoriesLoading && !userCategories && user) {
-  //     console.log("getting categories");
-  //     getCategories(user.user_id);
-  //   }
-  // });
+  useEffect(() => {
+    parseFile();
+    // use the resulting transactions here for processing
+  }, []);
 
   return <h1>next step</h1>;
 }

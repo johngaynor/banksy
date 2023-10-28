@@ -22,17 +22,18 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-export default function Home({ setFormStep }) {
+export default function Home() {
   const { addMsg } = useGlobalState();
-  const { file, setFile } = useProcessorState();
+  const { rawFile, setRawFile, setFormStep } = useProcessorState();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file && file.name.endsWith(".csv")) {
-      setFile(file);
-      addMsg("success", "CSV uploaded successfully!");
+      setRawFile(file);
+      setFormStep(1);
+      // addMsg("success", "CSV uploaded successfully!");
     } else {
-      addMsg("error", "Please select a valid .csv file.");
+      // addMsg("error", "Please select a valid .csv file.");
     }
   };
 
@@ -80,9 +81,9 @@ export default function Home({ setFormStep }) {
               marginTop: "20px",
             }}
           >
-            {file ? (
+            {rawFile ? (
               <>
-                <p>selected file: {file.name}</p>
+                <p>selected file: {rawFile.name}</p>
                 <Button
                   component="label"
                   variant="contained"

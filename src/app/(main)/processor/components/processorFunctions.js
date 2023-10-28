@@ -1,6 +1,6 @@
 import Papa from "papaparse";
 
-export function initUpload(file) {
+export function parseRawFile(file) {
   return new Promise(async (resolve, reject) => {
     try {
       Papa.parse(file, {

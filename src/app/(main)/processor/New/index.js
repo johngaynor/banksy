@@ -12,12 +12,8 @@ import { useProcessorState } from "../context";
 export default function Processor() {
   const { addMsg } = useGlobalState();
   const {
-    rawFile,
-    setRawFile,
-    data,
-    setData,
     formStep,
-    setFormStep,
+    rawFile,
     userBanks,
     setUserBanks,
     banksLoading,
@@ -74,34 +70,13 @@ export default function Processor() {
     }
   }, [userBanks, userCategories]);
 
-  // if (loading) {
-  //   return <CircularProgress />;
-  // }
+  if (banksLoading || categoriesLoading) {
+    return <CircularProgress />;
+  }
 
   if (formStep === 0) {
-    return <Home setFormStep={setFormStep} />;
-  } else if (formStep === 1) {
+    return <Home />;
+  } else if (formStep === 1 && rawFile) {
     return <Categories />;
   }
 }
-
-// CODE FOR LOADING IN INITIAL PROCESSED DATA
-// useEffect(() => {
-//   if (file) {
-//     const fetchData = async () => {
-//       try {
-//         setLoading(true);
-//         const transactions = await initUpload(file);
-//         setData(transactions);
-//         // console.log("data set", transactions);
-//         addMsg("success", "data set!");
-//         setLoading(false);
-//       } catch (error) {
-//         // console.log("error:", error);
-//         addMsg("error", error);
-//       }
-//     };
-
-//     fetchData();
-//   }
-// }, [file]);
