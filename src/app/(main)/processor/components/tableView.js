@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -116,7 +116,15 @@ export default function TableView() {
                       <TableCell sx={{ color: "white" }}>
                         ${row.amount.toFixed(2)}
                       </TableCell>
-                      <TableCell sx={{ color: "white" }}>{row.type}</TableCell>
+                      <TableCell
+                        sx={{
+                          color:
+                            row.type === "withdrawal" ? "#D32E2E" : "#2E7D32",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {row.type}
+                      </TableCell>
                       <TableCell sx={{ color: "white" }}>
                         {row.description}
                       </TableCell>

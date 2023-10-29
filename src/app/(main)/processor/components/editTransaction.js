@@ -15,9 +15,10 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import moment from "moment";
 
 import { useProcessorState } from "../context";
-import moment from "moment";
+import { useGlobalState } from "@/app/context";
 
 const modalStyle = {
   position: "absolute",
@@ -37,7 +38,8 @@ export default function EditTransaction({
   setOpenEdit,
   transaction,
 }) {
-  const { userCategories } = useProcessorState();
+  const { userCategories, setData, data } = useProcessorState();
+  const { addMsg } = useGlobalState();
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState(0);
   const [type, setType] = useState("withdrawal");
@@ -51,8 +53,20 @@ export default function EditTransaction({
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log("date", date, typeof date);
-    // handle submit here
+    const updatedData = { ...data };
+    updatedData.filtered[transaction.id] = {
+      date: date.format("MM/DD/YYYY"),
+      amount,
+      type,
+      description,
+      category,
+    };
+    setData(updatedData);
+    addMsg(
+      "success",
+      `Successfully updated transaction #${transaction.id + 1}`
+    );
+    setOpenEdit(false);
   };
 
   const categories = ["income", ...Object.keys(userCategories)];
