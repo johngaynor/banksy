@@ -12,8 +12,12 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 
 import { useProcessorState } from "../context";
+import moment from "moment";
 
 const modalStyle = {
   position: "absolute",
@@ -37,6 +41,8 @@ export default function EditTransaction({
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState(0);
   const [type, setType] = useState("withdrawal");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState(moment());
 
   const onClose = () => {
     setOpenEdit(false);
@@ -45,7 +51,7 @@ export default function EditTransaction({
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log("category", category);
+    console.log("date", date, typeof date);
     // handle submit here
   };
 
@@ -55,6 +61,9 @@ export default function EditTransaction({
     if (transaction) {
       setCategory(transaction.category);
       setAmount(transaction.amount);
+      setType(transaction.type);
+      setDescription(transaction.description);
+      setDate(moment(transaction.date, "MM/DD/YYYY"));
     }
   }, [transaction]);
 
@@ -64,90 +73,165 @@ export default function EditTransaction({
 
   return (
     <React.Fragment>
-      <Modal
-        open={openEdit}
-        onClose={onClose}
-        style={{
-          backdropFilter: "blur(1px)",
-        }}
-        hideBackdrop={true}
-      >
-        <Box sx={modalStyle}>
-          <Typography variant="h5" sx={{ textAlign: "center" }}>
-            Edit transaction #{transaction?.id + 1}
-          </Typography>
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <Modal
+          open={openEdit}
+          onClose={onClose}
+          style={{
+            backdropFilter: "blur(1px)",
+          }}
+          hideBackdrop={true}
+        >
+          <Box sx={modalStyle}>
+            <Typography variant="h5" sx={{ textAlign: "center" }}>
+              Edit transaction #{transaction?.id + 1}
+            </Typography>
 
-          <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <InputLabel>Date</InputLabel>
-                {/* Add your date input here */}
-              </Grid>
-              <Grid item xs={4}>
-                <InputLabel>Amount</InputLabel>
-                <TextField
-                  variant="outlined"
-                  type="number"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <InputLabel sx={{ color: "white" }}>Type</InputLabel>
-                <ToggleButtonGroup
-                  color={type === "withdrawal" ? "error" : "success"}
-                  value={type}
-                  exclusive
-                  onChange={(e) => setType(e.target.value)}
-                >
-                  <ToggleButton
-                    value="withdrawal"
-                    style={{
+            <form onSubmit={handleSubmit}>
+              <Grid container spacing={0}>
+                <Grid item xs={4}>
+                  <InputLabel sx={{ color: "white" }}>Date</InputLabel>
+                  <DatePicker
+                    value={date}
+                    onChange={(newDate) => setDate(newDate)}
+                    sx={{
+                      color: "white",
                       border: "1px solid white",
-                      color: type === "withdrawal" ? null : "#C2C2C2",
+                      borderRadius: "5px",
+                      "& input": {
+                        height: "15px",
+                        color: "white",
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <InputLabel sx={{ color: "white" }}>Amount</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    type="number"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    sx={{
+                      border: "1px solid white",
+                      borderRadius: "5px",
+                      "& input": {
+                        height: "15px",
+                        color: "white",
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <InputLabel sx={{ color: "white" }}>Type</InputLabel>
+                  <ToggleButtonGroup
+                    color={type === "withdrawal" ? "error" : "success"}
+                    value={type}
+                    exclusive
+                    onChange={(e) => setType(e.target.value)}
+                    sx={{ height: "50px" }}
+                  >
+                    <ToggleButton
+                      value="withdrawal"
+                      style={{
+                        border: "1px solid white",
+                        color: type === "withdrawal" ? null : "#E0E0E0",
+                      }}
+                    >
+                      Withdrawal
+                    </ToggleButton>
+                    <ToggleButton
+                      value="deposit"
+                      style={{
+                        border: "1px solid white",
+                        color: type === "deposit" ? null : "#E0E0E0",
+                      }}
+                    >
+                      Deposit
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                </Grid>
+
+                <Grid item xs={9} sx={{ marginTop: "15px" }}>
+                  <InputLabel sx={{ color: "white" }}>Description</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    sx={{
+                      border: "1px solid white",
+                      borderRadius: "5px",
+                      "& input": {
+                        height: "15px",
+                        color: "white",
+                      },
+                      width: "85%",
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={2} sx={{ marginTop: "15px" }}>
+                  <InputLabel sx={{ color: "white" }}>Category</InputLabel>
+                  <Select
+                    onChange={(e) => setCategory(e.target.value)}
+                    value={category}
+                    sx={{
+                      color: "white",
+                      border: "1px solid white",
+                      "& .MuiSelect-icon": {
+                        color: "white",
+                      },
+                      height: "50px",
                     }}
                   >
-                    Withdrawal
-                  </ToggleButton>
-                  <ToggleButton
-                    value="deposit"
-                    style={{
-                      border: "1px solid white",
-                      color: type === "deposit" ? null : "#C2C2C2",
+                    {categories.map((cat) => (
+                      <MenuItem value={cat} key={cat}>
+                        {cat}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </Grid>
+
+                <Grid
+                  item
+                  xs={6}
+                  sx={{ display: "flex", justifyContent: "center" }}
+                >
+                  <Button
+                    type="submit"
+                    variant="outlined"
+                    color="success"
+                    sx={{
+                      border: "2px solid",
+                      width: "60%",
+                      marginTop: "20px",
                     }}
                   >
-                    Deposit
-                  </ToggleButton>
-                </ToggleButtonGroup>
-              </Grid>
-
-              <Grid item xs={8}>
-                <InputLabel>Description</InputLabel>
-                {/* Add your description input here */}
-              </Grid>
-              <Grid item xs={3}>
-                <InputLabel>Category</InputLabel>
-                <Select
-                  onChange={(e) => setCategory(e.target.value)}
-                  value={category}
-                  label="Category"
+                    Submit
+                  </Button>
+                </Grid>
+                <Grid
+                  item
+                  xs={6}
+                  sx={{ display: "flex", justifyContent: "center" }}
                 >
-                  {categories.map((cat) => (
-                    <MenuItem value={cat} key={cat}>
-                      {cat}
-                    </MenuItem>
-                  ))}
-                </Select>
+                  <Button
+                    onClick={onClose}
+                    variant="outlined"
+                    color="error"
+                    sx={{
+                      border: "2px solid",
+                      width: "60%",
+                      marginTop: "20px",
+                    }}
+                  >
+                    Exit
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
-
-            <Button type="submit">Submit</Button>
-            {/* <Button onClick={onClose}>Cancel</Button> */}
-          </form>
-
-          <Button onClick={onClose}>Cancel</Button>
-        </Box>
-      </Modal>
+            </form>
+          </Box>
+        </Modal>
+      </LocalizationProvider>
     </React.Fragment>
   );
 }
