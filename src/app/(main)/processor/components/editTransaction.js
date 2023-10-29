@@ -9,6 +9,9 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 import { useProcessorState } from "../context";
 
@@ -33,6 +36,7 @@ export default function EditTransaction({
   const { userCategories } = useProcessorState();
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState(0);
+  const [type, setType] = useState("withdrawal");
 
   const onClose = () => {
     setOpenEdit(false);
@@ -74,28 +78,71 @@ export default function EditTransaction({
           </Typography>
 
           <form onSubmit={handleSubmit}>
-            <InputLabel>Category</InputLabel>
-            <Select
-              onChange={(e) => setCategory(e.target.value)}
-              value={category}
-              label="Category"
-            >
-              {categories.map((cat) => (
-                <MenuItem value={cat} key={cat}>
-                  {cat}
-                </MenuItem>
-              ))}
-            </Select>
-            <InputLabel>Amount</InputLabel>
+            <Grid container spacing={2}>
+              <Grid item xs={4}>
+                <InputLabel>Date</InputLabel>
+                {/* Add your date input here */}
+              </Grid>
+              <Grid item xs={4}>
+                <InputLabel>Amount</InputLabel>
+                <TextField
+                  variant="outlined"
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <InputLabel sx={{ color: "white" }}>Type</InputLabel>
+                <ToggleButtonGroup
+                  color={type === "withdrawal" ? "error" : "success"}
+                  value={type}
+                  exclusive
+                  onChange={(e) => setType(e.target.value)}
+                >
+                  <ToggleButton
+                    value="withdrawal"
+                    style={{
+                      border: "1px solid white",
+                      color: type === "withdrawal" ? null : "#C2C2C2",
+                    }}
+                  >
+                    Withdrawal
+                  </ToggleButton>
+                  <ToggleButton
+                    value="deposit"
+                    style={{
+                      border: "1px solid white",
+                      color: type === "deposit" ? null : "#C2C2C2",
+                    }}
+                  >
+                    Deposit
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </Grid>
 
-            <TextField
-              variant="outlined"
-              //   label="amount"
-              type="number"
-              value={amount}
-              onChange={() => setAmount(e.target.value)}
-            />
+              <Grid item xs={8}>
+                <InputLabel>Description</InputLabel>
+                {/* Add your description input here */}
+              </Grid>
+              <Grid item xs={3}>
+                <InputLabel>Category</InputLabel>
+                <Select
+                  onChange={(e) => setCategory(e.target.value)}
+                  value={category}
+                  label="Category"
+                >
+                  {categories.map((cat) => (
+                    <MenuItem value={cat} key={cat}>
+                      {cat}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Grid>
+            </Grid>
+
             <Button type="submit">Submit</Button>
+            {/* <Button onClick={onClose}>Cancel</Button> */}
           </form>
 
           <Button onClick={onClose}>Cancel</Button>
