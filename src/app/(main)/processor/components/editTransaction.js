@@ -15,6 +15,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import InputAdornment from "@mui/material/InputAdornment";
 import moment from "moment";
 
 import { useProcessorState } from "../context";
@@ -46,7 +47,7 @@ export default function EditTransaction({
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(moment());
 
-  console.log(`clicked on transaction #${transaction?.id}`, transaction);
+  // console.log(`clicked on transaction #${transaction?.id}`, transaction);
 
   const onClose = () => {
     setOpenEdit(false);
@@ -76,16 +77,16 @@ export default function EditTransaction({
   useEffect(() => {
     if (transaction) {
       setCategory(transaction.category);
-      setAmount(transaction.amount);
+      setAmount(transaction.amount.toFixed(2));
       setType(transaction.type);
       setDescription(transaction.description);
       setDate(moment(transaction.date, "MM/DD/YYYY"));
     }
   }, [transaction]);
 
-  if (!transaction) {
-    return;
-  }
+  // if (!transaction) {
+  //   return;
+  // }
 
   return (
     <React.Fragment>
@@ -127,7 +128,16 @@ export default function EditTransaction({
                     variant="outlined"
                     type="number"
                     value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
+                    onChange={(e) => setAmount(parseFloat(e.target.value))}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Typography variant="h6" sx={{ color: "white" }}>
+                            $
+                          </Typography>
+                        </InputAdornment>
+                      ),
+                    }}
                     sx={{
                       border: "1px solid white",
                       borderRadius: "5px",
