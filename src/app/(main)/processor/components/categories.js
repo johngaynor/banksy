@@ -60,9 +60,12 @@ export default function Categories() {
           const type = transaction[bank.amount].includes("-")
             ? "withdrawal"
             : "deposit";
-          const amount = transaction[bank.amount]
-            .replace("-", "")
-            .replace("$", "");
+          const amount = parseFloat(
+            transaction[bank.amount]
+              .replace("-", "")
+              .replace("$", "")
+              .replace(",", "")
+          );
 
           // setting up column structure
           transaction.date = transaction[bank.date];

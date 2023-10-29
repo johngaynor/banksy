@@ -114,7 +114,7 @@ export default function TableView() {
                     >
                       <TableCell sx={{ color: "white" }}>{row.date}</TableCell>
                       <TableCell sx={{ color: "white" }}>
-                        {row.amount}
+                        ${row.amount.toFixed(2)}
                       </TableCell>
                       <TableCell sx={{ color: "white" }}>{row.type}</TableCell>
                       <TableCell sx={{ color: "white" }}>

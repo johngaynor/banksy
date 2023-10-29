@@ -8,6 +8,7 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
 
 import { useProcessorState } from "../context";
 
@@ -31,6 +32,7 @@ export default function EditTransaction({
 }) {
   const { userCategories } = useProcessorState();
   const [category, setCategory] = useState("");
+  const [amount, setAmount] = useState(0);
 
   const onClose = () => {
     setOpenEdit(false);
@@ -48,6 +50,7 @@ export default function EditTransaction({
   useEffect(() => {
     if (transaction) {
       setCategory(transaction.category);
+      setAmount(transaction.amount);
     }
   }, [transaction]);
 
@@ -83,6 +86,15 @@ export default function EditTransaction({
                 </MenuItem>
               ))}
             </Select>
+            <InputLabel>Amount</InputLabel>
+
+            <TextField
+              variant="outlined"
+              //   label="amount"
+              type="number"
+              value={amount}
+              onChange={() => setAmount(e.target.value)}
+            />
             <Button type="submit">Submit</Button>
           </form>
 

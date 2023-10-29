@@ -95,26 +95,3 @@ export default function Home() {
     </Box>
   );
 }
-
-// CODE FOR CONFIRMATION MESSAGE
-// {rawFile ? (
-//   <>
-//     <p>selected file: {rawFile.name}</p>
-//     <Button
-//       component="label"
-//       variant="contained"
-//       sx={{
-//         backgroundColor: "#4caf50",
-//         "&:hover": {
-//           backgroundColor: "#4caf50",
-//         },
-//         margin: "-7px 0 0 15px",
-//       }}
-//       onClick={() => setFormStep(1)}
-//     >
-//       Start
-//     </Button>
-//   </>
-// ) : (
-//   ""
-// )}
