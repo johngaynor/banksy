@@ -12,6 +12,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 
 import { useProcessorState } from "../context";
 import EditTransaction from "./editTransaction";
@@ -19,9 +22,10 @@ import EditTransaction from "./editTransaction";
 export default function TableView() {
   const { data } = useProcessorState();
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openEdit, setOpenEdit] = useState(false);
   const [editedTransaction, setEditedTransaction] = useState(null);
+  const [showIgnore, setShowIgnore] = useState(false);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -35,9 +39,13 @@ export default function TableView() {
   const editMode = (id) => {
     setEditedTransaction({ ...data.filtered[id], id });
     setOpenEdit(true);
+    // console.log(`clicked on edit for transaction #${id}`);
+    // console.log(id);
   };
 
-  const filteredData = data.filtered.map((row, index) => ({ ...row, index }));
+  const filteredData = data.filtered
+    .map((row, index) => ({ ...row, index }))
+    .filter((row) => showIgnore || row.category !== "ignore");
 
   return (
     <Box
@@ -65,6 +73,39 @@ export default function TableView() {
           >
             Transactions
           </Typography>
+          <Grid container spacing={0}>
+            <Grid item xs={6}>
+              <Button
+                type="submit"
+                variant="outlined"
+                color="success"
+                sx={{
+                  border: "2px solid",
+                  width: "60%",
+                  marginTop: "20px",
+                }}
+              >
+                Submit
+              </Button>
+            </Grid>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "flex-end",
+              }}
+            >
+              <FormGroup>
+                <FormControlLabel
+                  control={<Switch />}
+                  label="Show Ignored?"
+                  onChange={(e) => setShowIgnore(e.target.checked)}
+                />
+              </FormGroup>
+            </Grid>
+          </Grid>
           <TableContainer
             component={Paper}
             sx={{
@@ -153,9 +194,9 @@ export default function TableView() {
                   color: "white",
                 },
               }}
-              rowsPerPageOptions={[10, 25, 50]}
+              rowsPerPageOptions={[5, 25, 50]}
               component="div"
-              count={data.filtered.length}
+              count={filteredData.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

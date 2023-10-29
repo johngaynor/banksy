@@ -46,6 +46,8 @@ export default function EditTransaction({
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(moment());
 
+  console.log(`clicked on transaction #${transaction?.id}`, transaction);
+
   const onClose = () => {
     setOpenEdit(false);
   };
