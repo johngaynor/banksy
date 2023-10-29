@@ -5,6 +5,10 @@
 - button at top of form for adding new transaction
 - modifying edit modal to support new transactions as well
 
+AFTER MVP IS COMPLETE:
+
+- set up with user authentication
+
 <h1 align="center">Welcome to Banksy 👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
