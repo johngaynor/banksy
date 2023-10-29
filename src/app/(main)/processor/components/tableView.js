@@ -147,7 +147,12 @@ export default function TableView() {
             </Table>
 
             <TablePagination
-              sx={{ color: "white" }}
+              sx={{
+                color: "white",
+                "& .MuiSelect-icon": {
+                  color: "white",
+                },
+              }}
               rowsPerPageOptions={[10, 25, 50]}
               component="div"
               count={data.filtered.length}
