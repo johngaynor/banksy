@@ -1,9 +1,9 @@
 # TODO
 
-- Define structure for database
-- Connect to postgres
-- Create UI for handling flagged transactions
-- Set up JSDoc comments for custom functions
+- toggle for hiding 'ignore' transactions
+- shading 'ignore' text when showing
+- button at top of form for adding new transaction
+- modifying edit modal to support new transactions as well
 
 <h1 align="center">Welcome to Banksy 👋</h1>
 <p>
