@@ -15,6 +15,7 @@ import TablePagination from "@mui/material/TablePagination";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 
 import { useProcessorState } from "../context";
 import EditTransaction from "./editTransaction";
@@ -39,8 +40,6 @@ export default function TableView() {
   const editMode = (id) => {
     setEditedTransaction({ ...data.filtered[id], id });
     setOpenEdit(true);
-    // console.log(`clicked on edit for transaction #${id}`);
-    // console.log(id);
   };
 
   const filteredData = data.filtered
@@ -67,30 +66,36 @@ export default function TableView() {
         }}
       >
         <Grid item sx={{ width: "90%", position: "relative" }}>
-          <Typography
-            variant="h3"
-            sx={{ textAlign: "center", marginBottom: "20px" }}
-          >
-            Transactions
-          </Typography>
           <Grid container spacing={0}>
-            <Grid item xs={6}>
+            <Grid
+              item
+              xs={4}
+              sx={{
+                display: "flex",
+                alignItems: "flex-end",
+                paddingBottom: "5px",
+              }}
+            >
               <Button
-                type="submit"
-                variant="outlined"
-                color="success"
-                sx={{
-                  border: "2px solid",
-                  width: "60%",
-                  marginTop: "20px",
-                }}
+                onClick={() => setOpenEdit(true)}
+                component="label"
+                variant="contained"
+                startIcon={<AddBoxIcon />}
               >
-                Submit
+                New Transaction
               </Button>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography
+                variant="h3"
+                sx={{ textAlign: "center", marginBottom: "20px" }}
+              >
+                Transactions
+              </Typography>
             </Grid>
             <Grid
               item
-              xs={6}
+              xs={4}
               sx={{
                 display: "flex",
                 justifyContent: "flex-end",
@@ -209,6 +214,7 @@ export default function TableView() {
         openEdit={openEdit}
         setOpenEdit={setOpenEdit}
         transaction={editedTransaction}
+        setTransaction={setEditedTransaction}
       />
     </Box>
   );

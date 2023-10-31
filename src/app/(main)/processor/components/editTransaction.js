@@ -38,37 +38,54 @@ export default function EditTransaction({
   openEdit,
   setOpenEdit,
   transaction,
+  setTransaction,
 }) {
   const { userCategories, setData, data } = useProcessorState();
   const { addMsg } = useGlobalState();
+
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState(0);
   const [type, setType] = useState("withdrawal");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(moment());
 
-  // console.log(`clicked on transaction #${transaction?.id}`, transaction);
-
   const onClose = () => {
     setOpenEdit(false);
+    setTransaction(null);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const updatedData = { ...data };
-    updatedData.filtered[transaction.id] = {
+
+    const newTransaction = {
       date: date.format("MM/DD/YYYY"),
-      amount,
+      amount: parseFloat(amount),
       type,
       description,
       category,
     };
+
+    if (transaction) {
+      updatedData.filtered[transaction.id] = newTransaction;
+    } else {
+      updatedData.filtered[updatedData.filtered.length] = newTransaction;
+    }
+
     setData(updatedData);
+
     addMsg(
       "success",
-      `Successfully updated transaction #${transaction.id + 1}`
+      transaction
+        ? `Successfully updated transaction #${transaction.id + 1}`
+        : "Successfully added new transaction."
     );
+    setTransaction(null);
+    setCategory("");
+    setAmount(0);
+    setDescription("");
+    setDate(moment());
     setOpenEdit(false);
   };
 
@@ -84,10 +101,6 @@ export default function EditTransaction({
     }
   }, [transaction]);
 
-  // if (!transaction) {
-  //   return;
-  // }
-
   return (
     <React.Fragment>
       <LocalizationProvider dateAdapter={AdapterMoment}>
@@ -101,7 +114,9 @@ export default function EditTransaction({
         >
           <Box sx={modalStyle}>
             <Typography variant="h5" sx={{ textAlign: "center" }}>
-              Edit transaction #{transaction?.id + 1}
+              {transaction
+                ? `Edit transaction #${transaction?.id + 1}`
+                : "New Transaction"}
             </Typography>
 
             <form onSubmit={handleSubmit}>
