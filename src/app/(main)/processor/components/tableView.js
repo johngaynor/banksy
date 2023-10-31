@@ -38,11 +38,11 @@ export default function TableView() {
   };
 
   const editMode = (id) => {
-    setEditedTransaction({ ...data.filtered[id], id });
+    setEditedTransaction({ ...data[id], id });
     setOpenEdit(true);
   };
 
-  const filteredData = data.filtered
+  const filteredData = data
     .map((row, index) => ({ ...row, index }))
     .filter((row) => showIgnore || row.category !== "ignore");
 

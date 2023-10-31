@@ -57,7 +57,7 @@ export default function EditTransaction({
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const updatedData = { ...data };
+    const updatedData = [...data];
 
     const newTransaction = {
       date: date.format("MM/DD/YYYY"),
@@ -68,9 +68,9 @@ export default function EditTransaction({
     };
 
     if (transaction) {
-      updatedData.filtered[transaction.id] = newTransaction;
+      updatedData[transaction.id] = newTransaction;
     } else {
-      updatedData.filtered[updatedData.filtered.length] = newTransaction;
+      updatedData.push(newTransaction);
     }
 
     setData(updatedData);

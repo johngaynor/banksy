@@ -99,10 +99,10 @@ export default function Categories() {
       setFlaggedIndex(flaggedIndex + 1);
 
       if (flaggedIndex === updatedData.flagged.length - 1) {
-        delete updatedData.flagged;
+        setData([...updatedData.filtered]);
         addMsg("success", "All transactions have been processed!");
         setFormStep(2);
-        // console.log(updatedData);
+        return;
       }
       setData(updatedData);
     }
