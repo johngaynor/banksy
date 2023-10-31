@@ -21,7 +21,7 @@ import { useProcessorState } from "../context";
 import EditTransaction from "./editTransaction";
 
 export default function TableView() {
-  const { data } = useProcessorState();
+  const { data, setFormStep } = useProcessorState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openEdit, setOpenEdit] = useState(false);
@@ -61,8 +61,9 @@ export default function TableView() {
         spacing={1}
         sx={{
           display: "flex",
-          justifyContent: "center",
+          alignItems: "center",
           marginTop: "30px",
+          flexDirection: "column",
         }}
       >
         <Grid item sx={{ width: "90%", position: "relative" }}>
@@ -208,6 +209,14 @@ export default function TableView() {
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </TableContainer>
+          <Button
+            onClick={() => setFormStep(3)}
+            component="label"
+            variant="contained"
+            startIcon={<AddBoxIcon />}
+          >
+            View Summary
+          </Button>
         </Grid>
       </Grid>
       <EditTransaction
