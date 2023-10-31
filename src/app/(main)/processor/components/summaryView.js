@@ -1,3 +1,4 @@
+import { ConstructionOutlined } from "@mui/icons-material";
 import React, { useEffect } from "react";
 
 import { useProcessorState } from "../context";
@@ -5,29 +6,29 @@ import { useProcessorState } from "../context";
 export default function SummaryView() {
   const { data, userCategories } = useProcessorState();
 
-  console.log(userCategories);
-  console.log("hi");
-
   useEffect(() => {
     if (data) {
-      console.log(data);
-      //   const summaryObj = {};
+      const summaryObj = {};
 
-      //   for (const category in userCategories) {
-      //     summaryObj[category] = 0;
-      //   }
+      for (const category in userCategories) {
+        summaryObj[category] = 0;
+      }
 
-      //   const summary = newData.reduce((acc, row) => {
-      //     const retObj = { ...acc };
+      const summary = data
+        .filter((r) => r.category !== "ignore")
+        .reduce((acc, row) => {
+          const retObj = { ...acc };
 
-      //     for (const category in retObj) {
-      //       if (category === row.category) {
-      //         retObj[category] += row.amount;
-      //       }
-      //     }
-      //   }, summaryObj);
+          for (const category in retObj) {
+            if (category === row.category) {
+              retObj[category] += row.amount;
+              retObj[category] = Math.round(retObj[category] * 100) / 100; // fixing JS imprecision
+            }
+          }
+          return retObj;
+        }, summaryObj);
 
-      //   console.log(summary);
+      console.log(summary);
     }
   });
 
