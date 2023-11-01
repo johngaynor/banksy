@@ -122,6 +122,7 @@ export default function TableView() {
                 component="label"
                 variant="contained"
                 startIcon={<AddBoxIcon />}
+                sx={{ marginTop: "20px" }}
               >
                 New Transaction
               </Button>
@@ -249,14 +250,25 @@ export default function TableView() {
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </TableContainer>
-          <Button
-            onClick={handleFinishTable}
-            component="label"
-            variant="contained"
-            startIcon={<AddBoxIcon />}
+          <Grid
+            container
+            spacing={0}
+            sx={{
+              marginTop: "10px",
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
           >
-            View Summary
-          </Button>
+            <Button
+              onClick={handleFinishTable}
+              component="label"
+              variant="contained"
+              color="success"
+              startIcon={<AddBoxIcon />}
+            >
+              View Summary
+            </Button>
+          </Grid>
         </Grid>
       </Grid>
       <EditTransaction
