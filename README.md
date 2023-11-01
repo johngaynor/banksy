@@ -46,6 +46,13 @@ Still in development!
 
 - Section to take notes (if you know for sure that a specific charge on your account will be marked wrong)
 
+## Biggest Challenges of Project
+
+- Global and local state handling via useContext
+- Creating queue for message handling (when multiple messages would occur simultaneously)
+- Figuring out workflow for user experience
+- Data structure for summary views
+
 ## Author
 
 👤 **John Gaynor**
