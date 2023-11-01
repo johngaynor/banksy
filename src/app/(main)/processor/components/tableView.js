@@ -21,7 +21,7 @@ import { useProcessorState } from "../context";
 import EditTransaction from "./editTransaction";
 
 export default function TableView() {
-  const { data, setFormStep } = useProcessorState();
+  const { data, setFormStep, setSummaryViews } = useProcessorState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openEdit, setOpenEdit] = useState(false);
@@ -40,6 +40,42 @@ export default function TableView() {
   const editMode = (id) => {
     setEditedTransaction({ ...data[id], id });
     setOpenEdit(true);
+  };
+
+  const handleFinishTable = () => {
+    const testViews = [
+      {
+        name: "default",
+        aggregate: false,
+        categories: [
+          "gas",
+          "grocery",
+          "leisure",
+          "miscellaneous",
+          "recFood",
+          "rent",
+          "school",
+          "travel",
+          "income",
+        ],
+      },
+      {
+        name: "macros",
+        aggregate: true,
+        categories: [
+          {
+            name: "needs",
+            aggregate: ["gas", "grocery", "rent", "school", "travel"],
+          },
+          {
+            name: "wants",
+            aggregate: ["leisure", "miscellaneous", "recFood"],
+          },
+        ],
+      },
+    ];
+    setSummaryViews(testViews);
+    setFormStep(3);
   };
 
   const filteredData = data
@@ -210,7 +246,7 @@ export default function TableView() {
             />
           </TableContainer>
           <Button
-            onClick={() => setFormStep(3)}
+            onClick={handleFinishTable}
             component="label"
             variant="contained"
             startIcon={<AddBoxIcon />}

@@ -50,6 +50,7 @@ export default function Processor() {
         `/api/processor?action=getcategories&userId=${userId}`
       );
       if (response.status === 200) {
+        console.log(response.data);
         setUserCategories(response.data);
         addMsg("success", "Got user categories.");
       } else {
