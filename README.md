@@ -1,13 +1,12 @@
 # TODO
 
-- toggle for hiding 'ignore' transactions
-- shading 'ignore' text when showing
-- button at top of form for adding new transaction
-- modifying edit modal to support new transactions as well
+- build out UI for summary data
+- create tables for default views
+- pull from DB for views instead of locally
 
 AFTER MVP IS COMPLETE:
 
-- set up with user authentication
+- set up with user authentication (only need to sign in to save results. if not signed in, pull defaults for processing (this could get complicated with bank structure))
 
 <h1 align="center">Welcome to Banksy 👋</h1>
 <p>
