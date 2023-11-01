@@ -56,7 +56,6 @@ export default function TableView() {
           "rent",
           "school",
           "travel",
-          "income",
         ],
       },
       {
@@ -72,6 +71,11 @@ export default function TableView() {
             aggregate: ["leisure", "miscellaneous", "recFood"],
           },
         ],
+      },
+      {
+        name: "rec vs grocery food",
+        aggregate: false,
+        categories: ["recFood", "grocery"],
       },
     ];
     setSummaryViews(testViews);

@@ -1,18 +1,17 @@
-import { ConstructionOutlined } from "@mui/icons-material";
 import React, { useEffect } from "react";
 
 import { useProcessorState } from "../context";
 
 export default function SummaryView() {
-  const { data, userCategories, summaryViews } = useProcessorState();
+  const { data, summaryViews } = useProcessorState();
 
   useEffect(() => {
-    const summaryTemplate = { total: 0, income: 0, views: [] };
+    const summaryTemplate = { spending: 0, income: 0, views: [] };
 
     for (const summaryView of summaryViews) {
       const { categories, ...view } = summaryView;
 
-      view.total = 0;
+      view.spending = 0;
       view.categories = {};
 
       if (view.aggregate) {
@@ -30,29 +29,47 @@ export default function SummaryView() {
       summaryTemplate.views.push(view);
     }
 
-    console.log(summaryTemplate); // summaryTemplate built by now
-    //   }
-    // building template for summary obj
-    //   const summaryObj = {};
-    //   for (const category in userCategories) {
-    //     if (category !== "ignore") {
-    //       summaryObj[category] = 0;
-    //     }
-    //   }
-    //   const summary = data
-    //     .filter((r) => r.category !== "ignore")
-    //     .reduce((acc, row) => {
-    //       const retObj = { ...acc };
-    //       for (const category in retObj) {
-    //         if (category === row.category) {
-    //           retObj[category] += row.amount;
-    //           retObj[category] = Math.round(retObj[category] * 100) / 100; // fixing JS imprecision
-    //         }
-    //       }
-    //       return retObj;
-    //     }, summaryObj);
-    //   console.log(summary);
-    // }
+    // console.log(summaryTemplate); // summaryTemplate built by now
+
+    const summary = data
+      .filter((r) => r.category !== "ignore")
+      .reduce((acc, row) => {
+        const retObj = { ...acc };
+
+        // handling top level income vs. spending
+        if (row.category === "income") {
+          retObj.income += row.amount;
+        } else retObj.spending += row.amount;
+
+        // handling views
+        for (const view of retObj.views) {
+          for (const category in view.categories) {
+            let match = false;
+            if (view.aggregate) {
+              // handling aggregate views
+              const categoryOptions = view.aggregateRef.find(
+                (r) => r.name === category
+              ).aggregate;
+
+              if (categoryOptions.includes(row.category)) {
+                match = true;
+              }
+            } else if (row.category === category) {
+              // handling standard views
+              match = true;
+            }
+
+            if (match) {
+              view.categories[category] += row.amount;
+              view.spending += row.amount;
+            }
+          }
+        }
+
+        return retObj;
+      }, summaryTemplate);
+
+    console.log(summary.views);
   });
 
   return <h1>hello</h1>;
