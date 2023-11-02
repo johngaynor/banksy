@@ -73,19 +73,44 @@ export async function GetUserCategories(userId) {
 
 export async function GetUserViews() {
   const { rows: views } = await sql`
-    select * from processor_views
+    select view_id, view_name from processor_views
     where user_id = 0
     `;
 
-  const viewArr = [];
+  const template = { spending: 0, income: 0, views: [] };
 
   for (const view of views) {
-  }
+    view.spending = 0;
+    view.categories = {};
 
-  const { rows: categories } = await sql`
-    select 
+    const { rows: categories } = await sql`
+    select category_name, aggregate from processor_views_categories
+    where view_id = ${view.view_id}
     `;
 
-  return views;
-  // return { msg: "got views" };
+    const { rows: aggregates } = await sql`
+    select * from processor_views_categories_aggregates
+    where view_id = ${view.view_id}
+    `;
+
+    view.aggregate = {};
+
+    for (const c of categories) {
+      view.categories[c.category_name] = 0;
+
+      if (c.aggregate) {
+        view.aggregate[c.category_name] = [];
+
+        for (const a of aggregates) {
+          if (a.category_name === c.category_name) {
+            view.aggregate[c.category_name].push(a.aggregate_name);
+          }
+        }
+      }
+    }
+
+    template.views.push(view);
+  }
+
+  return template;
 }
