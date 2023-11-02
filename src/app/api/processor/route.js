@@ -6,11 +6,10 @@ export async function GET(request) {
   const action = searchParams.get("action");
   const userId = searchParams.get("userId");
 
-  if (!action || !userId) {
-    return NextResponse.json(
-      { error: "action and userId is required" },
-      { status: 400 }
-    );
+  console.log(action, userId);
+
+  if (!action) {
+    return NextResponse.json({ error: "action is required" }, { status: 400 });
   }
 
   if (action === "getbanks") {
@@ -23,9 +22,9 @@ export async function GET(request) {
     return NextResponse.json(categories, { status: "200" });
   }
 
-  if (action === "getfilters") {
-    const filters = await GetUserFilters();
-    return NextResponse.json(filters, { status: "200" });
+  if (action === "getviews") {
+    const views = await GetUserViews();
+    return NextResponse.json(views, { status: "200" });
   }
 }
 
@@ -72,11 +71,21 @@ export async function GetUserCategories(userId) {
   return sortedCategories;
 }
 
-export async function GetUserFilters() {
-  const { rows: filters } = await sql`
-    select * from processor_filters
+export async function GetUserViews() {
+  const { rows: views } = await sql`
+    select * from processor_views
     where user_id = 0
     `;
 
-  return filters;
+  const viewArr = [];
+
+  for (const view of views) {
+  }
+
+  const { rows: categories } = await sql`
+    select 
+    `;
+
+  return views;
+  // return { msg: "got views" };
 }

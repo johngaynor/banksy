@@ -14,7 +14,6 @@ export default function Processor() {
   const { addMsg } = useGlobalState();
   const {
     formStep,
-    rawFile,
     userBanks,
     setUserBanks,
     banksLoading,
@@ -23,6 +22,10 @@ export default function Processor() {
     setUserCategories,
     categoriesLoading,
     setCategoriesLoading,
+    summaryViews,
+    setSummaryViews,
+    summaryViewsLoading,
+    setSummaryViewsLoading,
   } = useProcessorState();
 
   const getBanks = async (userId) => {
@@ -64,17 +67,39 @@ export default function Processor() {
     setCategoriesLoading(false);
   };
 
+  const getSummaryViews = async () => {
+    setSummaryViewsLoading(true);
+    try {
+      const response = await axios.get(`/api/processor?action=getviews`);
+      if (response.status === 200) {
+        setSummaryViews(response.data);
+        addMsg("success", "Got summary views.");
+      } else {
+        addMsg("error", "Something failed, please try again later. (views)");
+      }
+    } catch (error) {
+      addMsg("error", `error getting views: ${error}`);
+    }
+    setSummaryViewsLoading(false);
+  };
+
   useEffect(() => {
-    if (!userBanks && !banksLoading) {
-      getBanks(0);
-    }
+    // if (!userBanks && !banksLoading) {
+    //   getBanks(0);
+    // }
 
-    if (!userCategories && !categoriesLoading) {
-      getCategories(0);
-    }
-  }, [userBanks, userCategories]);
+    // if (!userCategories && !categoriesLoading) {
+    //   getCategories(0);
+    // }
 
-  if (banksLoading || categoriesLoading) {
+    if (!summaryViews && !summaryViewsLoading) {
+      getSummaryViews();
+    }
+  }, [userBanks, userCategories, summaryViews]);
+
+  console.log(summaryViews);
+
+  if (banksLoading || categoriesLoading || summaryViewsLoading) {
     return <CircularProgress />;
   }
 

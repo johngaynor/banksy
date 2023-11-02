@@ -3,15 +3,17 @@ import React, { createContext, useContext, useState } from "react";
 const ProcessorContext = createContext();
 
 const ProcessorContextProvider = ({ children }) => {
+  const [formStep, setFormStep] = useState(0);
   const [rawFile, setRawFile] = useState(null);
-  const [data, setData] = useState(null);
   const [userBanks, setUserBanks] = useState(null);
   const [userCategories, setUserCategories] = useState(null);
-  const [formStep, setFormStep] = useState(0);
   const [summaryViews, setSummaryViews] = useState(null);
+  const [data, setData] = useState(null);
+
   // loading states
   const [banksLoading, setBanksLoading] = useState(false);
   const [categoriesLoading, setCategoriesLoading] = useState(false);
+  const [summaryViewsLoading, setSummaryViewsLoading] = useState(false);
 
   return (
     <ProcessorContext.Provider
@@ -32,6 +34,8 @@ const ProcessorContextProvider = ({ children }) => {
         setCategoriesLoading,
         summaryViews,
         setSummaryViews,
+        summaryViewsLoading,
+        setSummaryViewsLoading,
       }}
     >
       {children}
