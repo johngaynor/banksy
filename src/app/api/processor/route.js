@@ -32,8 +32,8 @@ export async function GetUserBanks(userId) {
         h."date", 
         h.description, 
         h.amount 
-        from user_banks b 
-    left join user_bank_headers h 
+        from processor_banks b 
+    left join processor_banks_headers h 
         on b.bank_id = h.bank_id
     where b.user_id = ${userId}
     `;
@@ -43,12 +43,12 @@ export async function GetUserBanks(userId) {
 
 export async function GetUserCategories(userId) {
   const { rows: categories } = await sql`
-    select * from user_processor_categories
+    select * from processor_categories
     where user_id = 0
   `;
 
   const { rows: keys } = await sql`
-    select * from user_category_keywords
+    select * from processor_keywords
   `;
 
   const sortedCategories = {};
