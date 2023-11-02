@@ -22,6 +22,11 @@ export async function GET(request) {
     const categories = await GetUserCategories(userId);
     return NextResponse.json(categories, { status: "200" });
   }
+
+  if (action === "getfilters") {
+    const filters = await GetUserFilters();
+    return NextResponse.json(filters, { status: "200" });
+  }
 }
 
 export async function GetUserBanks(userId) {
@@ -65,4 +70,13 @@ export async function GetUserCategories(userId) {
   }
 
   return sortedCategories;
+}
+
+export async function GetUserFilters() {
+  const { rows: filters } = await sql`
+    select * from processor_filters
+    where user_id = 0
+    `;
+
+  return filters;
 }
