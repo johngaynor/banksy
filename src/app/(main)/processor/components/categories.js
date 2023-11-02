@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import { LinearProgress } from "@mui/material";
+import { Box, Grid, Typography, Button, LinearProgress } from "@mui/material";
 
 import { parseRawFile } from "./processorFunctions";
 import { useGlobalState } from "@/app/context";

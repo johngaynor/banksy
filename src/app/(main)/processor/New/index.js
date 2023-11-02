@@ -1,14 +1,14 @@
 "use client";
-import { useEffect, useState } from "react";
-import CircularProgress from "@mui/material/CircularProgress";
+import { useEffect } from "react";
+import { CircularProgress } from "@mui/material";
 import axios from "axios";
 
-import { useGlobalState } from "../../../context";
-import { useProcessorState } from "../context";
 import Home from "../components/home";
 import Categories from "../components/categories";
 import TableView from "../components/tableView";
 import SummaryView from "../components/summaryView";
+import { useGlobalState } from "../../../context";
+import { useProcessorState } from "../context";
 
 export default function Processor() {
   const { addMsg } = useGlobalState();
