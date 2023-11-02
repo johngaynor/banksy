@@ -75,7 +75,7 @@ export default function TableView() {
         ],
       },
       {
-        name: "rec vs grocery food",
+        name: "rec/grocery food",
         aggregate: false,
         categories: ["recFood", "grocery"],
       },

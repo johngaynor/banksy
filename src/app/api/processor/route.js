@@ -1,4 +1,3 @@
-import { CollectionsBookmarkOutlined } from "@mui/icons-material";
 import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 

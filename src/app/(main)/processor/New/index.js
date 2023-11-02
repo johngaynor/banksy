@@ -81,7 +81,6 @@ export default function Processor() {
   if (formStep === 0) {
     return <Home />;
   } else if (formStep === 1) {
-    // removed && rawFile
     return <Categories />;
   } else if (formStep === 2) {
     return <TableView />;
