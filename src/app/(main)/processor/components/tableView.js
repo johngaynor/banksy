@@ -23,7 +23,7 @@ import { useProcessorState } from "../context";
 import EditTransaction from "./editTransaction";
 
 export default function TableView() {
-  const { data, setFormStep, setSummaryViews } = useProcessorState();
+  const { data, setFormStep } = useProcessorState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openEdit, setOpenEdit] = useState(false);
