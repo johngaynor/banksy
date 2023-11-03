@@ -7,13 +7,13 @@ const ProcessorContextProvider = ({ children }) => {
   const [rawFile, setRawFile] = useState(null);
   const [userBanks, setUserBanks] = useState(null);
   const [userCategories, setUserCategories] = useState(null);
-  const [summaryViews, setSummaryViews] = useState(null);
+  const [userViews, setUserViews] = useState(null);
   const [data, setData] = useState(null);
 
   // loading states
   const [banksLoading, setBanksLoading] = useState(false);
   const [categoriesLoading, setCategoriesLoading] = useState(false);
-  const [summaryViewsLoading, setSummaryViewsLoading] = useState(false);
+  const [viewsLoading, setViewsLoading] = useState(false);
 
   return (
     <ProcessorContext.Provider
@@ -32,10 +32,10 @@ const ProcessorContextProvider = ({ children }) => {
         setUserCategories,
         categoriesLoading,
         setCategoriesLoading,
-        summaryViews,
-        setSummaryViews,
-        summaryViewsLoading,
-        setSummaryViewsLoading,
+        userViews,
+        setUserViews,
+        viewsLoading,
+        setViewsLoading,
       }}
     >
       {children}

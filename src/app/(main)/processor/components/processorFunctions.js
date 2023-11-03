@@ -18,12 +18,12 @@ export function parseRawFile(file) {
   });
 }
 
-export function generateSummary(summaryViews, data) {
+export function generateSummary(userViews, data) {
   const template = { spending: 0, income: 0, views: [] };
 
-  // filling out template views. can't just import summaryViews directly into template.views because it references the same object and multiple re-renders will multiply quantities.
-  for (const summaryView of summaryViews) {
-    const { categories, ...view } = { spending: 0, ...summaryView };
+  // filling out template views. can't just import userViews directly into template.views because it references the same object and multiple re-renders will multiply quantities.
+  for (const userView of userViews) {
+    const { categories, ...view } = { spending: 0, ...userView };
 
     view.categories = {};
     for (const c of categories) {
