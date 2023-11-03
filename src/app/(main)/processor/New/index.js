@@ -84,20 +84,18 @@ export default function Processor() {
   };
 
   useEffect(() => {
-    // if (!userBanks && !banksLoading) {
-    //   getBanks(0);
-    // }
+    if (!userBanks && !banksLoading) {
+      getBanks(0);
+    }
 
-    // if (!userCategories && !categoriesLoading) {
-    //   getCategories(0);
-    // }
+    if (!userCategories && !categoriesLoading) {
+      getCategories(0);
+    }
 
     if (!summaryViews && !summaryViewsLoading) {
       getSummaryViews();
     }
   }, [userBanks, userCategories, summaryViews]);
-
-  console.log(summaryViews);
 
   if (banksLoading || categoriesLoading || summaryViewsLoading) {
     return <CircularProgress />;

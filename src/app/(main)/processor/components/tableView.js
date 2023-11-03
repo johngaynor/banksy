@@ -44,46 +44,6 @@ export default function TableView() {
     setOpenEdit(true);
   };
 
-  const handleFinishTable = () => {
-    const testViews = [
-      {
-        name: "default",
-        aggregate: false,
-        categories: [
-          "gas",
-          "grocery",
-          "leisure",
-          "miscellaneous",
-          "recFood",
-          "rent",
-          "school",
-          "travel",
-        ],
-      },
-      {
-        name: "macros",
-        aggregate: true,
-        categories: [
-          {
-            name: "needs",
-            aggregate: ["gas", "grocery", "rent", "school", "travel"],
-          },
-          {
-            name: "wants",
-            aggregate: ["leisure", "miscellaneous", "recFood"],
-          },
-        ],
-      },
-      {
-        name: "rec/grocery food",
-        aggregate: false,
-        categories: ["recFood", "grocery"],
-      },
-    ];
-    setSummaryViews(testViews);
-    setFormStep(3);
-  };
-
   const filteredData = data
     .map((row, index) => ({ ...row, index }))
     .filter((row) => showIgnore || row.category !== "ignore");
@@ -262,7 +222,7 @@ export default function TableView() {
             }}
           >
             <Button
-              onClick={handleFinishTable}
+              onClick={() => setFormStep(3)}
               component="label"
               variant="contained"
               color="success"

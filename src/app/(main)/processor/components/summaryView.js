@@ -6,30 +6,19 @@ export default function SummaryView() {
   const { data, summaryViews } = useProcessorState();
 
   useEffect(() => {
-    const summaryTemplate = { spending: 0, income: 0, views: [] };
+    const template = { spending: 0, income: 0, views: [] };
 
+    // filling out template views. can't just import summaryViews directly into template.views because it references the same object and multiple re-renders will multiply quantities.
     for (const summaryView of summaryViews) {
-      const { categories, ...view } = summaryView;
+      const { categories, ...view } = { spending: 0, ...summaryView };
 
-      view.spending = 0;
       view.categories = {};
-
-      if (view.aggregate) {
-        // console.log("aggregate view", categories);
-        for (const category of categories) {
-          view.categories[category.name] = 0;
-        }
-        view.aggregateRef = categories;
-      } else {
-        // console.log("standard view", categories);
-        for (const category of categories) {
-          view.categories[category] = 0;
-        }
+      for (const c of categories) {
+        view.categories[c] = 0;
       }
-      summaryTemplate.views.push(view);
-    }
 
-    // console.log(summaryTemplate); // summaryTemplate built by now
+      template.views.push(view);
+    }
 
     const summary = data
       .filter((r) => r.category !== "ignore")
@@ -45,17 +34,13 @@ export default function SummaryView() {
         for (const view of retObj.views) {
           for (const category in view.categories) {
             let match = false;
-            if (view.aggregate) {
-              // handling aggregate views
-              const categoryOptions = view.aggregateRef.find(
-                (r) => r.name === category
-              ).aggregate;
 
-              if (categoryOptions.includes(row.category)) {
-                match = true;
-              }
+            if (
+              view.aggregates[category] &&
+              view.aggregates[category].includes(row.category)
+            ) {
+              match = true;
             } else if (row.category === category) {
-              // handling standard views
               match = true;
             }
 
@@ -67,9 +52,9 @@ export default function SummaryView() {
         }
 
         return retObj;
-      }, summaryTemplate);
+      }, template);
 
-    console.log(summary.views);
+    console.log(summary);
   });
 
   return <h1>hello</h1>;
