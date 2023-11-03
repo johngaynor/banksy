@@ -93,7 +93,7 @@ export function processFile(file, userBanks, userCategories) {
 // 3. loop through transactions and add amount to appropriate places
 // 4. clean up numbers (prevent xx.000000001)
 export function generateSummary(userViews, data) {
-  const template = { spending: 0, income: 0, views: [] };
+  const template = { spending: 0, income: 0, savings: 0, views: [] };
 
   // filling out template views. can't just import userViews directly into template.views because it references the same object and multiple re-renders will multiply quantities.
   for (const userView of userViews) {
@@ -115,7 +115,11 @@ export function generateSummary(userViews, data) {
       // handling top level income vs. spending
       if (row.category === "income") {
         retObj.income += row.amount;
-      } else retObj.spending += row.amount;
+        retObj.savings += row.amount;
+      } else {
+        retObj.spending += row.amount;
+        retObj.savings -= row.amount;
+      }
 
       // handling views
       for (const view of retObj.views) {
