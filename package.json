@@ -25,7 +25,8 @@
     "next": "latest",
     "papaparse": "^5.4.1",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "recharts": "^2.9.2"
   },
   "devDependencies": {
     "autoprefixer": "latest",
