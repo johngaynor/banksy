@@ -11,7 +11,7 @@ import { useGlobalState } from "../../../context";
 import { useProcessorState } from "../context";
 
 export default function Processor() {
-  const { addMsg } = useGlobalState();
+  const { addMsg, user } = useGlobalState();
   const {
     formStep,
     userBanks,
@@ -85,17 +85,19 @@ export default function Processor() {
 
   useEffect(() => {
     if (!userBanks && !banksLoading) {
-      getBanks(0);
+      getBanks(user ? user.userId : 0);
     }
 
     if (!userCategories && !categoriesLoading) {
-      getCategories(0);
+      getCategories(user ? user.userId : 0);
     }
 
     if (!summaryViews && !summaryViewsLoading) {
-      getSummaryViews();
+      getSummaryViews(user ? user.userId : 0);
     }
   }, [userBanks, userCategories, summaryViews]);
+
+  console.log(userBanks, userCategories, summaryViews);
 
   if (banksLoading || categoriesLoading || summaryViewsLoading) {
     return <CircularProgress />;

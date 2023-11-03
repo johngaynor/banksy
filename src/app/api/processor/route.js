@@ -48,7 +48,7 @@ export async function GetUserBanks(userId) {
 export async function GetUserCategories(userId) {
   const { rows: categories } = await sql`
     select * from processor_categories
-    where user_id = 0
+    where user_id = ${userId}
   `;
 
   const { rows: keys } = await sql`
