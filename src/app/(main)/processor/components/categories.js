@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Box, Grid, Typography, Button, LinearProgress } from "@mui/material";
 
-import { parseRawFile } from "./processorFunctions";
+import { processFile } from "./processorFunctions";
 import { useGlobalState } from "@/app/context";
 import { useProcessorState } from "../context";
 
@@ -15,71 +15,13 @@ export default function Categories() {
   useEffect(() => {
     const initProcess = async () => {
       try {
-        const transactions = await parseRawFile(rawFile);
-        const headers = Object.keys(transactions[0]);
-        const bank = userBanks.find(
-          (bank) =>
-            // looking for a bank that has matching headers
-            headers.includes(bank.date) &&
-            headers.includes(bank.description) &&
-            headers.includes(bank.amount)
+        const transactions = await processFile(
+          rawFile,
+          userBanks,
+          userCategories
         );
 
-        if (!bank) {
-          addMsg("error", "unable to find a matching bank");
-          return;
-        }
-
-        for (const transaction of transactions) {
-          // assigning category
-          let category;
-          for (const categoryName in userCategories) {
-            const match = userCategories[categoryName].keys.find((key) =>
-              transaction[bank.description].toLowerCase().includes(key)
-            );
-
-            if (match) {
-              category = categoryName;
-              break;
-            }
-
-            if (!transaction[bank.amount].includes("-")) {
-              category = "income";
-              break;
-            }
-          }
-
-          transaction["category"] = category ?? "flag";
-
-          // sanitizing row
-          const desc = transaction[bank.description].toLowerCase();
-          const type = transaction[bank.amount].includes("-")
-            ? "withdrawal"
-            : "deposit";
-          const amount = parseFloat(
-            transaction[bank.amount]
-              .replace("-", "")
-              .replace("$", "")
-              .replace(",", "")
-          );
-
-          // setting up column structure
-          transaction.date = transaction[bank.date];
-          transaction.amount = amount;
-          transaction.description = desc;
-          transaction.type = type;
-          // deleting old columns
-          delete transaction[bank.date];
-          delete transaction[bank.amount];
-          delete transaction[bank.description];
-        }
-
-        const filteredTransactions = {
-          filtered: transactions.filter((t) => t.category !== "flag"),
-          flagged: transactions.filter((t) => t.category === "flag"),
-        };
-
-        setData(filteredTransactions);
+        setData(transactions);
       } catch (error) {
         addMsg("error", `error: ${error}`);
       }
@@ -132,7 +74,6 @@ export default function Categories() {
             margin: "0 auto",
             display: "flex",
             justifyContent: "center",
-            // backgroundColor: "green",
           }}
         >
           {Object.keys(userCategories).map((cat, index) => (
@@ -166,7 +107,6 @@ export default function Categories() {
           container
           spacing={1}
           sx={{
-            // backgroundColor: "blue",
             display: "flex",
             justifyContent: "center",
             marginTop: "50px",
