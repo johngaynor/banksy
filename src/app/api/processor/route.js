@@ -26,6 +26,9 @@ export async function GET(request) {
     const views = await GetUserViews();
     return NextResponse.json(views, { status: "200" });
   }
+
+  if (action === "submitsummary") {
+  }
 }
 
 export async function GetUserBanks(userId) {
@@ -111,4 +114,11 @@ export async function GetUserViews() {
   }
 
   return viewArr;
+}
+
+export async function SubmitSummary() {
+  const { rows: summary } = await sql`
+  insert into processor_history ()
+  
+  `;
 }
