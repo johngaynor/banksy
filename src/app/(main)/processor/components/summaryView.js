@@ -1,6 +1,5 @@
 "use client";
-
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   PieChart,
   Pie,
@@ -9,165 +8,195 @@ import {
   ResponsiveContainer,
   Label,
 } from "recharts";
+import { Box, Grid, Typography, Button, LinearProgress } from "@mui/material";
 
 import { generateSummary } from "./processorFunctions";
 import { useProcessorState } from "../context";
 
 export default function SummaryView() {
   const { setData, data, userViews } = useProcessorState();
+  const [categories, setCategories] = useState([]);
+  const [macros, setMacros] = useState([]);
+  console.log(macros, categories);
 
   useEffect(() => {
     const summary = generateSummary(userViews, data);
 
-    console.log(summary);
-    setData(summary);
+    // console.log(summary);
+    // setData(summary); // setting data
+
+    const sortedCategories = () => {
+      const order = Object.keys(summary.views[1].categories);
+      const categories = {
+        savings: summary.savings,
+        ...summary.views[0].categories,
+      };
+      const sorted = [];
+
+      for (const o of order) {
+        const options = summary.views[1].aggregates[o];
+
+        for (const c in categories) {
+          if (options.includes(c)) {
+            sorted.push({ name: c, value: categories[c] });
+          }
+        }
+
+        if (o === "savings") {
+          sorted.push({ name: "savings", value: summary.savings });
+        }
+      }
+
+      setCategories(sorted);
+    };
+
+    sortedCategories();
+
+    const macroArr = [];
+    for (const m in summary.views[1].categories) {
+      if (m === "savings") {
+        macroArr.push({ name: "savings", value: summary.savings });
+      } else {
+        macroArr.push({ name: m, value: summary.views[1].categories[m] });
+      }
+    }
+
+    setMacros(macroArr);
   }, []);
 
-  const testData = {
-    income: 2787.03,
-    spending: 2097.54,
-    savings: 689.49,
-    views: [
-      {
-        spending: 2097.54,
-        view_id: 1,
-        view_name: "default",
-        categories: {
-          gas: 567.62,
-          grocery: 405.21,
-          leisure: 720.18,
-          miscellaneous: 4.99,
-          recFood: 216.9,
-          rent: 0,
-          school: 0,
-          travel: 182.64,
-        },
-      },
-      {
-        spending: 2097.54,
-        view_id: 2,
-        view_name: "macros",
-        categories: {
-          needs: 1155.47,
-          wants: 942.07,
-        },
-      },
-    ],
-  };
-
-  const categoryArray = [
-    { name: "1", value: 70 },
-    { name: "2", value: 140 },
-    { name: "3", value: 30 },
-    { name: "4", value: 20 },
+  const defaultColors = [
+    "#0450b4",
+    "#046dc8",
+    "#1184a7",
+    "#15a2a2",
+    "#6fb1a0",
+    "#b4418e",
+    "#d94a8c",
+    "#ea515f",
+    "#fe7434",
+    "#fea802",
   ];
 
-  const macroArray = [
-    { name: "needs", value: 210 },
-    { name: "wants", value: 30 },
-    { name: "savings", value: 20 },
-  ];
+  const blueShades = ["#0450b4", "#045fbe", "#046dc8", "#0b79b8", "#1184a7"];
+
+  const macroColors = ["#fea802", "#15a2a2", "#ea515f"];
 
   return (
-    <PieChart width={400} height={400}>
-      <Pie
-        data={categoryArray}
-        dataKey="value"
-        cx="50%"
-        cy="50%"
-        outerRadius={120}
-        fill="#8884d8"
-      />
-      <Pie
-        data={macroArray}
-        dataKey="value"
-        cx="50%"
-        cy="50%"
-        innerRadius={135}
-        outerRadius={145}
-        fill="#8884d8"
-        label
-      />
-    </PieChart>
-    // <PieChart width={600} height={600}>
-    //   <Pie
-    //     data={categoryArray}
-    //     cx="50%"
-    //     cy="50%"
-    //     labelLine={false}
-    //     label={renderCustomizedLabel}
-    //     outerRadius={150}
-    //     fill="#8884d8"
-    //     dataKey="value"
-    //   >
-    //     {categoryArray.map((entry, index) => (
-    //       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-    //     ))}
-    //   </Pie>
-    // </PieChart>
+    <Grid
+      container
+      sx={{
+        // backgroundColor: "red",
+        display: "flex",
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        marginTop: "50px",
+      }}
+    >
+      <PieChart
+        width={550}
+        height={400}
+        // style={{ backgroundColor: "yellow" }}
+      >
+        <Pie
+          data={categories}
+          dataKey="value"
+          cx="50%"
+          cy="50%"
+          outerRadius={120}
+          fill="#8884d8"
+        >
+          {categories.map((entry, index) => (
+            <Cell
+              key={`cell-${index}`}
+              fill={blueShades[index % blueShades.length]}
+            />
+          ))}
+        </Pie>
+        <Pie
+          data={macros}
+          dataKey="value"
+          cx="50%"
+          cy="50%"
+          innerRadius={135}
+          outerRadius={145}
+          fill="#8884d8"
+          label={({ name, value, percent }) =>
+            `${name} - ${(percent * 100).toFixed(2)}`
+          }
+        >
+          {macros.map((entry, index) => (
+            <Cell
+              key={`cell-${index}`}
+              fill={macroColors[index % macroColors.length]}
+            />
+          ))}
+        </Pie>
+      </PieChart>
+      <PieChart
+        width={550}
+        height={400}
+        style={
+          {
+            // backgroundColor: "yellow",
+          }
+        }
+      >
+        <Pie
+          data={categories.filter((cat) => cat.value !== 0)}
+          dataKey="value"
+          cx="50%"
+          cy="50%"
+          outerRadius={135}
+          fill="#8884d8"
+          label={({ name, value, percent }) => `${name} - $${value}`}
+        >
+          {categories.map((entry, index) => (
+            <Cell
+              key={`cell-${index}`}
+              fill={defaultColors[index % defaultColors.length]}
+            />
+          ))}
+        </Pie>
+      </PieChart>
+    </Grid>
   );
 }
 
-// useEffect(() => {
-//   const summary = generateSummary(userViews, data);
-
-//   console.log(summary);
-//   setData(summary);
-// }, []);
-
-// <PieChart width={800} height={800}>
-//   <Pie
-//     data={categoryArray}
-//     dataKey="value"
-//     cx="50%"
-//     cy="50%"
-//     outerRadius={140}
-//     fill="#8884d8"
-//     label={false} // Disable the default labels
-//   >
-//     {categoryArray.map((entry, index) => (
-//       <Label
-//         key={index}
-//         value={entry.value}
-//         position="insideTop" // or "inside"
-//         content={({ value }) => `${value}`} // Display the value
-//       />
-//     ))}
-//   </Pie>
-// </PieChart>
-
-// const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-
-// const RADIAN = Math.PI / 180;
-// const renderCustomizedLabel = ({
-//   cx,
-//   cy,
-//   midAngle,
-//   innerRadius,
-//   outerRadius,
-//   percent,
-//   index,
-// }) => {
-//   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-//   const x = cx + radius * Math.cos(-midAngle * RADIAN);
-//   const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-//   return (
-//     <text
-//       x={x}
-//       y={y}
-//       fill="white"
-//       textAnchor={x > cx ? "start" : "end"}
-//       dominantBaseline="central"
-//     >
-//       {`${(percent * 100).toFixed(0)}%`}
-//     </text>
-//   );
+// const testData = {
+//   income: 2787.03,
+//   spending: 2097.54,
+//   savings: 689.49,
+//   views: [
+//     {
+//       spending: 2097.54,
+//       view_id: 1,
+//       view_name: "default",
+//       aggregates: {},
+//       categories: {
+//         gas: 567.62,
+//         grocery: 405.21,
+//         leisure: 720.18,
+//         miscellaneous: 4.99,
+//         recFood: 216.9,
+//         rent: 0,
+//         school: 0,
+//         travel: 182.64,
+//       },
+//     },
+//     {
+//       spending: 2097.54,
+//       view_id: 2,
+//       view_name: "macros",
+//       aggregates: {
+//         needs: ["gas", "grocery", "rent", "school", "travel"],
+//         wants: ["leisure", "recFood", "miscellaneous"],
+//         savings: [],
+//       },
+//       categories: {
+//         needs: 1155.47,
+//         wants: 942.07,
+//         savings: 0,
+//       },
+//     },
+//   ],
 // };
-
-// const categoryArray = Object.keys(testData.views[0].categories).map(
-//   (key) => ({
-//     name: key,
-//     value: testData.views[0].categories[key],
-//   })
-// );

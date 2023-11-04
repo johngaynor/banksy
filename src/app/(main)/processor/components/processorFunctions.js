@@ -148,6 +148,7 @@ export function generateSummary(userViews, data) {
   // cleaning up math
   summary.spending = parseFloat(summary.spending.toFixed(2));
   summary.income = parseFloat(summary.income.toFixed(2));
+  summary.spending = parseFloat(summary.income.toFixed(2));
   for (const view of summary.views) {
     view.spending = parseFloat(view.spending.toFixed(2));
     for (const category in view.categories) {
