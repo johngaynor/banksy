@@ -92,8 +92,15 @@ export function processFile(file, userBanks, userCategories) {
 // 2. inserting standardized views into the template from DB
 // 3. loop through transactions and add amount to appropriate places
 // 4. clean up numbers (prevent xx.000000001)
-export function generateSummary(userViews, data) {
-  const template = { spending: 0, income: 0, savings: 0, views: [] };
+export function generateSummary(userViews, data, start, end) {
+  const template = {
+    spending: 0,
+    income: 0,
+    savings: 0,
+    startDate: "2023-01-01",
+    endDate: "2023-01-30",
+    views: [],
+  };
 
   // filling out template views. can't just import userViews directly into template.views because it references the same object and multiple re-renders will multiply quantities.
   for (const userView of userViews) {

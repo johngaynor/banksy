@@ -1,13 +1,13 @@
 # TODO
 
 - build out UI for summary data
-- create tables for default views
-- pull from DB for views instead of locally
+- add button on tableView to select date range (hard coded now)
 
 AFTER MVP IS COMPLETE:
 
 - set up with user authentication (only need to sign in to save results. if not signed in, pull defaults for processing (this could get complicated with bank structure))
 - button to add keyword for category
+
 <h1 align="center">Welcome to Banksy 👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
