@@ -2,6 +2,7 @@
 
 - build out UI for summary data
 - add button on tableView to select date range (hard coded now)
+- sanitize & protect routes
 
 AFTER MVP IS COMPLETE:
 

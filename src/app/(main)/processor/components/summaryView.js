@@ -18,29 +18,27 @@ import {
 } from "@mui/material";
 import StorageIcon from "@mui/icons-material/Storage";
 
-import { generateSummary, SubmitSummary } from "./processorFunctions";
+import { SubmitSummary } from "./processorFunctions";
 import { useProcessorState } from "../context";
+import { useGlobalState } from "../../../context";
 
 export default function SummaryView() {
-  const { setData, data, userViews } = useProcessorState();
+  const { data, setSubmitSummaryLoading } = useProcessorState();
+  const { addMsg } = useGlobalState();
   const [categories, setCategories] = useState([]);
   const [macros, setMacros] = useState([]);
 
   useEffect(() => {
-    const summary = generateSummary(userViews, data);
-
-    setData(summary); // setting data
-
     const sortedCategories = () => {
-      const order = Object.keys(summary.views[1].categories);
+      const order = Object.keys(data.views[1].categories);
       const categories = {
-        savings: summary.savings,
-        ...summary.views[0].categories,
+        savings: data.savings,
+        ...data.views[0].categories,
       };
       const sorted = [];
 
       for (const o of order) {
-        const options = summary.views[1].aggregates[o];
+        const options = data.views[1].aggregates[o];
 
         for (const c in categories) {
           if (options.includes(c)) {
@@ -49,7 +47,7 @@ export default function SummaryView() {
         }
 
         if (o === "savings") {
-          sorted.push({ name: "savings", value: summary.savings });
+          sorted.push({ name: "savings", value: data.savings });
         }
       }
 
@@ -59,11 +57,11 @@ export default function SummaryView() {
     sortedCategories();
 
     const macroArr = [];
-    for (const m in summary.views[1].categories) {
+    for (const m in data.views[1].categories) {
       if (m === "savings") {
-        macroArr.push({ name: "savings", value: summary.savings });
+        macroArr.push({ name: "savings", value: data.savings });
       } else {
-        macroArr.push({ name: m, value: summary.views[1].categories[m] });
+        macroArr.push({ name: m, value: data.views[1].categories[m] });
       }
     }
 
@@ -94,7 +92,7 @@ export default function SummaryView() {
   };
 
   const handleSubmit = () => {
-    SubmitSummary(data);
+    SubmitSummary(data, addMsg, setSubmitSummaryLoading);
   };
 
   return (

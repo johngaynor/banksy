@@ -21,9 +21,10 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 
 import { useProcessorState } from "../context";
 import EditTransaction from "./editTransaction";
+import { generateSummary } from "./processorFunctions";
 
 export default function TableView() {
-  const { data, setFormStep } = useProcessorState();
+  const { data, setData, setFormStep, userViews } = useProcessorState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openEdit, setOpenEdit] = useState(false);
@@ -47,6 +48,12 @@ export default function TableView() {
   const filteredData = data
     .map((row, index) => ({ ...row, index }))
     .filter((row) => showIgnore || row.category !== "ignore");
+
+  const handleSubmit = () => {
+    const summary = generateSummary(userViews, data);
+    setData(summary);
+    setFormStep(3);
+  };
 
   return (
     <Box
@@ -222,7 +229,7 @@ export default function TableView() {
             }}
           >
             <Button
-              onClick={() => setFormStep(3)}
+              onClick={() => handleSubmit()}
               component="label"
               variant="contained"
               color="success"
