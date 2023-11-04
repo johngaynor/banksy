@@ -167,3 +167,14 @@ export function generateSummary(userViews, data, start, end) {
 
   return summary;
 }
+
+export function SubmitSummary(data) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log("trying to submit");
+      console.log(data);
+    } catch (error) {
+      reject(error);
+    }
+  });
+}

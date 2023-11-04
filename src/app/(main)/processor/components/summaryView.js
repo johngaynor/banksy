@@ -8,9 +8,17 @@ import {
   ResponsiveContainer,
   Label,
 } from "recharts";
-import { Box, Grid, Typography, Card, CardContent } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Typography,
+  Card,
+  CardContent,
+  Button,
+} from "@mui/material";
+import StorageIcon from "@mui/icons-material/Storage";
 
-import { generateSummary } from "./processorFunctions";
+import { generateSummary, SubmitSummary } from "./processorFunctions";
 import { useProcessorState } from "../context";
 
 export default function SummaryView() {
@@ -20,8 +28,6 @@ export default function SummaryView() {
 
   useEffect(() => {
     const summary = generateSummary(userViews, data);
-
-    console.log(summary);
 
     setData(summary); // setting data
 
@@ -106,7 +112,25 @@ export default function SummaryView() {
             Summary
           </Typography>
         </Grid>
-        <Grid item xs={4}></Grid>
+        <Grid
+          item
+          xs={4}
+          sx={{
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Button
+            onClick={() => SubmitSummary(data)}
+            component="label"
+            variant="contained"
+            color="success"
+            startIcon={<StorageIcon />}
+          >
+            Submit to DB
+          </Button>
+        </Grid>
       </Grid>
       <Grid
         container
