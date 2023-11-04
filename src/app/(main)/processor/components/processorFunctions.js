@@ -1,4 +1,5 @@
 import Papa from "papaparse";
+import axios from "axios";
 
 // processFile handles the initial processing/category assigning by:
 // 1. use papaparse to parse the file
@@ -173,6 +174,10 @@ export function SubmitSummary(data) {
     try {
       console.log("trying to submit");
       console.log(data);
+      const response = await axios.post(`/api/processor?action=summary`);
+      if (response.status === 200) {
+        console.log("it went through", response.data);
+      }
     } catch (error) {
       reject(error);
     }
