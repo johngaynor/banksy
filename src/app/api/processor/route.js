@@ -37,7 +37,30 @@ export async function POST(request) {
   }
 
   if (action === "summary") {
-    const summary = await processorFunctions.submitSummary();
+    const {
+      userId = 0,
+      startdate = null,
+      enddate = null,
+      income = null,
+      spending = null,
+      savings = null,
+    } = Object.fromEntries(searchParams);
+
+    if (!startdate || !enddate || !income || !spending || !savings) {
+      return NextResponse.json(
+        { error: "missing parameters" }, // shows up in response.data.error
+        { status: 400 }
+      );
+    }
+
+    const summary = await processorFunctions.submitSummary(
+      userId,
+      startdate,
+      enddate,
+      income,
+      spending,
+      savings
+    );
     return NextResponse.json(summary, { status: "200" });
   }
 

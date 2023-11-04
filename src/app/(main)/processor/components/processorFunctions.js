@@ -172,9 +172,10 @@ export function generateSummary(userViews, data, start, end) {
 export function SubmitSummary(data) {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log("trying to submit");
-      console.log(data);
-      const response = await axios.post(`/api/processor?action=summary`);
+      const { income, spending, savings, startDate, endDate } = data;
+      const response = await axios.post(
+        `/api/processor?action=summary&income=${income}&spending=${spending}&savings=${savings}&startdate=${startDate}&enddate=${endDate}`
+      );
       if (response.status === 200) {
         console.log("it went through", response.data);
       }

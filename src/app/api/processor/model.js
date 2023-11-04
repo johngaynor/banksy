@@ -17,6 +17,7 @@ export const processorFunctions = {
 
     return rows;
   },
+
   getUserCategories: async function (userId) {
     const { rows: categories } = await sql`
     select * from processor_categories
@@ -42,6 +43,7 @@ export const processorFunctions = {
 
     return sortedCategories;
   },
+
   getUserViews: async function () {
     const { rows: views } = await sql`
     select view_id, view_name from processor_views
@@ -83,9 +85,30 @@ export const processorFunctions = {
 
     return viewArr;
   },
-  submitSummary: async function () {
-    // const { rows: summary } = await sql`
-    // insert into processor_history ()
+
+  submitSummary: async function (
+    userId,
+    startdate,
+    enddate,
+    income,
+    spending,
+    savings
+  ) {
+    const { rows: summary } = await sql`
+    insert into processor_history 
+        (user_id, start_date, end_date, income, spending, savings)
+    values (${userId}, ${startdate}, ${enddate}, ${parseFloat(
+      income
+    )}, ${parseFloat(spending)}, ${parseFloat(savings)})
+    `;
+
+    return summary;
+
+    // const { rows: success } = await sql`
+    // select * from processor_history
+    // where start_date = ${startdate} and end_date = ${enddate};
     // `;
+
+    // return success;
   },
 };

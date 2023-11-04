@@ -93,6 +93,10 @@ export default function SummaryView() {
     savings: 200.0,
   };
 
+  const handleSubmit = () => {
+    SubmitSummary(data);
+  };
+
   return (
     <Box
       sx={{
@@ -122,7 +126,7 @@ export default function SummaryView() {
           }}
         >
           <Button
-            onClick={() => SubmitSummary(data)}
+            onClick={() => handleSubmit()}
             component="label"
             variant="contained"
             color="success"
