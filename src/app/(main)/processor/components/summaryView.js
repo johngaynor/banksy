@@ -8,7 +8,7 @@ import {
   ResponsiveContainer,
   Label,
 } from "recharts";
-import { Box, Grid, Typography, Button, LinearProgress } from "@mui/material";
+import { Box, Grid, Typography, Card, CardContent } from "@mui/material";
 
 import { generateSummary } from "./processorFunctions";
 import { useProcessorState } from "../context";
@@ -17,13 +17,13 @@ export default function SummaryView() {
   const { setData, data, userViews } = useProcessorState();
   const [categories, setCategories] = useState([]);
   const [macros, setMacros] = useState([]);
-  console.log(macros, categories);
 
   useEffect(() => {
     const summary = generateSummary(userViews, data);
 
-    // console.log(summary);
-    // setData(summary); // setting data
+    console.log(summary);
+
+    setData(summary); // setting data
 
     const sortedCategories = () => {
       const order = Object.keys(summary.views[1].categories);
@@ -81,84 +81,229 @@ export default function SummaryView() {
 
   const macroColors = ["#fea802", "#15a2a2", "#ea515f"];
 
+  const prevSummary = {
+    spending: 1800.0,
+    income: 2000.0,
+    savings: 200.0,
+  };
+
   return (
-    <Grid
-      container
+    <Box
       sx={{
-        // backgroundColor: "red",
-        display: "flex",
-        justifyContent: "space-evenly",
-        alignItems: "center",
-        marginTop: "50px",
+        flexGrow: 1,
+        padding: 4,
+        backgroundColor: "#121212",
+        minHeight: "100vh",
       }}
     >
-      <PieChart
-        width={550}
-        height={400}
-        // style={{ backgroundColor: "yellow" }}
+      <Grid container spacing={0}>
+        <Grid item xs={4}></Grid>
+        <Grid item xs={4}>
+          <Typography
+            variant="h3"
+            sx={{ textAlign: "center", marginBottom: "10px" }}
+          >
+            Summary
+          </Typography>
+        </Grid>
+        <Grid item xs={4}></Grid>
+      </Grid>
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          padding: "20px 0",
+          display: "flex",
+          justifyContent: "center",
+        }}
       >
-        <Pie
-          data={categories}
-          dataKey="value"
-          cx="50%"
-          cy="50%"
-          outerRadius={120}
-          fill="#8884d8"
-        >
-          {categories.map((entry, index) => (
-            <Cell
-              key={`cell-${index}`}
-              fill={blueShades[index % blueShades.length]}
-            />
-          ))}
-        </Pie>
-        <Pie
-          data={macros}
-          dataKey="value"
-          cx="50%"
-          cy="50%"
-          innerRadius={135}
-          outerRadius={145}
-          fill="#8884d8"
-          label={({ name, value, percent }) =>
-            `${name} - ${(percent * 100).toFixed(2)}`
-          }
-        >
-          {macros.map((entry, index) => (
-            <Cell
-              key={`cell-${index}`}
-              fill={macroColors[index % macroColors.length]}
-            />
-          ))}
-        </Pie>
-      </PieChart>
-      <PieChart
-        width={550}
-        height={400}
-        style={
-          {
-            // backgroundColor: "yellow",
-          }
-        }
+        <Grid item xs={3}>
+          <Card sx={{ backgroundColor: "#242424" }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ color: "white" }}>
+                Income
+              </Typography>
+              <Box
+                container
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-end",
+                }}
+              >
+                <Typography
+                  variant="h3"
+                  sx={{ color: "white", marginTop: "5px" }}
+                >
+                  ${data.income?.toFixed(2)}
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color:
+                      data.income - prevSummary.income > 0
+                        ? "#2E7D32"
+                        : "#D32E2E",
+
+                    margin: "0 0 4px 10px",
+                  }}
+                >
+                  {data.income - prevSummary.income > 0 ? "+" : "-"}
+                  {parseFloat((data.income - prevSummary.income).toFixed(2))}
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={3}>
+          <Card sx={{ backgroundColor: "#242424" }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ color: "white" }}>
+                Spending
+              </Typography>
+              <Box
+                container
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-end",
+                }}
+              >
+                <Typography
+                  variant="h3"
+                  sx={{ color: "white", marginTop: "5px" }}
+                >
+                  ${data.spending?.toFixed(2)}
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color:
+                      data.spending - prevSummary.spending > 0
+                        ? "#D32E2E"
+                        : "#2E7D32",
+
+                    margin: "0 0 4px 10px",
+                  }}
+                >
+                  {data.spending - prevSummary.spending > 0 ? "+" : "-"}
+                  {parseFloat(
+                    (data.spending - prevSummary.spending).toFixed(2)
+                  )}
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={3}>
+          <Card sx={{ backgroundColor: "#242424" }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ color: "white" }}>
+                Net Gain
+              </Typography>
+              <Box
+                container
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-end",
+                }}
+              >
+                <Typography
+                  variant="h3"
+                  sx={{ color: "white", marginTop: "5px" }}
+                >
+                  ${data.savings?.toFixed(2)}
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color:
+                      data.savings - prevSummary.savings > 0
+                        ? "#2E7D32"
+                        : "#D32E2E",
+
+                    margin: "0 0 4px 10px",
+                  }}
+                >
+                  {data.savings - prevSummary.savings > 0 ? "+" : "-"}
+                  {parseFloat((data.savings - prevSummary.savings).toFixed(2))}
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+      <Grid
+        container
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
       >
-        <Pie
-          data={categories.filter((cat) => cat.value !== 0)}
-          dataKey="value"
-          cx="50%"
-          cy="50%"
-          outerRadius={135}
-          fill="#8884d8"
-          label={({ name, value, percent }) => `${name} - $${value}`}
-        >
-          {categories.map((entry, index) => (
-            <Cell
-              key={`cell-${index}`}
-              fill={defaultColors[index % defaultColors.length]}
-            />
-          ))}
-        </Pie>
-      </PieChart>
-    </Grid>
+        <Grid item style={{ backgroundColor: "#242424" }}>
+          <Typography variant="h5" padding={2}>
+            Wants/Needs/Savings
+          </Typography>
+          <PieChart width={600} height={400}>
+            <Pie
+              data={categories}
+              dataKey="value"
+              cx="50%"
+              cy="50%"
+              outerRadius={120}
+              fill="#8884d8"
+            >
+              {categories.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={blueShades[index % blueShades.length]}
+                />
+              ))}
+            </Pie>
+            <Pie
+              data={macros}
+              dataKey="value"
+              cx="50%"
+              cy="50%"
+              innerRadius={135}
+              outerRadius={145}
+              fill="#8884d8"
+              label={({ name, value, percent }) =>
+                `${name} - ${(percent * 100).toFixed(2)}%`
+              }
+            >
+              {macros.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={macroColors[index % macroColors.length]}
+                />
+              ))}
+            </Pie>
+          </PieChart>
+        </Grid>
+        <Grid item sx={{ backgroundColor: "#242424" }}>
+          <Typography variant="h5" padding={2}>
+            All Categories
+          </Typography>
+          <PieChart width={600} height={400}>
+            <Pie
+              data={categories.filter((cat) => cat.value !== 0)}
+              dataKey="value"
+              cx="50%"
+              cy="50%"
+              outerRadius={135}
+              fill="#8884d8"
+              label={({ name, value, percent }) => `${name} - $${value}`}
+            >
+              {categories.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={defaultColors[index % defaultColors.length]}
+                />
+              ))}
+            </Pie>
+          </PieChart>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
 

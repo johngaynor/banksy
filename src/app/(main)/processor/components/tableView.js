@@ -53,7 +53,7 @@ export default function TableView() {
       sx={{
         flexGrow: 1,
         padding: 4,
-        backgroundColor: "#242424",
+        backgroundColor: "#121212",
         minHeight: "100vh",
         display: "flex",
       }}

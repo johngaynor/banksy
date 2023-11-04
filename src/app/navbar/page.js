@@ -21,7 +21,7 @@ export default function Navbar() {
       sx={{
         height: "70px",
         display: "flex",
-        backgroundColor: "#242424",
+        backgroundColor: "#121212",
       }}
     >
       <Grid container>
