@@ -8,6 +8,10 @@ import {
   Card,
   CardContent,
   Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import StorageIcon from "@mui/icons-material/Storage";
 
@@ -20,6 +24,8 @@ export default function SummaryView() {
   const { addMsg } = useGlobalState();
   const [categories, setCategories] = useState([]);
   const [macros, setMacros] = useState([]);
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
 
   useEffect(() => {
     const sortedCategories = () => {
@@ -84,8 +90,30 @@ export default function SummaryView() {
     savings: 200.0,
   };
 
+  const months = [
+    { name: "January", value: "01" },
+    { name: "February", value: "02" },
+    { name: "March", value: "03" },
+    { name: "April", value: "04" },
+    { name: "May", value: "05" },
+    { name: "June", value: "06" },
+    { name: "July", value: "07" },
+    { name: "August", value: "08" },
+    { name: "September", value: "09" },
+    { name: "October", value: "10" },
+    { name: "November", value: "11" },
+    { name: "December", value: "12" },
+  ];
+
+  const years = ["2021", "2022", "2023", "2024"];
+
   const handleSubmit = () => {
-    SubmitSummary(data, addMsg, setSubmitSummaryLoading);
+    if (!month || !year) {
+      addMsg("error", "Please enter a date for this summary.");
+    } else {
+      const date = month + "-" + year;
+      SubmitSummary(data, date, addMsg, setSubmitSummaryLoading);
+    }
   };
 
   return (
@@ -98,7 +126,59 @@ export default function SummaryView() {
       }}
     >
       <Grid container spacing={0}>
-        <Grid item xs={4}></Grid>
+        <Grid
+          item
+          xs={4}
+          sx={{
+            display: "flex",
+            alignItems: "flex-end",
+          }}
+        >
+          <FormControl>
+            <InputLabel sx={{ color: "white" }}>Month</InputLabel>
+            <Select
+              value={month}
+              onChange={(e) => setMonth(e.target.value)}
+              sx={{
+                color: "white",
+                border: "1px solid white",
+                "& .MuiSelect-icon": {
+                  color: "white",
+                },
+                height: "50px",
+                width: "130px",
+              }}
+            >
+              {months.map((m) => (
+                <MenuItem value={m.value}>{m.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl>
+            <InputLabel sx={{ color: "white", marginLeft: "20px" }}>
+              Year
+            </InputLabel>
+            <Select
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+              sx={{
+                color: "white",
+                border: "1px solid white",
+                "& .MuiSelect-icon": {
+                  color: "white",
+                },
+                height: "50px",
+                width: "90px",
+                marginLeft: "20px",
+              }}
+            >
+              {years.map((y) => (
+                <MenuItem value={y}>{y}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
         <Grid item xs={4}>
           <Typography
             variant="h3"

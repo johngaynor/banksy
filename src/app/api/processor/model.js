@@ -86,28 +86,27 @@ export const processorFunctions = {
     return viewArr;
   },
 
-  submitSummary: async function (
-    userId,
-    startdate,
-    enddate,
-    income,
-    spending,
-    savings
-  ) {
-    const { rows: summary } = await sql`
-    insert into processor_history 
-        (user_id, start_date, end_date, income, spending, savings)
-    values (${userId}, ${startdate}, ${enddate}, ${parseFloat(
-      income
-    )}, ${parseFloat(spending)}, ${parseFloat(savings)})
-    `;
+  submitSummary: async function (userId, monthYear, income, spending, savings) {
+    try {
+      const { rows: summary } = await sql`
+      insert into processor_history 
+          (user_id, month_year, income, spending, savings)
+      values (${userId}, ${monthYear}, ${parseFloat(income)}, ${parseFloat(
+        spending
+      )}, ${parseFloat(savings)})
+      `;
 
-    return summary;
-
-    // const { rows: success } = await sql`
-    // select * from processor_history
-    // where start_date = ${startdate} and end_date = ${enddate};
-    // `;
+      return {
+        msg: "it went through",
+        userId,
+        monthYear,
+        income,
+        spending,
+        savings,
+      };
+    } catch (error) {
+      return { error: `DB operation failed: ${error}` };
+    }
 
     // return success;
   },

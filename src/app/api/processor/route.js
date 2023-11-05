@@ -39,14 +39,13 @@ export async function POST(request) {
   if (action === "summary") {
     const {
       userId = 0,
-      startdate = null,
-      enddate = null,
+      date = null,
       income = null,
       spending = null,
       savings = null,
     } = Object.fromEntries(searchParams);
 
-    if (!startdate || !enddate || !income || !spending || !savings) {
+    if (!date || !income || !spending || !savings) {
       return NextResponse.json(
         { error: "missing parameters" }, // shows up in response.data.error
         { status: 400 }
@@ -55,17 +54,12 @@ export async function POST(request) {
 
     const summary = await processorFunctions.submitSummary(
       userId,
-      startdate,
-      enddate,
+      date,
       income,
       spending,
       savings
     );
+
     return NextResponse.json(summary, { status: "200" });
   }
-
-  // return NextResponse.json(
-  //   { action: searchParams.get("action") },
-  //   { status: "200" }
-  // );
 }
