@@ -1,8 +1,7 @@
 "use client";
-
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
+import { usePathname } from "next/navigation";
+import { Box, Grid } from "@mui/material";
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff";
 import Link from "next/link";
 
@@ -12,6 +11,7 @@ import { useGlobalState } from "./context";
 export default function Navbar() {
   const [openLogin, setOpenLogin] = useState(false);
   const { user } = useGlobalState();
+  const path = usePathname();
 
   return (
     <Box
@@ -46,7 +46,14 @@ export default function Navbar() {
           xs={6}
         >
           <Grid item>
-            <Link href="/processor">CSV PROCESSOR</Link>
+            <Link
+              href="/processor"
+              style={{
+                borderBottom: path === "/processor" ? "1px solid white" : "",
+              }}
+            >
+              CSV PROCESSOR
+            </Link>
           </Grid>
           <Grid
             item
@@ -54,7 +61,14 @@ export default function Navbar() {
               marginLeft: "50px",
             }}
           >
-            <Link href="/stats">STATISTICS</Link>
+            <Link
+              href="/stats"
+              style={{
+                borderBottom: path === "/stats" ? "1px solid white" : "",
+              }}
+            >
+              STATISTICS
+            </Link>
           </Grid>
           <Grid
             item
