@@ -4,7 +4,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import styled from "@emotion/styled";
 import Image from "next/image";
 
-import { useGlobalState } from "@/app/context";
+import { useGlobalState } from "@/app/components/context";
 import { useProcessorState } from "../context";
 
 const VisuallyHiddenInput = styled("input")({

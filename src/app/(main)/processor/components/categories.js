@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Box, Grid, Typography, Button, LinearProgress } from "@mui/material";
 
 import { processFile } from "./processorFunctions";
-import { useGlobalState } from "@/app/context";
+import { useGlobalState } from "@/app/components/context";
 import { useProcessorState } from "../context";
 
 export default function Categories() {

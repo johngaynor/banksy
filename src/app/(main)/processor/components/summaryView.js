@@ -17,7 +17,7 @@ import StorageIcon from "@mui/icons-material/Storage";
 
 import { SubmitSummary } from "./processorFunctions";
 import { useProcessorState } from "../context";
-import { useGlobalState } from "../../../context";
+import { useGlobalState } from "../../../components/context";
 
 export default function SummaryView() {
   const { data, setSubmitSummaryLoading } = useProcessorState();

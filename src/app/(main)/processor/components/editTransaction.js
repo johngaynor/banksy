@@ -20,7 +20,7 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
 
 import { useProcessorState } from "../context";
-import { useGlobalState } from "@/app/context";
+import { useGlobalState } from "@/app/components/context";
 
 const modalStyle = {
   position: "absolute",

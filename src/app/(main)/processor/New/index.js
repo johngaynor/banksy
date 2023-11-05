@@ -7,7 +7,7 @@ import Home from "../components/home";
 import Categories from "../components/categories";
 import TableView from "../components/tableView";
 import SummaryView from "../components/summaryView";
-import { useGlobalState } from "../../../context";
+import { useGlobalState } from "../../../components/context";
 import { useProcessorState } from "../context";
 
 export default function Processor() {

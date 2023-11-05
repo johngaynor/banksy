@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import axios from "axios";
-import { useGlobalState } from "../context";
+import { useGlobalState } from "./context";
 
 export default function LoginForm({ openLogin, setOpenLogin }) {
   const { setUser, addMsg } = useGlobalState();
