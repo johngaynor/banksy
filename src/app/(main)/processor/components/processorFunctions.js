@@ -1,4 +1,5 @@
 import Papa from "papaparse";
+import axios from "axios";
 
 // processFile handles the initial processing/category assigning by:
 // 1. use papaparse to parse the file
@@ -97,8 +98,7 @@ export function generateSummary(userViews, data, start, end) {
     spending: 0,
     income: 0,
     savings: 0,
-    startDate: "2023-01-01",
-    endDate: "2023-01-30",
+    month: 0,
     views: [],
   };
 
@@ -168,13 +168,26 @@ export function generateSummary(userViews, data, start, end) {
   return summary;
 }
 
-export function SubmitSummary(data) {
+export function SubmitSummary(data, date, addMsg, setLoading) {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log("trying to submit");
-      console.log(data);
+      setLoading(true);
+      const { income, spending, savings } = data;
+      const response = await axios.post(
+        `/api/processor?action=summary&date=${date}&income=${income}&spending=${spending}&savings=${savings}`
+      );
+      if (response.status === 200) {
+        if (response.data.error) {
+          addMsg("error", `Error: ${response.data.error}`);
+        } else {
+          addMsg("success", "Summary submitted to database.");
+        }
+      }
     } catch (error) {
+      addMsg("error", `error submitting summary: ${error}`);
       reject(error);
     }
+    setLoading(false);
+    // window.location.reload(); // just a way to start over
   });
 }

@@ -26,6 +26,7 @@ export default function Processor() {
     setUserViews,
     viewsLoading,
     setViewsLoading,
+    submitSummaryLoading,
   } = useProcessorState();
 
   const getBanks = async (userId) => {
@@ -97,7 +98,12 @@ export default function Processor() {
     }
   }, [userBanks, userCategories, userViews]);
 
-  if (banksLoading || categoriesLoading || viewsLoading) {
+  if (
+    banksLoading ||
+    categoriesLoading ||
+    viewsLoading ||
+    submitSummaryLoading
+  ) {
     return <CircularProgress />;
   }
 

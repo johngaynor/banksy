@@ -1,13 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  PieChart,
-  Pie,
-  Sector,
-  Cell,
-  ResponsiveContainer,
-  Label,
-} from "recharts";
+import { PieChart, Pie, Cell } from "recharts";
 import {
   Box,
   Grid,
@@ -15,32 +8,36 @@ import {
   Card,
   CardContent,
   Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import StorageIcon from "@mui/icons-material/Storage";
 
-import { generateSummary, SubmitSummary } from "./processorFunctions";
+import { SubmitSummary } from "./processorFunctions";
 import { useProcessorState } from "../context";
+import { useGlobalState } from "../../../context";
 
 export default function SummaryView() {
-  const { setData, data, userViews } = useProcessorState();
+  const { data, setSubmitSummaryLoading } = useProcessorState();
+  const { addMsg } = useGlobalState();
   const [categories, setCategories] = useState([]);
   const [macros, setMacros] = useState([]);
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
 
   useEffect(() => {
-    const summary = generateSummary(userViews, data);
-
-    setData(summary); // setting data
-
     const sortedCategories = () => {
-      const order = Object.keys(summary.views[1].categories);
+      const order = Object.keys(data.views[1].categories);
       const categories = {
-        savings: summary.savings,
-        ...summary.views[0].categories,
+        savings: data.savings,
+        ...data.views[0].categories,
       };
       const sorted = [];
 
       for (const o of order) {
-        const options = summary.views[1].aggregates[o];
+        const options = data.views[1].aggregates[o];
 
         for (const c in categories) {
           if (options.includes(c)) {
@@ -49,7 +46,7 @@ export default function SummaryView() {
         }
 
         if (o === "savings") {
-          sorted.push({ name: "savings", value: summary.savings });
+          sorted.push({ name: "savings", value: data.savings });
         }
       }
 
@@ -59,11 +56,11 @@ export default function SummaryView() {
     sortedCategories();
 
     const macroArr = [];
-    for (const m in summary.views[1].categories) {
+    for (const m in data.views[1].categories) {
       if (m === "savings") {
-        macroArr.push({ name: "savings", value: summary.savings });
+        macroArr.push({ name: "savings", value: data.savings });
       } else {
-        macroArr.push({ name: m, value: summary.views[1].categories[m] });
+        macroArr.push({ name: m, value: data.views[1].categories[m] });
       }
     }
 
@@ -93,6 +90,32 @@ export default function SummaryView() {
     savings: 200.0,
   };
 
+  const months = [
+    { name: "January", value: "01" },
+    { name: "February", value: "02" },
+    { name: "March", value: "03" },
+    { name: "April", value: "04" },
+    { name: "May", value: "05" },
+    { name: "June", value: "06" },
+    { name: "July", value: "07" },
+    { name: "August", value: "08" },
+    { name: "September", value: "09" },
+    { name: "October", value: "10" },
+    { name: "November", value: "11" },
+    { name: "December", value: "12" },
+  ];
+
+  const years = ["2021", "2022", "2023", "2024"];
+
+  const handleSubmit = () => {
+    if (!month || !year) {
+      addMsg("error", "Please enter a date for this summary.");
+    } else {
+      const date = month + "-" + year;
+      SubmitSummary(data, date, addMsg, setSubmitSummaryLoading);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -103,7 +126,59 @@ export default function SummaryView() {
       }}
     >
       <Grid container spacing={0}>
-        <Grid item xs={4}></Grid>
+        <Grid
+          item
+          xs={4}
+          sx={{
+            display: "flex",
+            alignItems: "flex-end",
+          }}
+        >
+          <FormControl>
+            <InputLabel sx={{ color: "white" }}>Month</InputLabel>
+            <Select
+              value={month}
+              onChange={(e) => setMonth(e.target.value)}
+              sx={{
+                color: "white",
+                border: "1px solid white",
+                "& .MuiSelect-icon": {
+                  color: "white",
+                },
+                height: "50px",
+                width: "130px",
+              }}
+            >
+              {months.map((m) => (
+                <MenuItem value={m.value}>{m.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl>
+            <InputLabel sx={{ color: "white", marginLeft: "20px" }}>
+              Year
+            </InputLabel>
+            <Select
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+              sx={{
+                color: "white",
+                border: "1px solid white",
+                "& .MuiSelect-icon": {
+                  color: "white",
+                },
+                height: "50px",
+                width: "90px",
+                marginLeft: "20px",
+              }}
+            >
+              {years.map((y) => (
+                <MenuItem value={y}>{y}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
         <Grid item xs={4}>
           <Typography
             variant="h3"
@@ -122,7 +197,7 @@ export default function SummaryView() {
           }}
         >
           <Button
-            onClick={() => SubmitSummary(data)}
+            onClick={() => handleSubmit()}
             component="label"
             variant="contained"
             color="success"

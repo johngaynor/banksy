@@ -14,6 +14,7 @@ const ProcessorContextProvider = ({ children }) => {
   const [banksLoading, setBanksLoading] = useState(false);
   const [categoriesLoading, setCategoriesLoading] = useState(false);
   const [viewsLoading, setViewsLoading] = useState(false);
+  const [submitSummaryLoading, setSubmitSummaryLoading] = useState(false);
 
   return (
     <ProcessorContext.Provider
@@ -36,6 +37,8 @@ const ProcessorContextProvider = ({ children }) => {
         setUserViews,
         viewsLoading,
         setViewsLoading,
+        submitSummaryLoading,
+        setSubmitSummaryLoading,
       }}
     >
       {children}
