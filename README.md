@@ -3,6 +3,7 @@
 - build out UI for summary data
 - add button on tableView to select date range (hard coded now)
 - sanitize & protect routes
+- table view for past transactions
 
 AFTER MVP IS COMPLETE:
 
