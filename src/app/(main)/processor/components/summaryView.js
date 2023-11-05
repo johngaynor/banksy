@@ -1,13 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  PieChart,
-  Pie,
-  Sector,
-  Cell,
-  ResponsiveContainer,
-  Label,
-} from "recharts";
+import { PieChart, Pie, Cell } from "recharts";
 import {
   Box,
   Grid,

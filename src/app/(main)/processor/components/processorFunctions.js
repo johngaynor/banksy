@@ -186,5 +186,6 @@ export function SubmitSummary(data, addMsg, setLoading) {
       reject(error);
     }
     setLoading(false);
+    // window.location.reload(); // just a way to start over
   });
 }
