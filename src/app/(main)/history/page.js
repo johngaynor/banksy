@@ -22,6 +22,7 @@ import moment from "moment";
 
 import { getHistory } from "./actions";
 import { useGlobalState } from "@/app/components/context";
+import { width } from "@mui/system";
 
 export default function History() {
   const {
@@ -58,7 +59,9 @@ export default function History() {
     .map((row, index) => ({
       ...row,
       index,
-      prevIncome: userHistory[index + 1] ? userHistory[index + 1].income : 0,
+      prevIncome: userHistory[index + 1]
+        ? row.income - userHistory[index + 1].income
+        : 0,
       prevSpending: userHistory[index + 1]
         ? userHistory[index + 1].spending
         : 0,
@@ -100,22 +103,22 @@ export default function History() {
                 paddingBottom: "5px",
               }}
             >
-              {/* <Button
+              <Button
                 // onClick={() => setOpenEdit(true)}
                 component="label"
                 variant="contained"
-                startIcon={<AddBoxIcon />}
+                // startIcon={<AddBoxIcon />}
                 sx={{ marginTop: "20px" }}
-              > */}
-              New Transaction
-              {/* </Button> */}
+              >
+                Export PDF
+              </Button>
             </Grid>
             <Grid item xs={4}>
               <Typography
                 variant="h3"
                 sx={{ textAlign: "center", marginBottom: "20px" }}
               >
-                Transactions
+                History
               </Typography>
             </Grid>
             <Grid
@@ -127,14 +130,13 @@ export default function History() {
                 alignItems: "flex-end",
               }}
             >
-              {/* <FormGroup>
+              <FormGroup>
                 <FormControlLabel
                   control={<Switch />}
-                  label="Show Ignored?"
+                  label="Show difference?"
                   //   onChange={(e) => setShowIgnore(e.target.checked)}
                 />
-              </FormGroup> */}
-              hello
+              </FormGroup>
             </Grid>
           </Grid>
           <TableContainer
@@ -149,13 +151,11 @@ export default function History() {
               <TableHead>
                 <TableRow>
                   <TableCell
-                    sx={{ color: "white", fontSize: "18px", width: "10%" }}
+                    sx={{ color: "white", fontSize: "18px", width: "30%" }}
                   >
                     Date
                   </TableCell>
-                  <TableCell
-                    sx={{ color: "white", fontSize: "18px", width: "10%" }}
-                  >
+                  <TableCell sx={{ color: "white", fontSize: "18px" }}>
                     Income
                   </TableCell>
                   <TableCell sx={{ color: "white", fontSize: "18px" }}>
@@ -168,8 +168,8 @@ export default function History() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {userHistory
-                  ? userHistory
+                {filteredHistory
+                  ? filteredHistory
                       .map((row, index) => ({ ...row, index }))
                       .slice(
                         page * rowsPerPage,
@@ -188,7 +188,25 @@ export default function History() {
                             {row.month_year}
                           </TableCell>
                           <TableCell sx={{ color: "white" }}>
-                            ${row.income.toFixed(2)}
+                            ${row.income.toFixed(2)}{" "}
+                            <span
+                              style={{
+                                color:
+                                  row.prevIncome === 0
+                                    ? "white"
+                                    : row.prevIncome > 0
+                                    ? "#2E7D32"
+                                    : "#D32E2E",
+                                fontWeight: "bold",
+                                fontSize: "14px",
+                              }}
+                            >
+                              {row.prevIncome === 0
+                                ? row.prevIncome.toFixed(2)
+                                : row.prevIncome > 0
+                                ? "+$" + row.prevIncome.toFixed(2)
+                                : "-$" + Math.abs(row.prevIncome.toFixed(2))}
+                            </span>
                           </TableCell>
                           <TableCell
                             sx={{
