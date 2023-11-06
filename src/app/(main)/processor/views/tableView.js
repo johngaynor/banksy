@@ -19,12 +19,14 @@ import {
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 
+import EditTransaction from "../components/editTransaction";
+import { generateSummary } from "../components/processorFunctions";
 import { useProcessorState } from "../context";
-import EditTransaction from "./editTransaction";
-import { generateSummary } from "./processorFunctions";
+import { useGlobalState } from "@/app/components/context";
 
-export default function TableView() {
-  const { data, setData, setFormStep, userViews } = useProcessorState();
+export default function TableView({ setFormStep }) {
+  const { userViews } = useGlobalState();
+  const { data, setData } = useProcessorState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openEdit, setOpenEdit] = useState(false);

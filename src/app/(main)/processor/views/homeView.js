@@ -1,4 +1,5 @@
 "use client";
+import { useEffect } from "react";
 import { Box, Grid, Typography, Button } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import styled from "@emotion/styled";
@@ -6,6 +7,7 @@ import Image from "next/image";
 
 import { useGlobalState } from "@/app/components/context";
 import { useProcessorState } from "../context";
+import { getBanks, getCategories, getViews } from "../actions";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -19,9 +21,23 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-export default function Home() {
-  const { addMsg } = useGlobalState();
-  const { setRawFile, setFormStep } = useProcessorState();
+export default function Home({ setFormStep }) {
+  const {
+    addMsg,
+    userBanks,
+    setUserBanks,
+    banksLoading,
+    setBanksLoading,
+    userCategories,
+    setUserCategories,
+    categoriesLoading,
+    setCategoriesLoading,
+    userViews,
+    setUserViews,
+    viewsLoading,
+    setViewsLoading,
+  } = useGlobalState();
+  const { setRawFile } = useProcessorState();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -33,6 +49,19 @@ export default function Home() {
       addMsg("error", "Please select a valid .csv file.");
     }
   };
+
+  useEffect(() => {
+    if (!userBanks && !banksLoading) {
+      getBanks(setUserBanks, setBanksLoading, addMsg, 0);
+    }
+    if (!userCategories && !categoriesLoading) {
+      getCategories(setUserCategories, setCategoriesLoading, addMsg, 0);
+    }
+
+    if (!userViews && !viewsLoading) {
+      getViews(setUserViews, setViewsLoading, addMsg, 0);
+    }
+  }, [userBanks, userCategories, userViews]);
 
   return (
     <Box

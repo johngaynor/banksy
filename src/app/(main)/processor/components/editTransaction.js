@@ -41,8 +41,8 @@ export default function EditTransaction({
   transaction,
   setTransaction,
 }) {
-  const { userCategories, setData, data } = useProcessorState();
-  const { addMsg } = useGlobalState();
+  const { setData, data } = useProcessorState();
+  const { userCategories, addMsg } = useGlobalState();
 
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState(0);

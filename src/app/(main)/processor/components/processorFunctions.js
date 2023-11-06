@@ -167,27 +167,3 @@ export function generateSummary(userViews, data, start, end) {
 
   return summary;
 }
-
-export function SubmitSummary(data, date, addMsg, setLoading) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      setLoading(true);
-      const { income, spending, savings } = data;
-      const response = await axios.post(
-        `/api/processor?action=summary&date=${date}&income=${income}&spending=${spending}&savings=${savings}`
-      );
-      if (response.status === 200) {
-        if (response.data.error) {
-          addMsg("error", `Error: ${response.data.error}`);
-        } else {
-          addMsg("success", "Summary submitted to database.");
-        }
-      }
-    } catch (error) {
-      addMsg("error", `error submitting summary: ${error}`);
-      reject(error);
-    }
-    setLoading(false);
-    // window.location.reload(); // just a way to start over
-  });
-}

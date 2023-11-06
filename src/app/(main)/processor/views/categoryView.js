@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import { Box, Grid, Typography, Button, LinearProgress } from "@mui/material";
 
-import { processFile } from "./processorFunctions";
+import { processFile } from "../components/processorFunctions";
 import { useGlobalState } from "@/app/components/context";
 import { useProcessorState } from "../context";
 
-export default function Categories() {
-  const { addMsg } = useGlobalState();
-
-  const { userBanks, userCategories, rawFile, data, setData, setFormStep } =
-    useProcessorState();
+export default function Categories({ setFormStep }) {
+  const { addMsg, userBanks, userCategories } = useGlobalState();
+  const { rawFile, data, setData } = useProcessorState();
   const [flaggedIndex, setFlaggedIndex] = useState(0);
 
   useEffect(() => {

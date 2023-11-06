@@ -14,18 +14,22 @@ import {
   MenuItem,
 } from "@mui/material";
 import StorageIcon from "@mui/icons-material/Storage";
+import { useRouter } from "next/navigation";
 
-import { SubmitSummary } from "./processorFunctions";
+import { submitSummary } from "../actions";
 import { useProcessorState } from "../context";
 import { useGlobalState } from "../../../components/context";
 
 export default function SummaryView() {
-  const { data, setSubmitSummaryLoading } = useProcessorState();
-  const { addMsg } = useGlobalState();
+  const { data } = useProcessorState();
+  const { addMsg, setSubmitSummaryLoading } = useGlobalState();
   const [categories, setCategories] = useState([]);
   const [macros, setMacros] = useState([]);
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
+  const router = useRouter();
+
+  console.log(data);
 
   useEffect(() => {
     const sortedCategories = () => {
@@ -112,7 +116,7 @@ export default function SummaryView() {
       addMsg("error", "Please enter a date for this summary.");
     } else {
       const date = month + "-" + year;
-      SubmitSummary(data, date, addMsg, setSubmitSummaryLoading);
+      submitSummary(data, date, addMsg, setSubmitSummaryLoading, router);
     }
   };
 
