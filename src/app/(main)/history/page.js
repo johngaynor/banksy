@@ -22,7 +22,6 @@ import moment from "moment";
 
 import { getHistory } from "./actions";
 import { useGlobalState } from "@/app/components/context";
-import { width } from "@mui/system";
 
 export default function History() {
   const {
@@ -49,6 +48,8 @@ export default function History() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  console.log(process.env.API_PASSWORD);
 
   const filteredHistory = userHistory
     ?.sort((a, b) => {
