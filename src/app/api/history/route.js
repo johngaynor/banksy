@@ -5,6 +5,9 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get("action");
   const userId = searchParams.get("userId");
+  if (!process.env.API_PASSWORD) {
+    return NextResponse.json({ msg: "not allowed" }, { status: 200 });
+  }
 
   if (!action) {
     return NextResponse.json({ error: "action is required" }, { status: 400 });

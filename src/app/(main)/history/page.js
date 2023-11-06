@@ -49,8 +49,6 @@ export default function History() {
     setPage(0);
   };
 
-  console.log(process.env.API_PASSWORD);
-
   const filteredHistory = userHistory
     ?.sort((a, b) => {
       const dateA = moment(a.month_year, "mm-yyyy").format("yyyymm");
