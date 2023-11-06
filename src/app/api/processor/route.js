@@ -13,17 +13,17 @@ export async function GET(request) {
 
   if (action === "getbanks") {
     const banks = await processorFunctions.getUserBanks(userId);
-    return NextResponse.json(banks, { status: "200" });
+    return NextResponse.json(banks, { status: 200 });
   }
 
   if (action === "getcategories") {
     const categories = await processorFunctions.getUserCategories(userId);
-    return NextResponse.json(categories, { status: "200" });
+    return NextResponse.json(categories, { status: 200 });
   }
 
   if (action === "getviews") {
     const views = await processorFunctions.getUserViews();
-    return NextResponse.json(views, { status: "200" });
+    return NextResponse.json(views, { status: 200 });
   }
 }
 
@@ -60,6 +60,6 @@ export async function POST(request) {
       savings
     );
 
-    return NextResponse.json(summary, { status: "200" });
+    return NextResponse.json(summary, { status: 200 });
   }
 }

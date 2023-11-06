@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Box } from "@mui/material";
 
 import HomeView from "./views/homeView";
 import CategoryView from "./views/categoryView";
@@ -40,5 +40,19 @@ export default function Processor() {
     return <CircularProgress />;
   }
 
-  return <ProcessorContextProvider>{activePage()}</ProcessorContextProvider>;
+  return (
+    <ProcessorContextProvider>
+      <Box
+        sx={{
+          flexGrow: 1,
+          padding: 4,
+          backgroundColor: "#121212",
+          minHeight: "100vh",
+          display: "flex",
+        }}
+      >
+        {activePage()}
+      </Box>
+    </ProcessorContextProvider>
+  );
 }

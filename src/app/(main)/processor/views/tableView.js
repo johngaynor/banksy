@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  Box,
   Grid,
   Typography,
   Button,
@@ -58,15 +57,7 @@ export default function TableView({ setFormStep }) {
   };
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        padding: 4,
-        backgroundColor: "#121212",
-        minHeight: "100vh",
-        display: "flex",
-      }}
-    >
+    <>
       <Grid
         container
         spacing={1}
@@ -248,6 +239,6 @@ export default function TableView({ setFormStep }) {
         transaction={editedTransaction}
         setTransaction={setEditedTransaction}
       />
-    </Box>
+    </>
   );
 }

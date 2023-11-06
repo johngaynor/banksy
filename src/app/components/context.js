@@ -8,12 +8,14 @@ const GlobalContextProvider = ({ children }) => {
   const [userBanks, setUserBanks] = useState(null);
   const [userCategories, setUserCategories] = useState(null);
   const [userViews, setUserViews] = useState(null);
+  const [userHistory, setUserHistory] = useState(null);
 
   // loading states
   const [banksLoading, setBanksLoading] = useState(false);
   const [categoriesLoading, setCategoriesLoading] = useState(false);
   const [viewsLoading, setViewsLoading] = useState(false);
   const [submitSummaryLoading, setSubmitSummaryLoading] = useState(false);
+  const [historyLoading, setHistoryLoading] = useState(false);
 
   const addMsg = useCallback((type, msgContent) => {
     setMsg((prevArr) => [...prevArr, { type, msg: msgContent }]);
@@ -41,6 +43,10 @@ const GlobalContextProvider = ({ children }) => {
         setViewsLoading,
         submitSummaryLoading,
         setSubmitSummaryLoading,
+        userHistory,
+        setUserHistory,
+        historyLoading,
+        setHistoryLoading,
       }}
     >
       {children}

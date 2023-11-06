@@ -64,60 +64,50 @@ export default function Home({ setFormStep }) {
   }, [userBanks, userCategories, userViews]);
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        padding: 4,
-        backgroundColor: "#121212",
-        minHeight: "100vh",
-        display: "flex",
-      }}
-    >
-      <Grid container spacing={1}>
-        <Grid
-          item
-          xs={6}
+    <Grid container spacing={1}>
+      <Grid
+        item
+        xs={6}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          marginTop: "60px",
+        }}
+      >
+        <Typography variant="h2">
+          Welcome to Banksy, your analytical finance tool.
+        </Typography>
+        <Typography
+          variant="h6"
+          sx={{ marginTop: "10px", marginBottom: "20px" }}
+        >
+          Upload a .csv file to get started.
+        </Typography>
+        <Button
+          component="label"
+          variant="contained"
+          startIcon={<CloudUploadIcon />}
+          sx={{ width: "200px", height: "50px" }}
+        >
+          Upload file
+          <VisuallyHiddenInput type="file" onChange={handleFileChange} />
+        </Button>
+        <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
-            marginTop: "60px",
+            marginTop: "20px",
           }}
-        >
-          <Typography variant="h2">
-            Welcome to Banksy, your analytical finance tool.
-          </Typography>
-          <Typography
-            variant="h6"
-            sx={{ marginTop: "10px", marginBottom: "20px" }}
-          >
-            Upload a .csv file to get started.
-          </Typography>
-          <Button
-            component="label"
-            variant="contained"
-            startIcon={<CloudUploadIcon />}
-            sx={{ width: "200px", height: "50px" }}
-          >
-            Upload file
-            <VisuallyHiddenInput type="file" onChange={handleFileChange} />
-          </Button>
-          <Box
-            sx={{
-              display: "flex",
-              marginTop: "20px",
-            }}
-          ></Box>
-        </Grid>
-        <Grid item xs={6} sx={{ marginTop: "-40px" }}>
-          <Image
-            src="/modern1.png"
-            alt="Description of the image"
-            width={600}
-            height={600}
-            priority
-          />
-        </Grid>
+        ></Box>
       </Grid>
-    </Box>
+      <Grid item xs={6} sx={{ marginTop: "-40px" }}>
+        <Image
+          src="/modern1.png"
+          alt="Description of the image"
+          width={600}
+          height={600}
+          priority
+        />
+      </Grid>
+    </Grid>
   );
 }

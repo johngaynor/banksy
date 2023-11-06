@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Grid, Typography, Button, LinearProgress } from "@mui/material";
+import { Grid, Typography, Button, LinearProgress } from "@mui/material";
 
 import { processFile } from "../components/processorFunctions";
 import { useGlobalState } from "@/app/components/context";
@@ -92,42 +92,32 @@ export default function Categories({ setFormStep }) {
 
   if (userCategories) {
     return (
-      <Box
+      <Grid
+        container
+        spacing={1}
         sx={{
-          flexGrow: 1,
-          padding: 4,
-          backgroundColor: "#121212",
-          minHeight: "100vh",
           display: "flex",
+          justifyContent: "center",
+          marginTop: "50px",
         }}
       >
-        <Grid
-          container
-          spacing={1}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "50px",
-          }}
-        >
-          <Grid item>
-            <Typography variant="h3" sx={{ textAlign: "center" }}>
-              First, let's take a look at some transactions.
-            </Typography>
+        <Grid item>
+          <Typography variant="h3" sx={{ textAlign: "center" }}>
+            First, let's take a look at some transactions.
+          </Typography>
 
-            <LinearProgress
-              variant="determinate"
-              value={
-                (flaggedIndex /
-                  (data?.flagged ? data.flagged.length : flaggedIndex)) *
-                100
-              }
-              sx={{ height: "20px", width: "70%", margin: "20px auto" }}
-            />
-            {flaggedPrompts()}
-          </Grid>
+          <LinearProgress
+            variant="determinate"
+            value={
+              (flaggedIndex /
+                (data?.flagged ? data.flagged.length : flaggedIndex)) *
+              100
+            }
+            sx={{ height: "20px", width: "70%", margin: "20px auto" }}
+          />
+          {flaggedPrompts()}
         </Grid>
-      </Box>
+      </Grid>
     );
   }
 }

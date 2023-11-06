@@ -62,9 +62,9 @@ export default function Navbar() {
             }}
           >
             <Link
-              href="/stats"
+              href="/history"
               style={{
-                borderBottom: path === "/stats" ? "1px solid white" : "",
+                borderBottom: path === "/history" ? "1px solid white" : "",
               }}
             >
               STATISTICS

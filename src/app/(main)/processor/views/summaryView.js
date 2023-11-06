@@ -121,14 +121,7 @@ export default function SummaryView() {
   };
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        padding: 4,
-        backgroundColor: "#121212",
-        minHeight: "100vh",
-      }}
-    >
+    <>
       <Grid container spacing={0}>
         <Grid
           item
@@ -406,7 +399,7 @@ export default function SummaryView() {
           </PieChart>
         </Grid>
       </Grid>
-    </Box>
+    </>
   );
 }
 
