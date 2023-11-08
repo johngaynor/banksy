@@ -92,6 +92,26 @@ export default function EditTransaction({
 
   const categories = ["income", ...Object.keys(userCategories)];
 
+  const handleTypeChange = (e) => {
+    const type = e.target.value;
+    setType(type);
+    if (type === "deposit") {
+      setCategory("income");
+    } else if (category === "income") {
+      setCategory("");
+    }
+  };
+
+  const handleCategoryChange = (e) => {
+    const category = e.target.value;
+    setCategory(category);
+    if (category === "income") {
+      setType("deposit");
+    } else if (type === "deposit") {
+      setType("withdrawal");
+    }
+  };
+
   useEffect(() => {
     if (transaction) {
       setCategory(transaction.category);
@@ -170,7 +190,7 @@ export default function EditTransaction({
                     color={type === "withdrawal" ? "error" : "success"}
                     value={type}
                     exclusive
-                    onChange={(e) => setType(e.target.value)}
+                    onChange={(e) => handleTypeChange(e)}
                     sx={{ height: "50px" }}
                   >
                     <ToggleButton
@@ -214,7 +234,7 @@ export default function EditTransaction({
                 <Grid item xs={2} sx={{ marginTop: "15px" }}>
                   <InputLabel sx={{ color: "white" }}>Category</InputLabel>
                   <Select
-                    onChange={(e) => setCategory(e.target.value)}
+                    onChange={(e) => handleCategoryChange(e)}
                     value={category}
                     sx={{
                       color: "white",

@@ -77,12 +77,11 @@ export async function submitSummary(
         addMsg("error", `Error: ${response.data.error}`);
       } else {
         addMsg("success", "Summary submitted to database.");
-        router.push("/stats");
+        router.push("/history");
       }
     }
   } catch (error) {
     addMsg("error", `error submitting summary: ${error}`);
   }
   setSubmitSummaryLoading(false);
-  // window.location.reload(); // just a way to start over
 }

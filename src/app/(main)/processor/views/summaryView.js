@@ -12,6 +12,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  CircularProgress,
 } from "@mui/material";
 import StorageIcon from "@mui/icons-material/Storage";
 import { useRouter } from "next/navigation";
@@ -30,6 +31,9 @@ export default function SummaryView() {
   const router = useRouter();
 
   console.log(data);
+  if (!data) {
+    return <CircularProgress />;
+  }
 
   useEffect(() => {
     const sortedCategories = () => {
@@ -204,6 +208,7 @@ export default function SummaryView() {
           </Button>
         </Grid>
       </Grid>
+
       <Grid
         container
         spacing={2}
@@ -230,7 +235,7 @@ export default function SummaryView() {
                   variant="h3"
                   sx={{ color: "white", marginTop: "5px" }}
                 >
-                  ${data.income?.toFixed(2)}
+                  ${data.income.toFixed(2)}
                 </Typography>
                 <Typography
                   variant="h6"
