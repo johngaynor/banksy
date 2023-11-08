@@ -1,3 +1,4 @@
+import { requestToBodyStream } from "next/dist/server/body-streams";
 import { NextResponse } from "next/server";
 import { processorFunctions } from "./model";
 
@@ -30,6 +31,7 @@ export async function GET(request) {
 export async function POST(request) {
   const { searchParams } = new URL(request.url);
   const { action } = Object.fromEntries(searchParams);
+  const res = await request.json();
 
   if (!action) {
     return NextResponse.json({ error: "action is required" }, { status: 400 });
@@ -56,7 +58,8 @@ export async function POST(request) {
       date,
       income,
       spending,
-      savings
+      savings,
+      res.summary
     );
 
     return NextResponse.json(summary, { status: 200 });

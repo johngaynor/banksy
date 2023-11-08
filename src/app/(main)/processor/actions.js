@@ -68,16 +68,26 @@ export async function submitSummary(
 ) {
   try {
     setSubmitSummaryLoading(true);
-    const { income, spending, savings } = data;
+    const { income, spending, savings, summary } = data;
+    const payload = {
+      date,
+      income,
+      spending,
+      savings,
+      summary,
+    };
     const response = await axios.post(
-      `/api/processor?action=summary&date=${date}&income=${income}&spending=${spending}&savings=${savings}`
+      `/api/processor?action=summary&date=${date}&income=${income}&spending=${spending}&savings=${savings}`,
+      payload
     );
+
+    console.log(response.data);
     if (response.status === 200) {
       if (response.data.error) {
         addMsg("error", `Error: ${response.data.error}`);
       } else {
         addMsg("success", "Summary submitted to database.");
-        router.push("/history");
+        // router.push("/history");
       }
     }
   } catch (error) {
