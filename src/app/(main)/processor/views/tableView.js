@@ -24,7 +24,7 @@ import { useProcessorState } from "../context";
 import { useGlobalState } from "@/app/components/context";
 
 export default function TableView({ setFormStep }) {
-  const { userViews } = useGlobalState();
+  const { userViews, userCategories } = useGlobalState();
   const { data, setData } = useProcessorState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -51,7 +51,7 @@ export default function TableView({ setFormStep }) {
     .filter((row) => showIgnore || row.category !== "ignore");
 
   const handleSubmit = () => {
-    const summary = generateSummary(userViews, data);
+    const summary = generateSummary(userViews, data, userCategories);
     setData(summary);
     setFormStep(3);
   };

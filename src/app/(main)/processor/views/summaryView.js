@@ -31,6 +31,7 @@ export default function SummaryView() {
   const router = useRouter();
 
   console.log(data);
+
   if (!data) {
     return <CircularProgress />;
   }

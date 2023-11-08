@@ -74,7 +74,7 @@ export default function Categories({ setFormStep }) {
             justifyContent: "center",
           }}
         >
-          {Object.keys(userCategories).map((cat, index) => (
+          {["income", ...Object.keys(userCategories)].map((cat, index) => (
             <Button
               component="label"
               variant="contained"
