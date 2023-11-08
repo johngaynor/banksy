@@ -87,7 +87,7 @@ export async function submitSummary(
         addMsg("error", `Error: ${response.data.error}`);
       } else {
         addMsg("success", "Summary submitted to database.");
-        // router.push("/history");
+        router.push("/history");
       }
     }
   } catch (error) {

@@ -14,7 +14,12 @@ export const historyFunctions = {
   deleteHistoryByUserAndDate: async function (userId, date) {
     const { rows } = await sql`
     delete from processor_history
-    where user_id = ${userId} and month_year = ${date};
+    where user_id = ${userId} and month_year = ${date}
+    `;
+
+    await sql`
+    delete from processor_history_categories
+    where user_id = ${userId} and month_year = ${date}
     `;
 
     return rows;
