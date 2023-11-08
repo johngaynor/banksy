@@ -18,9 +18,11 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
+import PageviewIcon from "@mui/icons-material/Pageview";
+import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
 
-import { getHistory } from "./actions";
+import { getHistory, deleteHistory } from "./actions";
 import { useGlobalState } from "@/app/components/context";
 
 export default function History() {
@@ -30,15 +32,23 @@ export default function History() {
     setUserHistory,
     historyLoading,
     setHistoryLoading,
+    deleteHistoryLoading,
+    setDeleteHistoryLoading,
   } = useGlobalState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [showPercents, setShowPercents] = useState(true);
 
   useEffect(() => {
     if (!userHistory && !historyLoading) {
       getHistory(setUserHistory, setHistoryLoading, addMsg, 0);
     }
   }, [userHistory]);
+
+  const handleDelete = async (date) => {
+    await deleteHistory(0, date, addMsg, setDeleteHistoryLoading);
+    getHistory(setUserHistory, setHistoryLoading, addMsg, 0);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -59,15 +69,29 @@ export default function History() {
       ...row,
       index,
       prevIncome: userHistory[index + 1]
-        ? row.income - userHistory[index + 1].income
+        ? showPercents
+          ? ((row.income - userHistory[index + 1].income) /
+              userHistory[index + 1].income) *
+            100
+          : row.income - userHistory[index + 1].income
         : 0,
       prevSpending: userHistory[index + 1]
-        ? userHistory[index + 1].spending
+        ? showPercents
+          ? ((row.spending - userHistory[index + 1].spending) /
+              userHistory[index + 1].spending) *
+            100
+          : row.spending - userHistory[index + 1].spending
         : 0,
-      prevSavings: userHistory[index + 1] ? userHistory[index + 1].savings : 0,
+      prevSavings: userHistory[index + 1]
+        ? showPercents
+          ? ((row.savings - userHistory[index + 1].savings) /
+              userHistory[index + 1].savings) *
+            100
+          : row.savings - userHistory[index + 1].savings
+        : 0,
     }));
 
-  if (historyLoading) {
+  if (historyLoading || deleteHistoryLoading) {
     return <CircularProgress />;
   }
 
@@ -131,9 +155,9 @@ export default function History() {
             >
               <FormGroup>
                 <FormControlLabel
-                  control={<Switch />}
-                  label="Show difference?"
-                  //   onChange={(e) => setShowIgnore(e.target.checked)}
+                  control={<Switch checked={showPercents} />}
+                  label="Show percents?"
+                  onChange={(e) => setShowPercents(e.target.checked)}
                 />
               </FormGroup>
             </Grid>
@@ -150,20 +174,27 @@ export default function History() {
               <TableHead>
                 <TableRow>
                   <TableCell
-                    sx={{ color: "white", fontSize: "18px", width: "30%" }}
+                    sx={{ color: "white", fontSize: "18px", width: "20%" }}
                   >
                     Date
                   </TableCell>
-                  <TableCell sx={{ color: "white", fontSize: "18px" }}>
+                  <TableCell
+                    sx={{ color: "white", fontSize: "18px", width: "20%" }}
+                  >
                     Income
                   </TableCell>
-                  <TableCell sx={{ color: "white", fontSize: "18px" }}>
+                  <TableCell
+                    sx={{ color: "white", fontSize: "18px", width: "20%" }}
+                  >
                     Spending
                   </TableCell>
-                  <TableCell sx={{ color: "white", fontSize: "18px" }}>
+                  <TableCell
+                    sx={{ color: "white", fontSize: "18px", width: "20%" }}
+                  >
                     Savings
                   </TableCell>
-                  <TableCell></TableCell>
+                  <TableCell sx={{ width: "5%" }}></TableCell>
+                  <TableCell sx={{ width: "5%" }}></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -184,10 +215,12 @@ export default function History() {
                           }}
                         >
                           <TableCell sx={{ color: "white" }}>
-                            {row.month_year}
+                            {moment(row.month_year, "MM-YYYY").format(
+                              "MMMM YYYY"
+                            )}
                           </TableCell>
                           <TableCell sx={{ color: "white" }}>
-                            ${row.income.toFixed(2)}{" "}
+                            ${row.income.toFixed(2)}&nbsp;&nbsp;&nbsp;
                             <span
                               style={{
                                 color:
@@ -203,8 +236,14 @@ export default function History() {
                               {row.prevIncome === 0
                                 ? row.prevIncome.toFixed(2)
                                 : row.prevIncome > 0
-                                ? "+$" + row.prevIncome.toFixed(2)
-                                : "-$" + Math.abs(row.prevIncome.toFixed(2))}
+                                ? "+" +
+                                  (showPercents ? "" : "$") +
+                                  row.prevIncome.toFixed(2) +
+                                  (showPercents ? "%" : "")
+                                : "-" +
+                                  (showPercents ? "" : "$") +
+                                  Math.abs(row.prevIncome.toFixed(2)) +
+                                  (showPercents ? "%" : "")}
                             </span>
                           </TableCell>
                           <TableCell
@@ -212,19 +251,70 @@ export default function History() {
                               color: "white",
                             }}
                           >
-                            ${row.spending.toFixed(2)}
+                            ${row.spending.toFixed(2)}&nbsp;&nbsp;&nbsp;
+                            <span
+                              style={{
+                                color:
+                                  row.prevSpending === 0
+                                    ? "white"
+                                    : row.prevSpending > 0
+                                    ? "#2E7D32"
+                                    : "#D32E2E",
+                                fontWeight: "bold",
+                                fontSize: "14px",
+                              }}
+                            >
+                              {row.prevSpending === 0
+                                ? row.prevSpending.toFixed(2)
+                                : row.prevSpending > 0
+                                ? "+$" + row.prevSpending.toFixed(2)
+                                : "-$" + Math.abs(row.prevSpending.toFixed(2))}
+                            </span>
                           </TableCell>
                           <TableCell sx={{ color: "white" }}>
-                            ${row.savings.toFixed(2)}
+                            ${row.savings.toFixed(2)}&nbsp;&nbsp;&nbsp;
+                            <span
+                              style={{
+                                color:
+                                  row.prevSavings === 0
+                                    ? "white"
+                                    : row.prevSavings > 0
+                                    ? "#2E7D32"
+                                    : "#D32E2E",
+                                fontWeight: "bold",
+                                fontSize: "14px",
+                              }}
+                            >
+                              {row.prevSavings === 0
+                                ? row.prevSavings.toFixed(2)
+                                : row.prevSavings > 0
+                                ? "+$" + row.prevSavings.toFixed(2)
+                                : "-$" + Math.abs(row.prevSavings.toFixed(2))}
+                            </span>
                           </TableCell>
                           <TableCell>
                             <Button
                               component="label"
                               variant="contained"
                               sx={{ width: "25px", height: "30px" }}
-                              onClick={() => console.log("hi")}
+                              onClick={() =>
+                                alert(
+                                  "Sorry, this feature is not available yet."
+                                )
+                              }
                             >
-                              {/* <EditNoteIcon /> */}
+                              <PageviewIcon />
+                            </Button>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              component="label"
+                              variant="contained"
+                              color="error"
+                              sx={{ width: "25px", height: "30px" }}
+                              onClick={() => handleDelete(row.month_year)}
+                            >
+                              <DeleteIcon />
                             </Button>
                           </TableCell>
                         </TableRow>
@@ -242,7 +332,7 @@ export default function History() {
               }}
               rowsPerPageOptions={[5, 25, 50]}
               component="div"
-              count={userHistory?.length}
+              count={userHistory?.length || 0}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

@@ -16,10 +16,40 @@ export async function getHistory(
       setHistory(response.data);
       addMsg("success", "Got user history.");
     } else {
-      addMsg("error", "Something failed, please try again later. (history)");
+      addMsg(
+        "error",
+        "Something failed, please try again later. (get history)"
+      );
     }
   } catch (error) {
     addMsg(`error', 'error getting history: ${error}`);
   }
   setHistoryLoading(false);
+}
+
+export async function deleteHistory(
+  userId,
+  date,
+  addMsg,
+  setDeleteHistoryLoading
+) {
+  setDeleteHistoryLoading(true);
+  try {
+    const response = await axios.delete(
+      `/api/history?action=deletehistory&userId=${userId}&date=${date}`
+    );
+
+    if (response.status === 200) {
+      addMsg("success", "Successfully deleted summary.");
+      console.log(response.data);
+    } else {
+      addMsg(
+        "error",
+        "Something failed, please try again later. (delete history)"
+      );
+    }
+  } catch (error) {
+    addMsg(`error', 'error deleting history: ${error}`);
+  }
+  setDeleteHistoryLoading(false);
 }

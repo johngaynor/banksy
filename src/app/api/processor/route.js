@@ -4,8 +4,7 @@ import { processorFunctions } from "./model";
 // handling get requests
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const action = searchParams.get("action");
-  const userId = searchParams.get("userId");
+  const { action, userId } = Object.fromEntries(searchParams);
 
   if (!action) {
     return NextResponse.json({ error: "action is required" }, { status: 400 });
@@ -30,7 +29,7 @@ export async function GET(request) {
 //handling post requests
 export async function POST(request) {
   const { searchParams } = new URL(request.url);
-  const action = searchParams.get("action");
+  const { action } = Object.fromEntries(searchParams);
 
   if (!action) {
     return NextResponse.json({ error: "action is required" }, { status: 400 });
