@@ -127,7 +127,9 @@ export default function History() {
               }}
             >
               <Button
-                // onClick={() => setOpenEdit(true)}
+                onClick={() =>
+                  alert("Sorry, this feature is not available yet.")
+                }
                 component="label"
                 variant="contained"
                 // startIcon={<AddBoxIcon />}
@@ -257,7 +259,7 @@ export default function History() {
                                 color:
                                   row.prevSpending === 0
                                     ? "white"
-                                    : row.prevSpending > 0
+                                    : row.prevSpending < 0
                                     ? "#2E7D32"
                                     : "#D32E2E",
                                 fontWeight: "bold",
@@ -267,8 +269,14 @@ export default function History() {
                               {row.prevSpending === 0
                                 ? row.prevSpending.toFixed(2)
                                 : row.prevSpending > 0
-                                ? "+$" + row.prevSpending.toFixed(2)
-                                : "-$" + Math.abs(row.prevSpending.toFixed(2))}
+                                ? "+" +
+                                  (showPercents ? "" : "$") +
+                                  row.prevSpending.toFixed(2) +
+                                  (showPercents ? "%" : "")
+                                : "-" +
+                                  (showPercents ? "" : "$") +
+                                  Math.abs(row.prevSpending.toFixed(2)) +
+                                  (showPercents ? "%" : "")}
                             </span>
                           </TableCell>
                           <TableCell sx={{ color: "white" }}>
@@ -288,8 +296,14 @@ export default function History() {
                               {row.prevSavings === 0
                                 ? row.prevSavings.toFixed(2)
                                 : row.prevSavings > 0
-                                ? "+$" + row.prevSavings.toFixed(2)
-                                : "-$" + Math.abs(row.prevSavings.toFixed(2))}
+                                ? "+" +
+                                  (showPercents ? "" : "$") +
+                                  row.prevSavings.toFixed(2) +
+                                  (showPercents ? "%" : "")
+                                : "-" +
+                                  (showPercents ? "" : "$") +
+                                  Math.abs(row.prevSavings.toFixed(2)) +
+                                  (showPercents ? "%" : "")}
                             </span>
                           </TableCell>
                           <TableCell>
