@@ -34,20 +34,23 @@ export default function History() {
     setHistoryLoading,
     deleteHistoryLoading,
     setDeleteHistoryLoading,
+    user,
   } = useGlobalState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [showPercents, setShowPercents] = useState(true);
 
+  console.log(user);
+
   useEffect(() => {
-    if (!userHistory && !historyLoading) {
-      getHistory(setUserHistory, setHistoryLoading, addMsg, 0);
+    if (user && !userHistory && !historyLoading) {
+      getHistory(setUserHistory, setHistoryLoading, addMsg, user.user_id);
     }
   }, [userHistory]);
 
   const handleDelete = async (date) => {
-    await deleteHistory(0, date, addMsg, setDeleteHistoryLoading);
-    getHistory(setUserHistory, setHistoryLoading, addMsg, 0);
+    await deleteHistory(date, addMsg, setDeleteHistoryLoading, user.userId);
+    getHistory(setUserHistory, setHistoryLoading, addMsg, user.user_id);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -93,6 +96,22 @@ export default function History() {
 
   if (historyLoading || deleteHistoryLoading) {
     return <CircularProgress />;
+  }
+
+  if (!user) {
+    return (
+      <Box
+        sx={{
+          flexGrow: 1,
+          padding: 4,
+          backgroundColor: "#121212",
+          minHeight: "100vh",
+          display: "flex",
+        }}
+      >
+        <h3>Please sign in to view history tab.</h3>
+      </Box>
+    );
   }
 
   return (

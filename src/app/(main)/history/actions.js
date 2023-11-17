@@ -28,10 +28,10 @@ export async function getHistory(
 }
 
 export async function deleteHistory(
-  userId,
   date,
   addMsg,
-  setDeleteHistoryLoading
+  setDeleteHistoryLoading,
+  userId
 ) {
   setDeleteHistoryLoading(true);
   try {
