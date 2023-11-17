@@ -1,4 +1,3 @@
-import { requestToBodyStream } from "next/dist/server/body-streams";
 import { NextResponse } from "next/server";
 import { processorFunctions } from "./model";
 
@@ -38,15 +37,13 @@ export async function POST(request) {
   }
 
   if (action === "summary") {
-    const {
-      userId = 0,
-      date = null,
-      income = null,
-      spending = null,
-      savings = null,
-    } = Object.fromEntries(searchParams);
-
-    if (!date || !income || !spending || !savings) {
+    if (
+      !res.date ||
+      !res.income ||
+      !res.spending ||
+      !res.savings ||
+      !res.userId
+    ) {
       return NextResponse.json(
         { error: "missing parameters" }, // shows up in response.data.error
         { status: 400 }
@@ -54,11 +51,11 @@ export async function POST(request) {
     }
 
     const summary = await processorFunctions.submitSummary(
-      userId,
-      date,
-      income,
-      spending,
-      savings,
+      res.userId,
+      res.date,
+      res.income,
+      res.spending,
+      res.savings,
       res.summary
     );
 

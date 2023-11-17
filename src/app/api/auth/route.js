@@ -34,7 +34,7 @@ export async function GET(request) {
 export async function Login(email, password) {
   const hash = new SHA512().hex(password);
   const { rows } =
-    await sql`SELECT * FROM users where email = ${email} and password = ${hash};`;
+    await sql`SELECT user_id, first_name, email FROM users where email = ${email} and password = ${hash};`;
 
   return rows.length === 1 ? rows[0] : null;
 }

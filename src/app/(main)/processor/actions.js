@@ -64,24 +64,23 @@ export async function submitSummary(
   date,
   addMsg,
   setSubmitSummaryLoading,
-  router
+  router,
+  userId
 ) {
   try {
     setSubmitSummaryLoading(true);
     const { income, spending, savings, summary } = data;
     const payload = {
+      userId,
       date,
       income,
       spending,
       savings,
       summary,
     };
-    const response = await axios.post(
-      `/api/processor?action=summary&date=${date}&income=${income}&spending=${spending}&savings=${savings}`,
-      payload
-    );
 
-    console.log(response.data);
+    const response = await axios.post(`/api/processor?action=summary`, payload);
+
     if (response.status === 200) {
       if (response.data.error) {
         addMsg("error", `Error: ${response.data.error}`);

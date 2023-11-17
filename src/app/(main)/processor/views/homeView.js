@@ -23,6 +23,7 @@ const VisuallyHiddenInput = styled("input")({
 
 export default function Home({ setFormStep }) {
   const {
+    user,
     addMsg,
     userBanks,
     setUserBanks,
@@ -53,6 +54,7 @@ export default function Home({ setFormStep }) {
   useEffect(() => {
     if (!userBanks && !banksLoading) {
       getBanks(setUserBanks, setBanksLoading, addMsg, 0);
+      // 0 will change to user ? user.user_id : 0 when custom functionality is built
     }
     if (!userCategories && !categoriesLoading) {
       getCategories(setUserCategories, setCategoriesLoading, addMsg, 0);
