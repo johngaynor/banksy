@@ -10,7 +10,7 @@ import { useGlobalState } from "./context";
 
 export default function Navbar() {
   const [openLogin, setOpenLogin] = useState(false);
-  const { user } = useGlobalState();
+  const { user, setUser } = useGlobalState();
   const path = usePathname();
 
   return (
@@ -84,9 +84,15 @@ export default function Navbar() {
               marginLeft: "50px",
             }}
           >
-            <Link href="#" onClick={() => setOpenLogin(true)}>
-              {user ? user.name : "LOGIN"}
-            </Link>
+            {user ? (
+              <Link href="#" onClick={() => setUser(null)}>
+                LOGOUT
+              </Link>
+            ) : (
+              <Link href="#" onClick={() => setOpenLogin(true)}>
+                LOGIN
+              </Link>
+            )}
           </Grid>
         </Grid>
       </Grid>

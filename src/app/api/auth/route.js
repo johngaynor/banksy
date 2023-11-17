@@ -1,5 +1,6 @@
 import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
+import { MD5, SHA1, SHA256, SHA512, RMD160 } from "jshashes";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -31,8 +32,9 @@ export async function GET(request) {
 }
 
 export async function Login(email, password) {
+  const hash = new SHA512().hex(password);
   const { rows } =
-    await sql`SELECT * FROM users where email = ${email} and password = ${password};`;
+    await sql`SELECT * FROM users where email = ${email} and password = ${hash};`;
 
   return rows.length === 1 ? rows[0] : null;
 }
