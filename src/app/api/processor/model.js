@@ -121,7 +121,5 @@ export const processorFunctions = {
     } catch (error) {
       return { error: `DB operation failed: ${error}` };
     }
-
-    // return success;
   },
 };

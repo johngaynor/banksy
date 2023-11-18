@@ -22,7 +22,15 @@ export async function GET(request) {
   }
 
   if (user) {
-    return NextResponse.json({ user }, { status: "200" });
+    return NextResponse.json(
+      { user },
+      {
+        status: 200,
+        headers: {
+          "Set-Cookie": `auth=${user.user_id}; Path=/; HttpOnly; Secure; SameSite=Strict`,
+        },
+      }
+    );
   } else {
     return NextResponse.json(
       { error: "Invalid email, password, or action" },
