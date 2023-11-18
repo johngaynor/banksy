@@ -40,7 +40,7 @@ export async function GET(request) {
 }
 
 export async function Login(email, password) {
-  const hash = new SHA512().hex(password);
+  const hash = new SHA512().b64(password);
   const { rows } =
     await sql`SELECT user_id, first_name, email FROM users where email = ${email} and password = ${hash};`;
 

@@ -54,6 +54,7 @@ Still in development!
 - Creating queue for message handling (when multiple messages would occur simultaneously)
 - Figuring out workflow for user experience
 - Data structure for summary views
+- Protecting API routes (cookies)
 
 ## Author
 
