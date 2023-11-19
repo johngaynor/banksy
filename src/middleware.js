@@ -1,35 +1,42 @@
 import { NextResponse } from "next/server";
+import { jwtVerify } from "jose";
 
-// Create a simple keystore with your JWT secret
-const keystore = jose.JWK.createKeyStore();
-const jwtSecret = process.env.JWT_SECRET_KEY;
-keystore.add({
-  kty: "oct",
-  k: jwtSecret, // Your JWT secret
-  alg: "HS256", // Algorithm, make sure it matches the one used to sign the JWT
-});
+const getJwtSecretKey = () => {
+  const secret = process.env.JWT_SECRET_KEY;
+  if (!secret || secret.length === 0) {
+    throw new Error("Environment variable for JWT_SECRET_KEY is not set.");
+  }
+  return secret;
+};
+
+const verifyAuth = async (token) => {
+  try {
+    const verified = await jwtVerify(
+      token,
+      new TextEncoder().encode(getJwtSecretKey())
+    );
+    return verified.payload;
+  } catch (error) {
+    throw new Error("Your token has expired.");
+  }
+};
 
 export async function middleware(request) {
   const { searchParams } = new URL(request.url);
   const { userId } = Object.fromEntries(searchParams);
   const jwtToken = request.cookies.get("jwt-token")?.value;
 
-  if (jwtToken) {
-    console.log(jwtToken);
-    try {
-      const decrypted = await jose.JWE.createDecrypt(keystore, {
-        alg: "HS256",
-      }).decrypt(jwtToken);
-      console.log(decrypted);
-      // const token = JSON.parse(decrypted.payload.toString());
-      // console.log(token.userId);
-    } catch (error) {
-      console.error("JWT verification failed:", error.message);
-      return NextResponse.json(
-        { msg: "authentication failed" },
-        { status: 401 }
-      );
-    }
+  const verifiedToken =
+    jwtToken &&
+    (await verifyAuth(jwtToken).catch((err) => {
+      console.log(err);
+    }));
+
+  if (userId && parseInt(userId) !== verifiedToken.userId) {
+    return NextResponse.json(
+      { msg: "You do not have access to this route." },
+      { status: 401 }
+    );
   }
 
   const response = NextResponse.next();
