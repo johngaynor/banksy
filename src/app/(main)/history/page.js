@@ -183,6 +183,7 @@ export default function History() {
               </FormGroup>
             </Grid>
           </Grid>
+
           <TableContainer
             component={Paper}
             sx={{
@@ -219,140 +220,145 @@ export default function History() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filteredHistory
-                  ? filteredHistory
-                      .map((row, index) => ({ ...row, index }))
-                      .slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                      .map((row, index) => (
-                        <TableRow
-                          key={index}
-                          sx={{
-                            borderBottom: "2px solid #5d5d5d",
-                            backgroundColor:
-                              index % 2 !== 0 ? "#525252" : "#474747",
-                          }}
-                        >
-                          <TableCell sx={{ color: "white" }}>
-                            {moment(row.month_year, "MM-YYYY").format(
-                              "MMMM YYYY"
-                            )}
-                          </TableCell>
-                          <TableCell sx={{ color: "white" }}>
-                            ${row.income.toFixed(2)}&nbsp;&nbsp;&nbsp;
-                            <span
-                              style={{
-                                color:
-                                  row.prevIncome === 0
-                                    ? "white"
-                                    : row.prevIncome > 0
-                                    ? "#2E7D32"
-                                    : "#D32E2E",
-                                fontWeight: "bold",
-                                fontSize: "14px",
-                              }}
-                            >
-                              {row.prevIncome === 0
-                                ? row.prevIncome.toFixed(2)
-                                : row.prevIncome > 0
-                                ? "+" +
-                                  (showPercents ? "" : "$") +
-                                  row.prevIncome.toFixed(2) +
-                                  (showPercents ? "%" : "")
-                                : "-" +
-                                  (showPercents ? "" : "$") +
-                                  Math.abs(row.prevIncome.toFixed(2)) +
-                                  (showPercents ? "%" : "")}
-                            </span>
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              color: "white",
+                {filteredHistory && filteredHistory.length !== 0 ? (
+                  filteredHistory
+                    .map((row, index) => ({ ...row, index }))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => (
+                      <TableRow
+                        key={index}
+                        sx={{
+                          borderBottom: "2px solid #5d5d5d",
+                          backgroundColor:
+                            index % 2 !== 0 ? "#525252" : "#474747",
+                        }}
+                      >
+                        <TableCell sx={{ color: "white" }}>
+                          {moment(row.month_year, "MM-YYYY").format(
+                            "MMMM YYYY"
+                          )}
+                        </TableCell>
+                        <TableCell sx={{ color: "white" }}>
+                          ${row.income.toFixed(2)}&nbsp;&nbsp;&nbsp;
+                          <span
+                            style={{
+                              color:
+                                row.prevIncome === 0
+                                  ? "white"
+                                  : row.prevIncome > 0
+                                  ? "#2E7D32"
+                                  : "#D32E2E",
+                              fontWeight: "bold",
+                              fontSize: "14px",
                             }}
                           >
-                            ${row.spending.toFixed(2)}&nbsp;&nbsp;&nbsp;
-                            <span
-                              style={{
-                                color:
-                                  row.prevSpending === 0
-                                    ? "white"
-                                    : row.prevSpending < 0
-                                    ? "#2E7D32"
-                                    : "#D32E2E",
-                                fontWeight: "bold",
-                                fontSize: "14px",
-                              }}
-                            >
-                              {row.prevSpending === 0
-                                ? row.prevSpending.toFixed(2)
-                                : row.prevSpending > 0
-                                ? "+" +
-                                  (showPercents ? "" : "$") +
-                                  row.prevSpending.toFixed(2) +
-                                  (showPercents ? "%" : "")
-                                : "-" +
-                                  (showPercents ? "" : "$") +
-                                  Math.abs(row.prevSpending.toFixed(2)) +
-                                  (showPercents ? "%" : "")}
-                            </span>
-                          </TableCell>
-                          <TableCell sx={{ color: "white" }}>
-                            ${row.savings.toFixed(2)}&nbsp;&nbsp;&nbsp;
-                            <span
-                              style={{
-                                color:
-                                  row.prevSavings === 0
-                                    ? "white"
-                                    : row.prevSavings > 0
-                                    ? "#2E7D32"
-                                    : "#D32E2E",
-                                fontWeight: "bold",
-                                fontSize: "14px",
-                              }}
-                            >
-                              {row.prevSavings === 0
-                                ? row.prevSavings.toFixed(2)
-                                : row.prevSavings > 0
-                                ? "+" +
-                                  (showPercents ? "" : "$") +
-                                  row.prevSavings.toFixed(2) +
-                                  (showPercents ? "%" : "")
-                                : "-" +
-                                  (showPercents ? "" : "$") +
-                                  Math.abs(row.prevSavings.toFixed(2)) +
-                                  (showPercents ? "%" : "")}
-                            </span>
-                          </TableCell>
-                          <TableCell>
-                            <Button
-                              component="label"
-                              variant="contained"
-                              sx={{ width: "25px", height: "30px" }}
-                              onClick={() =>
-                                alert(
-                                  "Sorry, this feature is not available yet."
-                                )
-                              }
-                            >
-                              <PageviewIcon />
-                            </Button>
-                          </TableCell>
-                          <TableCell>
-                            <Button
-                              component="label"
-                              variant="contained"
-                              color="error"
-                              sx={{ width: "25px", height: "30px" }}
-                              onClick={() => handleDelete(row.month_year)}
-                            >
-                              <DeleteIcon />
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                  : null}
+                            {row.prevIncome === 0
+                              ? row.prevIncome.toFixed(2)
+                              : row.prevIncome > 0
+                              ? "+" +
+                                (showPercents ? "" : "$") +
+                                row.prevIncome.toFixed(2) +
+                                (showPercents ? "%" : "")
+                              : "-" +
+                                (showPercents ? "" : "$") +
+                                Math.abs(row.prevIncome.toFixed(2)) +
+                                (showPercents ? "%" : "")}
+                          </span>
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            color: "white",
+                          }}
+                        >
+                          ${row.spending.toFixed(2)}&nbsp;&nbsp;&nbsp;
+                          <span
+                            style={{
+                              color:
+                                row.prevSpending === 0
+                                  ? "white"
+                                  : row.prevSpending < 0
+                                  ? "#2E7D32"
+                                  : "#D32E2E",
+                              fontWeight: "bold",
+                              fontSize: "14px",
+                            }}
+                          >
+                            {row.prevSpending === 0
+                              ? row.prevSpending.toFixed(2)
+                              : row.prevSpending > 0
+                              ? "+" +
+                                (showPercents ? "" : "$") +
+                                row.prevSpending.toFixed(2) +
+                                (showPercents ? "%" : "")
+                              : "-" +
+                                (showPercents ? "" : "$") +
+                                Math.abs(row.prevSpending.toFixed(2)) +
+                                (showPercents ? "%" : "")}
+                          </span>
+                        </TableCell>
+                        <TableCell sx={{ color: "white" }}>
+                          ${row.savings.toFixed(2)}&nbsp;&nbsp;&nbsp;
+                          <span
+                            style={{
+                              color:
+                                row.prevSavings === 0
+                                  ? "white"
+                                  : row.prevSavings > 0
+                                  ? "#2E7D32"
+                                  : "#D32E2E",
+                              fontWeight: "bold",
+                              fontSize: "14px",
+                            }}
+                          >
+                            {row.prevSavings === 0
+                              ? row.prevSavings.toFixed(2)
+                              : row.prevSavings > 0
+                              ? "+" +
+                                (showPercents ? "" : "$") +
+                                row.prevSavings.toFixed(2) +
+                                (showPercents ? "%" : "")
+                              : "-" +
+                                (showPercents ? "" : "$") +
+                                Math.abs(row.prevSavings.toFixed(2)) +
+                                (showPercents ? "%" : "")}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            component="label"
+                            variant="contained"
+                            sx={{ width: "25px", height: "30px" }}
+                            onClick={() =>
+                              alert("Sorry, this feature is not available yet.")
+                            }
+                          >
+                            <PageviewIcon />
+                          </Button>
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            component="label"
+                            variant="contained"
+                            color="error"
+                            sx={{ width: "25px", height: "30px" }}
+                            onClick={() => handleDelete(row.month_year)}
+                          >
+                            <DeleteIcon />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                ) : (
+                  <TableRow
+                    sx={{
+                      borderBottom: "2px solid #5d5d5d",
+                    }}
+                  >
+                    <TableCell sx={{ color: "white" }}>
+                      You have not submitted any reports yet.
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
 
