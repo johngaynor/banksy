@@ -32,7 +32,7 @@ export async function middleware(request) {
       console.log(err);
     }));
 
-  if (userId && parseInt(userId) !== verifiedToken.userId) {
+  if (userId && parseInt(userId) !== verifiedToken.userId && userId !== "0") {
     return NextResponse.json(
       { msg: "You do not have access to this route." },
       { status: 401 }
