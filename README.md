@@ -1,8 +1,6 @@
 # TODO
 
 - build out UI for summary data
-- add button on tableView to select date range (hard coded now)
-- sanitize & protect routes
 - table view for past transactions
 
 AFTER MVP IS COMPLETE:
@@ -54,7 +52,7 @@ Still in development!
 - Creating queue for message handling (when multiple messages would occur simultaneously)
 - Figuring out workflow for user experience
 - Data structure for summary views
-- Protecting API routes (cookies)
+- Protecting API routes with JWT
 
 ## Author
 
