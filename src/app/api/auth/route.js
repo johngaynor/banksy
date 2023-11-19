@@ -1,6 +1,7 @@
 import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
-import { MD5, SHA1, SHA256, SHA512, RMD160 } from "jshashes";
+import { SHA512 } from "jshashes";
+import { sign } from "jsonwebtoken";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -22,12 +23,16 @@ export async function GET(request) {
   }
 
   if (user) {
+    const token = sign({ userId: user.user_id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "1h",
+    });
+
     return NextResponse.json(
       { user },
       {
         status: 200,
         headers: {
-          "Set-Cookie": `auth=${user.user_id}; Path=/; HttpOnly; Secure; SameSite=Strict`,
+          "Set-Cookie": `jwt-token=${token}; Path=/; HttpOnly; Secure; SameSite=Strict`,
         },
       }
     );
