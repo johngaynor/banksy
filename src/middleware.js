@@ -17,7 +17,7 @@ const verifyAuth = async (token) => {
     );
     return verified.payload;
   } catch (error) {
-    throw new Error("Your token has expired.");
+    throw new Error("Your token has expired/there is no token.");
   }
 };
 
@@ -32,7 +32,7 @@ export async function middleware(request) {
       console.log(err);
     }));
 
-  if (userId && parseInt(userId) !== verifiedToken.userId && userId !== "0") {
+  if (userId && userId !== "0" && parseInt(userId) !== verifiedToken.userId) {
     return NextResponse.json(
       { msg: "You do not have access to this route." },
       { status: 401 }
