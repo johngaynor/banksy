@@ -1,50 +1,44 @@
-# TODO
-
-- build out UI for summary data
-- table view for past transactions
-
-AFTER MVP IS COMPLETE:
-
-- set up with user authentication (only need to sign in to save results. if not signed in, pull defaults for processing (this could get complicated with bank structure))
-- button to add keyword for category
-
 <h1 align="center">Welcome to Banksy 👋</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
-   <img alt="Last Updated" src="https://img.shields.io/badge/last%20updated-October%202023-red" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
+   <img alt="Last Updated" src="https://img.shields.io/badge/last%20updated-November%202023-red" />
    <img alt="Contributors" src="https://img.shields.io/badge/contributors-1-bright%20green">
-   <img alt="Status" src="https://img.shields.io/badge/status-WIP-red">
+   <img alt="Status" src="https://img.shields.io/badge/status-stable-bright%20green">
 </p>
 
-> Simple description here
+> Welcome to Banksy, your analytical financial tool.
 
 <p>
-<img alt="Homepage Image" src="src/assets/images/readme-img.png">
+<img alt="Homepage Image" src="public/banksy-homepage.png">
 </p>
 
-### 🏠 [Homepage](https://google.com)
+### 🏠 [Homepage](https://banksyy.vercel.app/)
 
 ## Description
 
-Longer Description
+Banksy is a finance tool that allows users to sort their spending into customizable categories and views to better understand their spending. Users follow a multi-step form that automatically assigns categories by default, with the option to change them as needed. The transactions are then compiled into views that compare different metrics (i.e. % by category, needs vs. wants). Users can then submit the statistics from those transactions to the database to compare them to each other on a monthly basis.
 
 ## Tech Stack
 
 - Next.js
-- Postgres
+- Postgres (Vercel)
 - Material UI
 
 ## Version History
 
 ### v1
 
-Still in development!
+- Process CSV into default categories
+- View spending breakdown by category/default views
+- Store summaries in table (user authentication required)
 
 ## Future Releases
 
 - Place for custom filters (for example, don't mark gas station purchases under $10 because it was probably a convenience store purchase)
-
 - Section to take notes (if you know for sure that a specific charge on your account will be marked wrong)
+- More extensive summary view
+- Forms for new banks, keywords, categories, and views
+- Better error handling
 
 ## Biggest Challenges of Project
 
