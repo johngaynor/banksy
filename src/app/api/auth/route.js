@@ -66,7 +66,7 @@ export async function GET(request) {
     } else
       return NextResponse.json(
         { msg: "there was no user in cookies." },
-        { status: 400 }
+        { status: 200 }
       );
   }
 
