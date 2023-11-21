@@ -30,6 +30,7 @@ export default function Navbar() {
           }
         } catch (error) {
           // addMsg("error", `error checking cookies for user: ${error}`);
+          console.log(error, response.data);
         }
       };
 
