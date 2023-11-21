@@ -10,6 +10,8 @@ const GlobalContextProvider = ({ children }) => {
   const [userViews, setUserViews] = useState(null);
   const [userHistory, setUserHistory] = useState(null);
 
+  console.log(user);
+
   // loading states
   const [banksLoading, setBanksLoading] = useState(false);
   const [categoriesLoading, setCategoriesLoading] = useState(false);

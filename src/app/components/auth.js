@@ -27,7 +27,6 @@ export default function LoginForm({ openLogin, setOpenLogin }) {
         `/api/auth?action=login&email=${email}&password=${password}`
       );
       if (response.status === 200) {
-        // console.log("Login successful:", response.data.user);
         setOpenLogin(false);
         setUser(response.data.user);
         addMsg("success", "Successfully logged in!");

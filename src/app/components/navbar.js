@@ -1,8 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Box, Grid } from "@mui/material";
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff";
+import axios from "axios";
 import Link from "next/link";
 
 import LoginForm from "@/app/components/auth";
@@ -10,8 +11,29 @@ import { useGlobalState } from "./context";
 
 export default function Navbar() {
   const [openLogin, setOpenLogin] = useState(false);
-  const { user, setUser } = useGlobalState();
+  const { user, setUser, addMsg } = useGlobalState();
   const path = usePathname();
+
+  useEffect(() => {
+    // check to see if there are cookies for a current user and, if so, log them in
+    if (!user) {
+      const checkCookies = async () => {
+        try {
+          const response = await axios.get("/api/auth?action=autologin");
+          if (response.status === 200) {
+            const { user_id, first_name, email } = response.data;
+            setUser({ user_id, first_name, email });
+          } else {
+            console.log("no user to be set");
+          }
+        } catch (error) {
+          addMsg("error", `error checking cookies for user: ${error}`);
+        }
+      };
+
+      checkCookies();
+    }
+  }, []);
 
   return (
     <Box
