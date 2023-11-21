@@ -40,13 +40,13 @@ export default function History() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [showPercents, setShowPercents] = useState(true);
 
-  console.log(user);
 
   useEffect(() => {
     if (user && !userHistory && !historyLoading) {
       getHistory(setUserHistory, setHistoryLoading, addMsg, user.user_id);
     }
-  }, [userHistory]);
+  }, [userHistory, user]);
+
 
   const handleDelete = async (date) => {
     await deleteHistory(date, addMsg, setDeleteHistoryLoading, user.userId);
