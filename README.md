@@ -14,6 +14,8 @@
 
 ### 🏠 [Homepage](https://banksyy.vercel.app/)
 
+### 📄 [SQL Documentation](https://github.com/johngaynor/banksy-sql)
+
 ## Description
 
 Banksy is a finance tool that allows users to sort their spending into customizable categories and views to better understand their spending. Users follow a multi-step form that automatically assigns categories by default, with the option to change them as needed. The transactions are then compiled into views that compare different metrics (i.e. % by category, needs vs. wants). Users can then submit the statistics from those transactions to the database to compare them to each other on a monthly basis.
