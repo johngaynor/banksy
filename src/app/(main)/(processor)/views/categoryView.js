@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
-import { Box, Grid, Typography, Button, LinearProgress } from "@mui/material";
+import { Grid, Typography, Button, LinearProgress } from "@mui/material";
 
-import { processFile } from "./processorFunctions";
-import { useGlobalState } from "@/app/context";
+import { processFile } from "../components/processorFunctions";
+import { useGlobalState } from "@/app/components/context";
 import { useProcessorState } from "../context";
 
-export default function Categories() {
-  const { addMsg } = useGlobalState();
-
-  const { userBanks, userCategories, rawFile, data, setData, setFormStep } =
-    useProcessorState();
+export default function Categories({ setFormStep }) {
+  const { addMsg, userBanks, userCategories } = useGlobalState();
+  const { rawFile, data, setData } = useProcessorState();
   const [flaggedIndex, setFlaggedIndex] = useState(0);
 
   useEffect(() => {
@@ -76,7 +74,7 @@ export default function Categories() {
             justifyContent: "center",
           }}
         >
-          {Object.keys(userCategories).map((cat, index) => (
+          {["income", ...Object.keys(userCategories)].map((cat, index) => (
             <Button
               component="label"
               variant="contained"
@@ -94,42 +92,32 @@ export default function Categories() {
 
   if (userCategories) {
     return (
-      <Box
+      <Grid
+        container
+        spacing={1}
         sx={{
-          flexGrow: 1,
-          padding: 4,
-          backgroundColor: "#121212",
-          minHeight: "100vh",
           display: "flex",
+          justifyContent: "center",
+          marginTop: "50px",
         }}
       >
-        <Grid
-          container
-          spacing={1}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "50px",
-          }}
-        >
-          <Grid item>
-            <Typography variant="h3" sx={{ textAlign: "center" }}>
-              First, let's take a look at some transactions.
-            </Typography>
+        <Grid item>
+          <Typography variant="h3" sx={{ textAlign: "center" }}>
+            First, let's take a look at some transactions.
+          </Typography>
 
-            <LinearProgress
-              variant="determinate"
-              value={
-                (flaggedIndex /
-                  (data?.flagged ? data.flagged.length : flaggedIndex)) *
-                100
-              }
-              sx={{ height: "20px", width: "70%", margin: "20px auto" }}
-            />
-            {flaggedPrompts()}
-          </Grid>
+          <LinearProgress
+            variant="determinate"
+            value={
+              (flaggedIndex /
+                (data?.flagged ? data.flagged.length : flaggedIndex)) *
+              100
+            }
+            sx={{ height: "20px", width: "70%", margin: "20px auto" }}
+          />
+          {flaggedPrompts()}
         </Grid>
-      </Box>
+      </Grid>
     );
   }
 }

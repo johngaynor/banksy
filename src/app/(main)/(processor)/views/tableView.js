@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  Box,
   Grid,
   Typography,
   Button,
@@ -19,12 +18,14 @@ import {
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 
+import EditTransaction from "../components/editTransaction";
+import { generateSummary } from "../components/processorFunctions";
 import { useProcessorState } from "../context";
-import EditTransaction from "./editTransaction";
-import { generateSummary } from "./processorFunctions";
+import { useGlobalState } from "@/app/components/context";
 
-export default function TableView() {
-  const { data, setData, setFormStep, userViews } = useProcessorState();
+export default function TableView({ setFormStep }) {
+  const { userViews, userCategories } = useGlobalState();
+  const { data, setData } = useProcessorState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openEdit, setOpenEdit] = useState(false);
@@ -50,21 +51,13 @@ export default function TableView() {
     .filter((row) => showIgnore || row.category !== "ignore");
 
   const handleSubmit = () => {
-    const summary = generateSummary(userViews, data);
+    const summary = generateSummary(userViews, data, userCategories);
     setData(summary);
     setFormStep(3);
   };
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        padding: 4,
-        backgroundColor: "#121212",
-        minHeight: "100vh",
-        display: "flex",
-      }}
-    >
+    <>
       <Grid
         container
         spacing={1}
@@ -246,6 +239,6 @@ export default function TableView() {
         transaction={editedTransaction}
         setTransaction={setEditedTransaction}
       />
-    </Box>
+    </>
   );
 }

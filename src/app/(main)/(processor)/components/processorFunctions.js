@@ -93,14 +93,24 @@ export function processFile(file, userBanks, userCategories) {
 // 2. inserting standardized views into the template from DB
 // 3. loop through transactions and add amount to appropriate places
 // 4. clean up numbers (prevent xx.000000001)
-export function generateSummary(userViews, data, start, end) {
+export function generateSummary(userViews, data, userCategories) {
   const template = {
     spending: 0,
     income: 0,
     savings: 0,
     month: 0,
     views: [],
+    summary: {},
   };
+
+  for (const category in userCategories) {
+    template.summary[category] = {
+      id: userCategories[category].ref,
+      amount: 0,
+    };
+  }
+
+  // console.log(template); this much is working
 
   // filling out template views. can't just import userViews directly into template.views because it references the same object and multiple re-renders will multiply quantities.
   for (const userView of userViews) {
@@ -126,6 +136,8 @@ export function generateSummary(userViews, data, start, end) {
       } else {
         retObj.spending += row.amount;
         retObj.savings -= row.amount;
+
+        retObj.summary[row.category].amount += row.amount; // adding to ref to put in history
       }
 
       // handling views
@@ -156,6 +168,11 @@ export function generateSummary(userViews, data, start, end) {
   summary.spending = parseFloat(summary.spending.toFixed(2));
   summary.income = parseFloat(summary.income.toFixed(2));
   summary.savings = parseFloat(summary.savings.toFixed(2));
+  for (const category in summary.summary) {
+    summary.summary[category].amount = parseFloat(
+      summary.summary[category].amount.toFixed(2)
+    );
+  }
   for (const view of summary.views) {
     view.spending = parseFloat(view.spending.toFixed(2));
     for (const category in view.categories) {
@@ -166,28 +183,4 @@ export function generateSummary(userViews, data, start, end) {
   }
 
   return summary;
-}
-
-export function SubmitSummary(data, date, addMsg, setLoading) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      setLoading(true);
-      const { income, spending, savings } = data;
-      const response = await axios.post(
-        `/api/processor?action=summary&date=${date}&income=${income}&spending=${spending}&savings=${savings}`
-      );
-      if (response.status === 200) {
-        if (response.data.error) {
-          addMsg("error", `Error: ${response.data.error}`);
-        } else {
-          addMsg("success", "Summary submitted to database.");
-        }
-      }
-    } catch (error) {
-      addMsg("error", `error submitting summary: ${error}`);
-      reject(error);
-    }
-    setLoading(false);
-    // window.location.reload(); // just a way to start over
-  });
 }

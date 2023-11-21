@@ -12,20 +12,27 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  CircularProgress,
 } from "@mui/material";
 import StorageIcon from "@mui/icons-material/Storage";
+import { useRouter } from "next/navigation";
 
-import { SubmitSummary } from "./processorFunctions";
+import { submitSummary } from "../actions";
 import { useProcessorState } from "../context";
-import { useGlobalState } from "../../../context";
+import { useGlobalState } from "../../../components/context";
 
 export default function SummaryView() {
-  const { data, setSubmitSummaryLoading } = useProcessorState();
-  const { addMsg } = useGlobalState();
+  const { data } = useProcessorState();
+  const { addMsg, setSubmitSummaryLoading, user } = useGlobalState();
   const [categories, setCategories] = useState([]);
   const [macros, setMacros] = useState([]);
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
+  const router = useRouter();
+
+  if (!data) {
+    return <CircularProgress />;
+  }
 
   useEffect(() => {
     const sortedCategories = () => {
@@ -85,9 +92,9 @@ export default function SummaryView() {
   const macroColors = ["#fea802", "#15a2a2", "#ea515f"];
 
   const prevSummary = {
-    spending: 1800.0,
-    income: 2000.0,
-    savings: 200.0,
+    spending: 0,
+    income: 0,
+    savings: 0,
   };
 
   const months = [
@@ -108,23 +115,25 @@ export default function SummaryView() {
   const years = ["2021", "2022", "2023", "2024"];
 
   const handleSubmit = () => {
-    if (!month || !year) {
+    if (!user) {
+      addMsg("error", "Please log in to submit summaries to DB.");
+    } else if (!month || !year) {
       addMsg("error", "Please enter a date for this summary.");
     } else {
       const date = month + "-" + year;
-      SubmitSummary(data, date, addMsg, setSubmitSummaryLoading);
+      submitSummary(
+        data,
+        date,
+        addMsg,
+        setSubmitSummaryLoading,
+        router,
+        user.user_id
+      );
     }
   };
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        padding: 4,
-        backgroundColor: "#121212",
-        minHeight: "100vh",
-      }}
-    >
+    <>
       <Grid container spacing={0}>
         <Grid
           item
@@ -207,6 +216,7 @@ export default function SummaryView() {
           </Button>
         </Grid>
       </Grid>
+
       <Grid
         container
         spacing={2}
@@ -233,7 +243,7 @@ export default function SummaryView() {
                   variant="h3"
                   sx={{ color: "white", marginTop: "5px" }}
                 >
-                  ${data.income?.toFixed(2)}
+                  ${data.income.toFixed(2)}
                 </Typography>
                 <Typography
                   variant="h6"
@@ -322,7 +332,7 @@ export default function SummaryView() {
                     margin: "0 0 4px 10px",
                   }}
                 >
-                  {data.savings - prevSummary.savings > 0 ? "+" : "-"}
+                  {data.savings - prevSummary.savings > 0 ? "+" : ""}
                   {parseFloat((data.savings - prevSummary.savings).toFixed(2))}
                 </Typography>
               </Box>
@@ -402,45 +412,6 @@ export default function SummaryView() {
           </PieChart>
         </Grid>
       </Grid>
-    </Box>
+    </>
   );
 }
-
-// const testData = {
-//   income: 2787.03,
-//   spending: 2097.54,
-//   savings: 689.49,
-//   views: [
-//     {
-//       spending: 2097.54,
-//       view_id: 1,
-//       view_name: "default",
-//       aggregates: {},
-//       categories: {
-//         gas: 567.62,
-//         grocery: 405.21,
-//         leisure: 720.18,
-//         miscellaneous: 4.99,
-//         recFood: 216.9,
-//         rent: 0,
-//         school: 0,
-//         travel: 182.64,
-//       },
-//     },
-//     {
-//       spending: 2097.54,
-//       view_id: 2,
-//       view_name: "macros",
-//       aggregates: {
-//         needs: ["gas", "grocery", "rent", "school", "travel"],
-//         wants: ["leisure", "recFood", "miscellaneous"],
-//         savings: [],
-//       },
-//       categories: {
-//         needs: 1155.47,
-//         wants: 942.07,
-//         savings: 0,
-//       },
-//     },
-//   ],
-// };

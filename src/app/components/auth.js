@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import axios from "axios";
-import { useGlobalState } from "../context";
+import { useGlobalState } from "./context";
 
 export default function LoginForm({ openLogin, setOpenLogin }) {
   const { setUser, addMsg } = useGlobalState();
@@ -27,7 +27,6 @@ export default function LoginForm({ openLogin, setOpenLogin }) {
         `/api/auth?action=login&email=${email}&password=${password}`
       );
       if (response.status === 200) {
-        // console.log("Login successful:", response.data.user);
         setOpenLogin(false);
         setUser(response.data.user);
         addMsg("success", "Successfully logged in!");
