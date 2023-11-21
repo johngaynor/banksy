@@ -69,9 +69,9 @@ export default function Navbar() {
         >
           <Grid item>
             <Link
-              href="/processor"
+              href="/"
               style={{
-                borderBottom: path === "/processor" ? "1px solid white" : "",
+                borderBottom: path === "/" ? "1px solid white" : "",
               }}
             >
               CSV PROCESSOR
