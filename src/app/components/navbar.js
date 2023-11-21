@@ -21,10 +21,12 @@ export default function Navbar() {
         try {
           const response = await axios.get("/api/auth?action=autologin");
           if (response.status === 200) {
-            const { user_id, first_name, email } = response.data;
-            setUser({ user_id, first_name, email });
-          } else {
-            console.log("no user to be set");
+            if (response.data.user_id) {
+              const { user_id, first_name, email } = response.data;
+              setUser({ user_id, first_name, email });
+            } else {
+              console.log("no user to be set");
+            }
           }
         } catch (error) {
           // addMsg("error", `error checking cookies for user: ${error}`);
