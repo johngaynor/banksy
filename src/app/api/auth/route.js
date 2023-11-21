@@ -69,4 +69,22 @@ export async function GET(request) {
         { status: 400 }
       );
   }
+
+  if (action === "logout") {
+    try {
+      const expirationDate = new Date(Date.now() - 50000000);
+      return NextResponse.json(
+        { msg: "Successfully logged out." },
+        {
+          status: 200,
+          headers: {
+            "Set-Cookie": `jwt-token=; Path=/; HttpOnly; Secure; SameSite=Strict; Expires=${expirationDate.toUTCString()}`,
+          },
+        }
+      );
+    } catch (error) {
+      // console.log(error);
+      return NextResponse.json({ msg: "error on backend" }, { status: 400 });
+    }
+  }
 }

@@ -27,13 +27,28 @@ export default function Navbar() {
             console.log("no user to be set");
           }
         } catch (error) {
-          addMsg("error", `error checking cookies for user: ${error}`);
+          // addMsg("error", `error checking cookies for user: ${error}`);
         }
       };
 
       checkCookies();
     }
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.get("/api/auth?action=logout");
+      if (response.status === 200) {
+        addMsg("success", "Successfully logged out!");
+        setUser(null);
+      } else {
+        // addMsg("error", `error logging out: ${response.data.error}`);
+        console.log(response.data);
+      }
+    } catch (error) {
+      addMsg("error", `error logging out: ${error}`);
+    }
+  };
 
   return (
     <Box
@@ -107,7 +122,7 @@ export default function Navbar() {
             }}
           >
             {user ? (
-              <Link href="#" onClick={() => setUser(null)}>
+              <Link href="#" onClick={handleLogout}>
                 LOGOUT
               </Link>
             ) : (
