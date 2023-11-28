@@ -18,9 +18,9 @@ export function processFile(file, userBanks, userCategories) {
         const headers = Object.keys(transactions[0]);
         const bank = userBanks.find(
           (bank) =>
-            headers.includes(bank.date) &&
-            headers.includes(bank.description) &&
-            headers.includes(bank.amount)
+            headers.includes(bank.dateHeader) &&
+            headers.includes(bank.descriptionHeader) &&
+            headers.includes(bank.amountHeader)
         );
 
         if (!bank) {

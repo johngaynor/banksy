@@ -4,15 +4,9 @@ export const processorFunctions = {
   getUserBanks: async function (userId) {
     const { rows } = await sql`
       select
-          b.bank_id, 
-          b.bank_name, 
-          h."date", 
-          h.description, 
-          h.amount 
-          from processor_banks b 
-      left join processor_banks_headers h 
-          on b.bank_id = h.bank_id
-      where b.user_id = ${userId}
+          *
+      from processor_banks
+      where user_id = ${userId}
       `;
 
     return rows;
