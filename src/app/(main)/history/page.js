@@ -40,17 +40,14 @@ export default function History() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [showPercents, setShowPercents] = useState(true);
 
-
   useEffect(() => {
     if (user && !userHistory && !historyLoading) {
       getHistory(setUserHistory, setHistoryLoading, addMsg, user.user_id);
     }
   }, [userHistory, user]);
-
-
   const handleDelete = async (date) => {
-    await deleteHistory(date, addMsg, setDeleteHistoryLoading, user.userId);
-    getHistory(setUserHistory, setHistoryLoading, addMsg, user.user_id);
+    await deleteHistory(date, addMsg, setDeleteHistoryLoading, user.user_id);
+    await getHistory(setUserHistory, setHistoryLoading, addMsg, user.user_id);
   };
 
   const handleChangePage = (event, newPage) => {
