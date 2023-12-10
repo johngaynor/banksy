@@ -71,6 +71,7 @@ export default function History() {
     })
     .map((row, index) => ({
       ...row,
+      savings: row.income - row.spending,
       index,
       prevIncome: userHistory[index + 1]
         ? showPercents
@@ -88,12 +89,20 @@ export default function History() {
         : 0,
       prevSavings: userHistory[index + 1]
         ? showPercents
-          ? ((row.savings - userHistory[index + 1].savings) /
-              userHistory[index + 1].savings) *
+          ? ((row.income -
+              row.spending -
+              (userHistory[index + 1].income -
+                userHistory[index + 1].spending)) /
+              (userHistory[index + 1].income -
+                userHistory[index + 1].spending)) *
             100
-          : row.savings - userHistory[index + 1].savings
+          : row.income -
+            row.spending -
+            (userHistory[index + 1].income - userHistory[index + 1].spending)
         : 0,
     }));
+
+  console.log(filteredHistory);
 
   const viewReport = (report) => {
     console.log("clicked", report);
@@ -309,7 +318,8 @@ export default function History() {
                           </span>
                         </TableCell>
                         <TableCell sx={{ color: "white" }}>
-                          ${row.savings.toFixed(2)}&nbsp;&nbsp;&nbsp;
+                          ${(row.income - row.spending).toFixed(2)}
+                          &nbsp;&nbsp;&nbsp;
                           <span
                             style={{
                               color:

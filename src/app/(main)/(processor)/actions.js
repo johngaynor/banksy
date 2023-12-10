@@ -69,13 +69,12 @@ export async function submitSummary(
 ) {
   try {
     setSubmitSummaryLoading(true);
-    const { income, spending, savings, summary } = data;
+    const { income, spending, summary } = data;
     const payload = {
       userId,
       date,
       income,
       spending,
-      savings,
       summary,
     };
 

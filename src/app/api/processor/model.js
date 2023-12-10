@@ -86,21 +86,14 @@ export const processorFunctions = {
     return viewArr;
   },
 
-  submitSummary: async function (
-    userId,
-    monthYear,
-    income,
-    spending,
-    savings,
-    summary
-  ) {
+  submitSummary: async function (userId, monthYear, income, spending, summary) {
     try {
       const { rows: result } = await sql`
       insert into processor_history 
-          (user_id, month_year, income, spending, savings)
+          (user_id, month_year, income, spending)
       values (${userId}, ${monthYear}, ${parseFloat(income)}, ${parseFloat(
         spending
-      )}, ${parseFloat(savings)})
+      )})
       `;
 
       for (const category in summary) {
@@ -116,7 +109,6 @@ export const processorFunctions = {
         monthYear,
         income,
         spending,
-        savings,
       };
     } catch (error) {
       return { error: `DB operation failed: ${error}` };
