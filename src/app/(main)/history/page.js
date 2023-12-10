@@ -24,6 +24,7 @@ import moment from "moment";
 
 import { getHistory, deleteHistory } from "./actions";
 import { useGlobalState } from "@/app/components/context";
+import ReportModal from "./components/ReportModal";
 
 export default function History() {
   const {
@@ -39,21 +40,25 @@ export default function History() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [showPercents, setShowPercents] = useState(true);
-
+  const [openReport, setOpenReport] = useState(false);
 
   useEffect(() => {
     if (user && !userHistory && !historyLoading) {
       getHistory(setUserHistory, setHistoryLoading, addMsg, user.user_id);
     }
   }, [userHistory, user]);
-
-
   const handleDelete = async (date) => {
-    await deleteHistory(date, addMsg, setDeleteHistoryLoading, user.userId);
-    getHistory(setUserHistory, setHistoryLoading, addMsg, user.user_id);
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this report? This action cannot be undone."
+    );
+
+    if (isConfirmed) {
+      await deleteHistory(date, addMsg, setDeleteHistoryLoading, user.user_id);
+      await getHistory(setUserHistory, setHistoryLoading, addMsg, user.user_id);
+    }
   };
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (e, newPage) => {
     setPage(newPage);
   };
 
@@ -70,6 +75,7 @@ export default function History() {
     })
     .map((row, index) => ({
       ...row,
+      savings: row.income - row.spending,
       index,
       prevIncome: userHistory[index + 1]
         ? showPercents
@@ -87,12 +93,23 @@ export default function History() {
         : 0,
       prevSavings: userHistory[index + 1]
         ? showPercents
-          ? ((row.savings - userHistory[index + 1].savings) /
-              userHistory[index + 1].savings) *
+          ? ((row.income -
+              row.spending -
+              (userHistory[index + 1].income -
+                userHistory[index + 1].spending)) /
+              (userHistory[index + 1].income -
+                userHistory[index + 1].spending)) *
             100
-          : row.savings - userHistory[index + 1].savings
+          : row.income -
+            row.spending -
+            (userHistory[index + 1].income - userHistory[index + 1].spending)
         : 0,
     }));
+
+  const viewReport = (report) => {
+    // console.log("clicked", report);
+    setOpenReport(report);
+  };
 
   if (historyLoading || deleteHistoryLoading) {
     return <CircularProgress />;
@@ -124,6 +141,13 @@ export default function History() {
         display: "flex",
       }}
     >
+      <ReportModal
+        openReport={openReport ? true : false}
+        setOpenReport={setOpenReport}
+        report={openReport}
+        userHistory={userHistory}
+        showPercents={showPercents}
+      />
       <Grid
         container
         spacing={1}
@@ -147,14 +171,14 @@ export default function History() {
             >
               <Button
                 onClick={() =>
-                  alert("Sorry, this feature is not available yet.")
+                  alert("Sorry, this feature is not available yet. (PDF)")
                 }
                 component="label"
                 variant="contained"
                 // startIcon={<AddBoxIcon />}
                 sx={{ marginTop: "20px" }}
               >
-                Export PDF
+                Yearly Summary
               </Button>
             </Grid>
             <Grid item xs={4}>
@@ -297,7 +321,8 @@ export default function History() {
                           </span>
                         </TableCell>
                         <TableCell sx={{ color: "white" }}>
-                          ${row.savings.toFixed(2)}&nbsp;&nbsp;&nbsp;
+                          ${(row.income - row.spending).toFixed(2)}
+                          &nbsp;&nbsp;&nbsp;
                           <span
                             style={{
                               color:
@@ -328,9 +353,7 @@ export default function History() {
                             component="label"
                             variant="contained"
                             sx={{ width: "25px", height: "30px" }}
-                            onClick={() =>
-                              alert("Sorry, this feature is not available yet.")
-                            }
+                            onClick={() => viewReport(row)}
                           >
                             <PageviewIcon />
                           </Button>

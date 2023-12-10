@@ -58,6 +58,7 @@ export default function SummaryView() {
       }
 
       setCategories(sorted);
+      // console.log(sorted);
     };
 
     sortedCategories();
