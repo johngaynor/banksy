@@ -50,11 +50,17 @@ export default function History() {
     }
   }, [userHistory, user]);
   const handleDelete = async (date) => {
-    await deleteHistory(date, addMsg, setDeleteHistoryLoading, user.user_id);
-    await getHistory(setUserHistory, setHistoryLoading, addMsg, user.user_id);
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this report? This action cannot be undone."
+    );
+
+    if (isConfirmed) {
+      await deleteHistory(date, addMsg, setDeleteHistoryLoading, user.user_id);
+      await getHistory(setUserHistory, setHistoryLoading, addMsg, user.user_id);
+    }
   };
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (e, newPage) => {
     setPage(newPage);
   };
 
