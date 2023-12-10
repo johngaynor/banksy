@@ -26,6 +26,8 @@ export default function ReportModal({
     setOpenReport(false);
   };
 
+  const prevReport = userHistory ? userHistory[report.index + 1] : null;
+
   return (
     <React.Fragment>
       <Dialog open={openReport} onClose={onClose}>
@@ -177,11 +179,13 @@ export default function ReportModal({
                 {report.categories
                   ?.slice(0, Math.floor(report.categories.length / 2))
                   .map((cat, index) => {
-                    const prevReport = userHistory[report.index + 1];
-                    const prevCategoryAmt = prevReport.categories.find(
+                    // const prevReport = userHistory[report.index + 1];
+                    const prevCategoryAmt = prevReport?.categories.find(
                       (r) => r.category_name == cat.category_name
                     )?.value;
-                    const diff = cat.value - prevCategoryAmt;
+                    const diff = prevCategoryAmt
+                      ? cat.value - prevCategoryAmt
+                      : 0;
                     return (
                       <ListItem sx={{ marginBottom: "-10px" }}>
                         <ListItemText
@@ -227,11 +231,13 @@ export default function ReportModal({
                 {report.categories
                   ?.slice(Math.floor(report.categories.length / 2))
                   .map((cat, index) => {
-                    const prevReport = userHistory[report.index + 1];
-                    const prevCategoryAmt = prevReport.categories.find(
+                    // const prevReport = userHistory[report.index + 1];
+                    const prevCategoryAmt = prevReport?.categories.find(
                       (r) => r.category_name == cat.category_name
                     )?.value;
-                    const diff = cat.value - prevCategoryAmt;
+                    const diff = prevCategoryAmt
+                      ? cat.value - prevCategoryAmt
+                      : 0;
                     return (
                       <ListItem sx={{ marginBottom: "-10px" }}>
                         <ListItemText

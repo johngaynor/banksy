@@ -353,7 +353,7 @@ export default function History() {
                             component="label"
                             variant="contained"
                             sx={{ width: "25px", height: "30px" }}
-                            onClick={() => viewReport({ ...row, index })}
+                            onClick={() => viewReport(row)}
                           >
                             <PageviewIcon />
                           </Button>
