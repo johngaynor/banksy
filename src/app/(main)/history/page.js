@@ -24,7 +24,7 @@ import moment from "moment";
 
 import { getHistory, deleteHistory } from "./actions";
 import { useGlobalState } from "@/app/components/context";
-import ReportModal from "./components/SummaryModal";
+import ReportModal from "./components/ReportModal";
 
 export default function History() {
   const {
@@ -41,8 +41,6 @@ export default function History() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [showPercents, setShowPercents] = useState(true);
   const [openReport, setOpenReport] = useState(false);
-
-  console.log(userHistory);
 
   useEffect(() => {
     if (user && !userHistory && !historyLoading) {
@@ -108,10 +106,8 @@ export default function History() {
         : 0,
     }));
 
-  console.log(filteredHistory);
-
   const viewReport = (report) => {
-    console.log("clicked", report);
+    // console.log("clicked", report);
     setOpenReport(report);
   };
 
@@ -150,6 +146,7 @@ export default function History() {
         setOpenReport={setOpenReport}
         report={openReport}
         userHistory={userHistory}
+        showPercents={showPercents}
       />
       <Grid
         container
@@ -356,7 +353,7 @@ export default function History() {
                             component="label"
                             variant="contained"
                             sx={{ width: "25px", height: "30px" }}
-                            onClick={() => viewReport({ ...row, index })}
+                            onClick={() => viewReport(row)}
                           >
                             <PageviewIcon />
                           </Button>
