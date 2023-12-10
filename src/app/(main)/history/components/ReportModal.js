@@ -51,7 +51,7 @@ export default function ReportModal({
                     variant="h6"
                     sx={{ color: "white", marginTop: "5px" }}
                   >
-                    ${report.income}
+                    ${report.income?.toFixed(2)}
                   </Typography>
                   <span
                     style={{
@@ -90,7 +90,7 @@ export default function ReportModal({
                     variant="h6"
                     sx={{ color: "white", marginTop: "5px" }}
                   >
-                    ${report.spending}
+                    ${report.spending?.toFixed(2)}
                   </Typography>
                   <span
                     style={{
@@ -182,7 +182,6 @@ export default function ReportModal({
                       (r) => r.category_name == cat.category_name
                     )?.value;
                     const diff = cat.value - prevCategoryAmt;
-                    console.log(prevCategoryAmt);
                     return (
                       <ListItem sx={{ marginBottom: "-10px" }}>
                         <ListItemText
@@ -233,7 +232,6 @@ export default function ReportModal({
                       (r) => r.category_name == cat.category_name
                     )?.value;
                     const diff = cat.value - prevCategoryAmt;
-                    console.log(prevCategoryAmt);
                     return (
                       <ListItem sx={{ marginBottom: "-10px" }}>
                         <ListItemText
