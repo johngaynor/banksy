@@ -97,10 +97,12 @@ export const processorFunctions = {
       `;
 
       for (const category in summary) {
-        await sql`insert into processor_history_categories
-        (user_id, month_year, category_id, amount) values
-        (${userId}, ${monthYear}, ${summary[category].id}, ${summary[category].amount})
-        `;
+        if (category !== "ignore") {
+          await sql`insert into processor_history_categories
+          (user_id, month_year, category_id, amount) values
+          (${userId}, ${monthYear}, ${summary[category].id}, ${summary[category].amount})
+          `;
+        }
       }
 
       return {
