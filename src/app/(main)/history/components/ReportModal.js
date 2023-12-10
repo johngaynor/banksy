@@ -187,7 +187,7 @@ export default function ReportModal({
                       ? cat.value - prevCategoryAmt
                       : 0;
                     return (
-                      <ListItem sx={{ marginBottom: "-10px" }}>
+                      <ListItem sx={{ marginBottom: "-10px" }} key={index}>
                         <ListItemText
                           primary={
                             <Typography variant="subtitle1">
@@ -239,7 +239,7 @@ export default function ReportModal({
                       ? cat.value - prevCategoryAmt
                       : 0;
                     return (
-                      <ListItem sx={{ marginBottom: "-10px" }}>
+                      <ListItem sx={{ marginBottom: "-10px" }} key={index}>
                         <ListItemText
                           primary={
                             <Typography variant="subtitle1">
