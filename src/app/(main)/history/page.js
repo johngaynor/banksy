@@ -178,7 +178,7 @@ export default function History() {
                 // startIcon={<AddBoxIcon />}
                 sx={{ marginTop: "20px" }}
               >
-                Export PDF
+                Yearly Summary
               </Button>
             </Grid>
             <Grid item xs={4}>
@@ -353,7 +353,7 @@ export default function History() {
                             component="label"
                             variant="contained"
                             sx={{ width: "25px", height: "30px" }}
-                            onClick={() => viewReport(row)}
+                            onClick={() => viewReport({ ...row, index })}
                           >
                             <PageviewIcon />
                           </Button>

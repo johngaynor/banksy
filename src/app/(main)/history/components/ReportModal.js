@@ -9,6 +9,9 @@ import {
   Typography,
   Card,
   CardContent,
+  List,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import moment from "moment";
 
@@ -17,6 +20,7 @@ export default function ReportModal({
   setOpenReport,
   report,
   showPercents,
+  userHistory,
 }) {
   const onClose = () => {
     setOpenReport(false);
@@ -155,8 +159,124 @@ export default function ReportModal({
               </Card>
             </Grid>
           </Grid>
+          <Typography
+            variant="h6"
+            sx={{ color: "white", padding: "10px", textAlign: "center" }}
+          >
+            Categories:
+          </Typography>
+          <Grid
+            sx={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              width: "100%",
+            }}
+          >
+            <Grid item sx={{ width: "40%" }}>
+              <List sx={{ color: "white", backgroundColor: "#242424" }}>
+                {report.categories
+                  ?.slice(0, Math.floor(report.categories.length / 2))
+                  .map((cat, index) => {
+                    const prevReport = userHistory[report.index + 1];
+                    const prevCategoryAmt = prevReport.categories.find(
+                      (r) => r.category_name == cat.category_name
+                    )?.value;
+                    const diff = cat.value - prevCategoryAmt;
+                    console.log(prevCategoryAmt);
+                    return (
+                      <ListItem sx={{ marginBottom: "-10px" }}>
+                        <ListItemText
+                          primary={
+                            <Typography variant="subtitle1">
+                              {cat.category_name}: ${cat.value.toFixed(2)}
+                            </Typography>
+                          }
+                          secondary={
+                            <span
+                              style={{
+                                color:
+                                  diff === 0
+                                    ? "white"
+                                    : diff < 0
+                                    ? "#2E7D32"
+                                    : "#D32E2E",
+                                fontWeight: "bold",
+                                fontSize: "14px",
+                              }}
+                            >
+                              {diff === 0
+                                ? diff.toFixed(2)
+                                : diff > 0
+                                ? "+" +
+                                  (showPercents ? "" : "$") +
+                                  diff.toFixed(2) +
+                                  (showPercents ? "%" : "")
+                                : "-" +
+                                  (showPercents ? "" : "$") +
+                                  Math.abs(diff?.toFixed(2)) +
+                                  (showPercents ? "%" : "")}
+                            </span>
+                          }
+                        />
+                      </ListItem>
+                    );
+                  })}
+              </List>
+            </Grid>
+            <Grid item sx={{ width: "40%" }}>
+              <List sx={{ color: "white", backgroundColor: "#242424" }}>
+                {report.categories
+                  ?.slice(Math.floor(report.categories.length / 2))
+                  .map((cat, index) => {
+                    const prevReport = userHistory[report.index + 1];
+                    const prevCategoryAmt = prevReport.categories.find(
+                      (r) => r.category_name == cat.category_name
+                    )?.value;
+                    const diff = cat.value - prevCategoryAmt;
+                    console.log(prevCategoryAmt);
+                    return (
+                      <ListItem sx={{ marginBottom: "-10px" }}>
+                        <ListItemText
+                          primary={
+                            <Typography variant="subtitle1">
+                              {cat.category_name}: ${cat.value.toFixed(2)}
+                            </Typography>
+                          }
+                          secondary={
+                            <span
+                              style={{
+                                color:
+                                  diff === 0
+                                    ? "white"
+                                    : diff < 0
+                                    ? "#2E7D32"
+                                    : "#D32E2E",
+                                fontWeight: "bold",
+                                fontSize: "14px",
+                              }}
+                            >
+                              {diff === 0
+                                ? diff.toFixed(2)
+                                : diff > 0
+                                ? "+" +
+                                  (showPercents ? "" : "$") +
+                                  diff.toFixed(2) +
+                                  (showPercents ? "%" : "")
+                                : "-" +
+                                  (showPercents ? "" : "$") +
+                                  Math.abs(diff?.toFixed(2)) +
+                                  (showPercents ? "%" : "")}
+                            </span>
+                          }
+                        />
+                      </ListItem>
+                    );
+                  })}
+              </List>
+            </Grid>
+          </Grid>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ backgroundColor: "#121212" }}>
           <Button onClick={onClose}>Close</Button>
         </DialogActions>
       </Dialog>
