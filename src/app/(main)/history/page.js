@@ -24,6 +24,7 @@ import moment from "moment";
 
 import { getHistory, deleteHistory } from "./actions";
 import { useGlobalState } from "@/app/components/context";
+import ReportModal from "./components/SummaryModal";
 
 export default function History() {
   const {
@@ -39,6 +40,9 @@ export default function History() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [showPercents, setShowPercents] = useState(true);
+  const [openReport, setOpenReport] = useState(false);
+
+  console.log(userHistory);
 
   useEffect(() => {
     if (user && !userHistory && !historyLoading) {
@@ -91,6 +95,11 @@ export default function History() {
         : 0,
     }));
 
+  const viewReport = (report) => {
+    console.log("clicked", report);
+    setOpenReport(report);
+  };
+
   if (historyLoading || deleteHistoryLoading) {
     return <CircularProgress />;
   }
@@ -121,6 +130,12 @@ export default function History() {
         display: "flex",
       }}
     >
+      <ReportModal
+        openReport={openReport ? true : false}
+        setOpenReport={setOpenReport}
+        report={openReport}
+        userHistory={userHistory}
+      />
       <Grid
         container
         spacing={1}
@@ -144,7 +159,7 @@ export default function History() {
             >
               <Button
                 onClick={() =>
-                  alert("Sorry, this feature is not available yet.")
+                  alert("Sorry, this feature is not available yet. (PDF)")
                 }
                 component="label"
                 variant="contained"
@@ -325,9 +340,7 @@ export default function History() {
                             component="label"
                             variant="contained"
                             sx={{ width: "25px", height: "30px" }}
-                            onClick={() =>
-                              alert("Sorry, this feature is not available yet.")
-                            }
+                            onClick={() => viewReport({ ...row, index })}
                           >
                             <PageviewIcon />
                           </Button>

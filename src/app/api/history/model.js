@@ -8,7 +8,25 @@ export const historyFunctions = {
         order by month_year desc  
         `;
 
-    return rows;
+    const reportArr = [];
+
+    for (const row of rows) {
+      const { rows } = await sql`
+      select 
+      hc.amount as value,
+      c.category_name
+      from processor_history_categories hc
+      left join processor_categories c
+      on c.category_id = hc.category_id
+      where hc.user_id = ${userId}
+      and hc.month_year = ${row.month_year}
+      `;
+
+      const report = { ...row, categories: rows };
+      reportArr.push(report);
+    }
+
+    return reportArr;
   },
 
   deleteHistoryByUserAndDate: async function (userId, date) {
