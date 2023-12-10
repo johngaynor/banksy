@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to Banksy 👋</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.1.0-blue.svg?cacheSeconds=2592000" />
    <img alt="Last Updated" src="https://img.shields.io/badge/last%20updated-November%202023-red" />
    <img alt="Contributors" src="https://img.shields.io/badge/contributors-1-bright%20green">
    <img alt="Status" src="https://img.shields.io/badge/status-stable-bright%20green">

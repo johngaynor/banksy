@@ -23,7 +23,6 @@ const VisuallyHiddenInput = styled("input")({
 
 export default function Home({ setFormStep }) {
   const {
-    user,
     addMsg,
     userBanks,
     setUserBanks,
@@ -64,6 +63,8 @@ export default function Home({ setFormStep }) {
       getViews(setUserViews, setViewsLoading, addMsg, 0);
     }
   }, [userBanks, userCategories, userViews]);
+
+  console.log(userCategories);
 
   return (
     <Grid container spacing={1}>

@@ -37,13 +37,7 @@ export async function POST(request) {
   }
 
   if (action === "summary") {
-    if (
-      !res.date ||
-      !res.income ||
-      !res.spending ||
-      !res.savings ||
-      !res.userId
-    ) {
+    if (!res.date || !res.income || !res.spending || !res.userId) {
       return NextResponse.json(
         { error: "missing parameters" }, // shows up in response.data.error
         { status: 400 }
@@ -55,7 +49,6 @@ export async function POST(request) {
       res.date,
       res.income,
       res.spending,
-      res.savings,
       res.summary
     );
 
