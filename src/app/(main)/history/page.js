@@ -39,7 +39,7 @@ export default function History() {
   } = useGlobalState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [showPercents, setShowPercents] = useState(true);
+  const [showPercents, setShowPercents] = useState(false);
   const [openReport, setOpenReport] = useState(false);
   const [comparePeriod, setComparePeriod] = useState(1);
 
@@ -78,43 +78,15 @@ export default function History() {
       ...row,
       savings: row.income - row.spending,
       index,
-      prevIncome: userHistory[index + 1]
-        ? showPercents
-          ? ((row.income - userHistory[index + 1].income) /
-              userHistory[index + 1].income) *
-            100
-          : row.income - userHistory[index + 1].income
-        : 0,
-      prevSpending: userHistory[index + 1]
-        ? showPercents
-          ? ((row.spending - userHistory[index + 1].spending) /
-              userHistory[index + 1].spending) *
-            100
-          : row.spending - userHistory[index + 1].spending
-        : 0,
-      prevSavings: userHistory[index + 1]
-        ? showPercents
-          ? ((row.income -
-              row.spending -
-              (userHistory[index + 1].income -
-                userHistory[index + 1].spending)) /
-              (userHistory[index + 1].income -
-                userHistory[index + 1].spending)) *
-            100
-          : row.income -
-            row.spending -
-            (userHistory[index + 1].income - userHistory[index + 1].spending)
-        : 0,
     }));
 
-  const generateComparativePeriod = (rowIndex) => {
-    // console.log('current row:', filteredHistory[rowIndex].month_year);
+  const generateComparativePeriod = (currentRow) => {
     let prevIncome = 0;
     let prevSpending = 0;
     let prevSavings = 0;
 
     for (let i = 1; i <= comparePeriod; i++) {
-      const row = filteredHistory[rowIndex + i];
+      const row = filteredHistory[currentRow.index + i];
       if (row) {
         prevIncome += row.income;
         prevSpending += row.spending;
@@ -126,14 +98,24 @@ export default function History() {
     prevSpending = prevSpending / comparePeriod;
     prevSavings = prevSavings / comparePeriod;
 
-    console.log(
-      "current row:",
-      filteredHistory[rowIndex].month_year,
-      "stats for previous row:",
-      prevIncome
-    );
+    // console.log(
+    //   "current row:",
+    //   filteredHistory[currentRow.index].month_year,
+    //   "stats for previous row:",
+    //   prevIncome
+    // );
 
-    return { prevIncome, prevSpending, prevSavings };
+    const income = showPercents
+      ? ((currentRow.income - prevIncome) / prevIncome) * 100
+      : currentRow.income - prevIncome;
+    const spending = showPercents
+      ? ((currentRow.spending - prevSpending) / prevSpending) * 100
+      : currentRow.spending - prevSpending;
+    const savings = showPercents
+      ? ((currentRow.savings - prevSavings) / prevSavings) * 100
+      : currentRow.savings - prevSavings;
+
+    return { income, spending, savings };
   };
 
   const viewReport = (report) => {
@@ -271,9 +253,7 @@ export default function History() {
                     .map((row, index) => ({ ...row, index }))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
-                      const comparativeStats = generateComparativePeriod(
-                        row.index
-                      );
+                      const comparativeStats = generateComparativePeriod(row);
                       return (
                         <TableRow
                           key={index}
@@ -293,25 +273,25 @@ export default function History() {
                             <span
                               style={{
                                 color:
-                                  row.prevIncome === 0
+                                  comparativeStats.income === 0
                                     ? "white"
-                                    : row.prevIncome > 0
+                                    : comparativeStats.income > 0
                                     ? "#2E7D32"
                                     : "#D32E2E",
                                 fontWeight: "bold",
                                 fontSize: "14px",
                               }}
                             >
-                              {row.prevIncome === 0
-                                ? row.prevIncome.toFixed(2)
-                                : row.prevIncome > 0
+                              {comparativeStats.income === 0
+                                ? comparativeStats.income.toFixed(2)
+                                : comparativeStats.income > 0
                                 ? "+" +
                                   (showPercents ? "" : "$") +
-                                  row.prevIncome.toFixed(2) +
+                                  comparativeStats.income.toFixed(2) +
                                   (showPercents ? "%" : "")
                                 : "-" +
                                   (showPercents ? "" : "$") +
-                                  Math.abs(row.prevIncome.toFixed(2)) +
+                                  Math.abs(comparativeStats.income.toFixed(2)) +
                                   (showPercents ? "%" : "")}
                             </span>
                           </TableCell>
@@ -324,53 +304,57 @@ export default function History() {
                             <span
                               style={{
                                 color:
-                                  row.prevSpending === 0
+                                  comparativeStats.spending === 0
                                     ? "white"
-                                    : row.prevSpending < 0
+                                    : comparativeStats.spending < 0
                                     ? "#2E7D32"
                                     : "#D32E2E",
                                 fontWeight: "bold",
                                 fontSize: "14px",
                               }}
                             >
-                              {row.prevSpending === 0
-                                ? row.prevSpending.toFixed(2)
-                                : row.prevSpending > 0
+                              {comparativeStats.spending === 0
+                                ? comparativeStats.spending.toFixed(2)
+                                : comparativeStats.spending > 0
                                 ? "+" +
                                   (showPercents ? "" : "$") +
-                                  row.prevSpending.toFixed(2) +
+                                  comparativeStats.spending.toFixed(2) +
                                   (showPercents ? "%" : "")
                                 : "-" +
                                   (showPercents ? "" : "$") +
-                                  Math.abs(row.prevSpending.toFixed(2)) +
+                                  Math.abs(
+                                    comparativeStats.spending.toFixed(2)
+                                  ) +
                                   (showPercents ? "%" : "")}
                             </span>
                           </TableCell>
                           <TableCell sx={{ color: "white" }}>
-                            ${(row.income - row.spending).toFixed(2)}
+                            ${row.savings.toFixed(2)}
                             &nbsp;&nbsp;&nbsp;
                             <span
                               style={{
                                 color:
-                                  row.prevSavings === 0
+                                  comparativeStats.savings === 0
                                     ? "white"
-                                    : row.prevSavings > 0
+                                    : comparativeStats.savings > 0
                                     ? "#2E7D32"
                                     : "#D32E2E",
                                 fontWeight: "bold",
                                 fontSize: "14px",
                               }}
                             >
-                              {row.prevSavings === 0
-                                ? row.prevSavings.toFixed(2)
-                                : row.prevSavings > 0
+                              {comparativeStats.savings === 0
+                                ? comparativeStats.savings.toFixed(2)
+                                : comparativeStats.savings > 0
                                 ? "+" +
                                   (showPercents ? "" : "$") +
-                                  row.prevSavings.toFixed(2) +
+                                  comparativeStats.savings.toFixed(2) +
                                   (showPercents ? "%" : "")
                                 : "-" +
                                   (showPercents ? "" : "$") +
-                                  Math.abs(row.prevSavings.toFixed(2)) +
+                                  Math.abs(
+                                    comparativeStats.savings.toFixed(2)
+                                  ) +
                                   (showPercents ? "%" : "")}
                             </span>
                           </TableCell>
