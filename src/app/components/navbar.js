@@ -25,7 +25,7 @@ export default function Navbar() {
               const { user_id, first_name, email } = response.data;
               setUser({ user_id, first_name, email });
             } else {
-              console.log("no user to be set");
+              // console.log("no user to be set");
             }
           }
         } catch (error) {

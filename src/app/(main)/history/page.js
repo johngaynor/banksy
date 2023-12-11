@@ -41,6 +41,7 @@ export default function History() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [showPercents, setShowPercents] = useState(true);
   const [openReport, setOpenReport] = useState(false);
+  const [comparePeriod, setComparePeriod] = useState(1);
 
   useEffect(() => {
     if (user && !userHistory && !historyLoading) {
@@ -106,8 +107,36 @@ export default function History() {
         : 0,
     }));
 
+  const generateComparativePeriod = (rowIndex) => {
+    // console.log('current row:', filteredHistory[rowIndex].month_year);
+    let prevIncome = 0;
+    let prevSpending = 0;
+    let prevSavings = 0;
+
+    for (let i = 1; i <= comparePeriod; i++) {
+      const row = filteredHistory[rowIndex + i];
+      if (row) {
+        prevIncome += row.income;
+        prevSpending += row.spending;
+        prevSavings += row.income - row.spending;
+      }
+    }
+
+    prevIncome = prevIncome / comparePeriod;
+    prevSpending = prevSpending / comparePeriod;
+    prevSavings = prevSavings / comparePeriod;
+
+    console.log(
+      "current row:",
+      filteredHistory[rowIndex].month_year,
+      "stats for previous row:",
+      prevIncome
+    );
+
+    return { prevIncome, prevSpending, prevSavings };
+  };
+
   const viewReport = (report) => {
-    // console.log("clicked", report);
     setOpenReport(report);
   };
 
@@ -175,7 +204,6 @@ export default function History() {
                 }
                 component="label"
                 variant="contained"
-                // startIcon={<AddBoxIcon />}
                 sx={{ marginTop: "20px" }}
               >
                 Yearly Summary
@@ -198,13 +226,7 @@ export default function History() {
                 alignItems: "flex-end",
               }}
             >
-              <FormGroup>
-                <FormControlLabel
-                  control={<Switch checked={showPercents} />}
-                  label="Show percents?"
-                  onChange={(e) => setShowPercents(e.target.checked)}
-                />
-              </FormGroup>
+              rest content at the top
             </Grid>
           </Grid>
 
@@ -248,129 +270,134 @@ export default function History() {
                   filteredHistory
                     .map((row, index) => ({ ...row, index }))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => (
-                      <TableRow
-                        key={index}
-                        sx={{
-                          borderBottom: "2px solid #5d5d5d",
-                          backgroundColor:
-                            index % 2 !== 0 ? "#525252" : "#474747",
-                        }}
-                      >
-                        <TableCell sx={{ color: "white" }}>
-                          {moment(row.month_year, "MM-YYYY").format(
-                            "MMMM YYYY"
-                          )}
-                        </TableCell>
-                        <TableCell sx={{ color: "white" }}>
-                          ${row.income.toFixed(2)}&nbsp;&nbsp;&nbsp;
-                          <span
-                            style={{
-                              color:
-                                row.prevIncome === 0
-                                  ? "white"
-                                  : row.prevIncome > 0
-                                  ? "#2E7D32"
-                                  : "#D32E2E",
-                              fontWeight: "bold",
-                              fontSize: "14px",
-                            }}
-                          >
-                            {row.prevIncome === 0
-                              ? row.prevIncome.toFixed(2)
-                              : row.prevIncome > 0
-                              ? "+" +
-                                (showPercents ? "" : "$") +
-                                row.prevIncome.toFixed(2) +
-                                (showPercents ? "%" : "")
-                              : "-" +
-                                (showPercents ? "" : "$") +
-                                Math.abs(row.prevIncome.toFixed(2)) +
-                                (showPercents ? "%" : "")}
-                          </span>
-                        </TableCell>
-                        <TableCell
+                    .map((row, index) => {
+                      const comparativeStats = generateComparativePeriod(
+                        row.index
+                      );
+                      return (
+                        <TableRow
+                          key={index}
                           sx={{
-                            color: "white",
+                            borderBottom: "2px solid #5d5d5d",
+                            backgroundColor:
+                              index % 2 !== 0 ? "#525252" : "#474747",
                           }}
                         >
-                          ${row.spending.toFixed(2)}&nbsp;&nbsp;&nbsp;
-                          <span
-                            style={{
-                              color:
-                                row.prevSpending === 0
-                                  ? "white"
-                                  : row.prevSpending < 0
-                                  ? "#2E7D32"
-                                  : "#D32E2E",
-                              fontWeight: "bold",
-                              fontSize: "14px",
+                          <TableCell sx={{ color: "white" }}>
+                            {moment(row.month_year, "MM-YYYY").format(
+                              "MMMM YYYY"
+                            )}
+                          </TableCell>
+                          <TableCell sx={{ color: "white" }}>
+                            ${row.income.toFixed(2)}&nbsp;&nbsp;&nbsp;
+                            <span
+                              style={{
+                                color:
+                                  row.prevIncome === 0
+                                    ? "white"
+                                    : row.prevIncome > 0
+                                    ? "#2E7D32"
+                                    : "#D32E2E",
+                                fontWeight: "bold",
+                                fontSize: "14px",
+                              }}
+                            >
+                              {row.prevIncome === 0
+                                ? row.prevIncome.toFixed(2)
+                                : row.prevIncome > 0
+                                ? "+" +
+                                  (showPercents ? "" : "$") +
+                                  row.prevIncome.toFixed(2) +
+                                  (showPercents ? "%" : "")
+                                : "-" +
+                                  (showPercents ? "" : "$") +
+                                  Math.abs(row.prevIncome.toFixed(2)) +
+                                  (showPercents ? "%" : "")}
+                            </span>
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              color: "white",
                             }}
                           >
-                            {row.prevSpending === 0
-                              ? row.prevSpending.toFixed(2)
-                              : row.prevSpending > 0
-                              ? "+" +
-                                (showPercents ? "" : "$") +
-                                row.prevSpending.toFixed(2) +
-                                (showPercents ? "%" : "")
-                              : "-" +
-                                (showPercents ? "" : "$") +
-                                Math.abs(row.prevSpending.toFixed(2)) +
-                                (showPercents ? "%" : "")}
-                          </span>
-                        </TableCell>
-                        <TableCell sx={{ color: "white" }}>
-                          ${(row.income - row.spending).toFixed(2)}
-                          &nbsp;&nbsp;&nbsp;
-                          <span
-                            style={{
-                              color:
-                                row.prevSavings === 0
-                                  ? "white"
-                                  : row.prevSavings > 0
-                                  ? "#2E7D32"
-                                  : "#D32E2E",
-                              fontWeight: "bold",
-                              fontSize: "14px",
-                            }}
-                          >
-                            {row.prevSavings === 0
-                              ? row.prevSavings.toFixed(2)
-                              : row.prevSavings > 0
-                              ? "+" +
-                                (showPercents ? "" : "$") +
-                                row.prevSavings.toFixed(2) +
-                                (showPercents ? "%" : "")
-                              : "-" +
-                                (showPercents ? "" : "$") +
-                                Math.abs(row.prevSavings.toFixed(2)) +
-                                (showPercents ? "%" : "")}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            component="label"
-                            variant="contained"
-                            sx={{ width: "25px", height: "30px" }}
-                            onClick={() => viewReport(row)}
-                          >
-                            <PageviewIcon />
-                          </Button>
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            component="label"
-                            variant="contained"
-                            color="error"
-                            sx={{ width: "25px", height: "30px" }}
-                            onClick={() => handleDelete(row.month_year)}
-                          >
-                            <DeleteIcon />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))
+                            ${row.spending.toFixed(2)}&nbsp;&nbsp;&nbsp;
+                            <span
+                              style={{
+                                color:
+                                  row.prevSpending === 0
+                                    ? "white"
+                                    : row.prevSpending < 0
+                                    ? "#2E7D32"
+                                    : "#D32E2E",
+                                fontWeight: "bold",
+                                fontSize: "14px",
+                              }}
+                            >
+                              {row.prevSpending === 0
+                                ? row.prevSpending.toFixed(2)
+                                : row.prevSpending > 0
+                                ? "+" +
+                                  (showPercents ? "" : "$") +
+                                  row.prevSpending.toFixed(2) +
+                                  (showPercents ? "%" : "")
+                                : "-" +
+                                  (showPercents ? "" : "$") +
+                                  Math.abs(row.prevSpending.toFixed(2)) +
+                                  (showPercents ? "%" : "")}
+                            </span>
+                          </TableCell>
+                          <TableCell sx={{ color: "white" }}>
+                            ${(row.income - row.spending).toFixed(2)}
+                            &nbsp;&nbsp;&nbsp;
+                            <span
+                              style={{
+                                color:
+                                  row.prevSavings === 0
+                                    ? "white"
+                                    : row.prevSavings > 0
+                                    ? "#2E7D32"
+                                    : "#D32E2E",
+                                fontWeight: "bold",
+                                fontSize: "14px",
+                              }}
+                            >
+                              {row.prevSavings === 0
+                                ? row.prevSavings.toFixed(2)
+                                : row.prevSavings > 0
+                                ? "+" +
+                                  (showPercents ? "" : "$") +
+                                  row.prevSavings.toFixed(2) +
+                                  (showPercents ? "%" : "")
+                                : "-" +
+                                  (showPercents ? "" : "$") +
+                                  Math.abs(row.prevSavings.toFixed(2)) +
+                                  (showPercents ? "%" : "")}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              component="label"
+                              variant="contained"
+                              sx={{ width: "25px", height: "30px" }}
+                              onClick={() => viewReport(row)}
+                            >
+                              <PageviewIcon />
+                            </Button>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              component="label"
+                              variant="contained"
+                              color="error"
+                              sx={{ width: "25px", height: "30px" }}
+                              onClick={() => handleDelete(row.month_year)}
+                            >
+                              <DeleteIcon />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
                 ) : (
                   <TableRow
                     sx={{
@@ -401,6 +428,23 @@ export default function History() {
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </TableContainer>
+          <Grid
+            container
+            spacing={0}
+            sx={{
+              marginTop: "10px",
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <FormGroup>
+              <FormControlLabel
+                control={<Switch checked={showPercents} />}
+                label="Show percents?"
+                onChange={(e) => setShowPercents(e.target.checked)}
+              />
+            </FormGroup>
+          </Grid>
         </Grid>
       </Grid>
     </Box>
