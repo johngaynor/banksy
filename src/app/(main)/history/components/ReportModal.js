@@ -181,7 +181,6 @@ export default function ReportModal({
                   {report.categories
                     ?.slice(0, Math.floor(report.categories.length / 2))
                     .map((cat, index) => {
-                      // const prevReport = userHistory[report.index + 1];
                       const prevCategoryAmt = prevReport?.categories.find(
                         (r) => r.category_name == cat.category_name
                       )?.value;

@@ -12,6 +12,7 @@ import {
   CircularProgress,
   MenuItem,
 } from "@mui/material";
+import PageviewIcon from "@mui/icons-material/Pageview";
 import moment from "moment";
 
 import { getHistory, deleteHistory } from "./actions";
@@ -159,13 +160,20 @@ export default function History() {
                 Yearly Summary
               </Button>
             </Grid>
-            <Grid item xs={4}>
+            <Grid
+              item
+              xs={4}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end",
+              }}
+            >
               <Typography
                 variant="h4"
                 sx={{
                   display: "flex",
-                  justifyContent: "center",
-                  marginTop: "15px",
+                  alignItems: "center",
                 }}
               >
                 {filteredHistory
@@ -173,6 +181,21 @@ export default function History() {
                       "MMMM YYYY"
                     )
                   : null}
+                <Button
+                  component="label"
+                  variant="contained"
+                  sx={{ width: "25px", height: "30px", marginLeft: "10px" }}
+                  onClick={() =>
+                    setOpenReport({
+                      ...filteredHistory[0],
+                      prevIncome: headerStatistics.income,
+                      prevSpending: headerStatistics.spending,
+                      prevSavings: headerStatistics.savings,
+                    })
+                  }
+                >
+                  <PageviewIcon />
+                </Button>
               </Typography>
             </Grid>
             <Grid
