@@ -229,7 +229,6 @@ export default function History() {
                       Income
                     </Typography>
                     <Box
-                      container
                       sx={{
                         display: "flex",
                         alignItems: "flex-end",
@@ -268,7 +267,6 @@ export default function History() {
                       Spending
                     </Typography>
                     <Box
-                      container
                       sx={{
                         display: "flex",
                         alignItems: "flex-end",
@@ -309,7 +307,6 @@ export default function History() {
                       Savings
                     </Typography>
                     <Box
-                      container
                       sx={{
                         display: "flex",
                         alignItems: "flex-end",
@@ -350,7 +347,6 @@ export default function History() {
                       % of Income Saved
                     </Typography>
                     <Box
-                      container
                       sx={{
                         display: "flex",
                         alignItems: "flex-end",
@@ -406,8 +402,6 @@ export default function History() {
           />
 
           <Grid
-            container
-            spacing={0}
             sx={{
               marginTop: "10px",
               display: "flex",
