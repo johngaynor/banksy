@@ -19,6 +19,8 @@ import {
   Box,
   CircularProgress,
   MenuItem,
+  Card,
+  CardContent,
 } from "@mui/material";
 import PageviewIcon from "@mui/icons-material/Pageview";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -82,6 +84,15 @@ export default function History() {
       savings: row.income - row.spending,
       index,
     }));
+
+  const headerStatistics = filteredHistory
+    ? generateComparativePeriod(
+        filteredHistory[0],
+        filteredHistory,
+        comparePeriod,
+        showPercents
+      )
+    : null;
 
   const comparePeriodOptions = [
     { text: "Last Month", value: 1 },
@@ -161,10 +172,18 @@ export default function History() {
             </Grid>
             <Grid item xs={4}>
               <Typography
-                variant="h3"
-                sx={{ textAlign: "center", marginBottom: "20px" }}
+                variant="h4"
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "15px",
+                }}
               >
-                History
+                {filteredHistory
+                  ? moment(filteredHistory[0].month_year, "MM-YYYY").format(
+                      "MMMM YYYY"
+                    )
+                  : null}
               </Typography>
             </Grid>
             <Grid
@@ -174,7 +193,7 @@ export default function History() {
                 display: "flex",
                 justifyContent: "flex-end",
                 alignItems: "center",
-                marginBottom: "-23px",
+                marginBottom: "-10px",
               }}
             >
               <Typography variant="subtitle1" sx={{ marginRight: "10px" }}>
@@ -200,6 +219,186 @@ export default function History() {
               </Select>
             </Grid>
           </Grid>
+          {filteredHistory ? (
+            <Grid
+              container
+              spacing={2}
+              sx={{
+                padding: "20px 0",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Grid item xs={3}>
+                <Card
+                  sx={{ backgroundColor: "#242424", border: "2px solid white" }}
+                >
+                  <CardContent>
+                    <Typography variant="h6" sx={{ color: "white" }}>
+                      Income
+                    </Typography>
+                    <Box
+                      container
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <Typography
+                        variant="h3"
+                        sx={{ color: "white", marginTop: "5px" }}
+                      >
+                        ${filteredHistory[0].income.toFixed(2)}
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          color:
+                            headerStatistics.income > 0 ? "#2E7D32" : "#D32E2E",
+
+                          margin: "0 0 4px 10px",
+                        }}
+                      >
+                        {headerStatistics.income > 0 ? "+" : ""}
+                        {showPercents ? "" : "$"}
+                        {headerStatistics.income.toFixed(2)}
+                        {showPercents ? "%" : ""}
+                      </Typography>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={3}>
+                <Card
+                  sx={{ backgroundColor: "#242424", border: "2px solid white" }}
+                >
+                  <CardContent>
+                    <Typography variant="h6" sx={{ color: "white" }}>
+                      Spending
+                    </Typography>
+                    <Box
+                      container
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <Typography
+                        variant="h3"
+                        sx={{ color: "white", marginTop: "5px" }}
+                      >
+                        ${filteredHistory[0].spending.toFixed(2)}
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          color:
+                            headerStatistics.spending > 0
+                              ? "#D32E2E"
+                              : "#2E7D32",
+
+                          margin: "0 0 4px 10px",
+                        }}
+                      >
+                        {headerStatistics.spending > 0 ? "+" : "-"}
+                        {showPercents ? "" : "$"}
+                        {headerStatistics.spending.toFixed(2)}
+                        {showPercents ? "%" : ""}
+                      </Typography>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={3}>
+                <Card
+                  sx={{ backgroundColor: "#242424", border: "2px solid white" }}
+                >
+                  <CardContent>
+                    <Typography variant="h6" sx={{ color: "white" }}>
+                      Savings
+                    </Typography>
+                    <Box
+                      container
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <Typography
+                        variant="h3"
+                        sx={{ color: "white", marginTop: "5px" }}
+                      >
+                        ${filteredHistory[0].savings.toFixed(2)}
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          color:
+                            headerStatistics.savings > 0
+                              ? "#2E7D32"
+                              : "#D32E2E",
+
+                          margin: "0 0 4px 10px",
+                        }}
+                      >
+                        {headerStatistics.savings > 0 ? "+" : ""}
+                        {showPercents ? "" : "$"}
+                        {headerStatistics.savings.toFixed(2)}
+                        {showPercents ? "%" : ""}
+                      </Typography>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={3}>
+                <Card
+                  sx={{ backgroundColor: "#242424", border: "2px solid white" }}
+                >
+                  <CardContent>
+                    <Typography variant="h6" sx={{ color: "white" }}>
+                      % of Income Saved
+                    </Typography>
+                    <Box
+                      container
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <Typography
+                        variant="h3"
+                        sx={{ color: "white", marginTop: "5px" }}
+                      >
+                        {(
+                          (filteredHistory[0].savings /
+                            filteredHistory[0].income) *
+                          100
+                        ).toFixed(2)}
+                        %
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          color:
+                            (
+                              (filteredHistory[0].savings /
+                                filteredHistory[0].income) *
+                              100
+                            ).toFixed(2) < 15
+                              ? "#D32E2E"
+                              : "#2E7D32",
+
+                          margin: "0 0 4px 10px",
+                        }}
+                      >
+                        Target: 15%
+                      </Typography>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+          ) : null}
 
           <TableContainer
             component={Paper}
@@ -240,6 +439,7 @@ export default function History() {
                 {filteredHistory && filteredHistory.length !== 0 ? (
                   filteredHistory
                     .map((row, index) => ({ ...row, index }))
+                    .filter((r) => r.index !== 0)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
                       const comparativeStats = generateComparativePeriod(
@@ -406,7 +606,7 @@ export default function History() {
               }}
               rowsPerPageOptions={[5, 25, 50]}
               component="div"
-              count={userHistory?.length || 0}
+              count={userHistory?.length - 1 || 0}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
