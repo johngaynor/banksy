@@ -23,6 +23,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
 
 import { getHistory, deleteHistory } from "./actions";
+import { generateComparativePeriod } from "./components/HistoryFunctions";
 import { useGlobalState } from "@/app/components/context";
 import ReportModal from "./components/ReportModal";
 
@@ -79,47 +80,6 @@ export default function History() {
       savings: row.income - row.spending,
       index,
     }));
-
-  const generateComparativePeriod = (currentRow) => {
-    let prevIncome = 0;
-    let prevSpending = 0;
-    let prevSavings = 0;
-
-    let validRows = 0;
-
-    for (let i = 1; i <= comparePeriod; i++) {
-      const row = filteredHistory[currentRow.index + i];
-      if (row) {
-        validRows += 1;
-        prevIncome += row.income;
-        prevSpending += row.spending;
-        prevSavings += row.income - row.spending;
-      }
-    }
-
-    prevIncome = validRows ? prevIncome / validRows : prevIncome;
-    prevSpending = validRows ? prevSpending / validRows : prevSpending;
-    prevSavings = validRows ? prevSavings / validRows : prevSavings;
-
-    const income = validRows
-      ? showPercents
-        ? ((currentRow.income - prevIncome) / prevIncome) * 100
-        : currentRow.income - prevIncome
-      : 0;
-    const spending = validRows
-      ? showPercents
-        ? ((currentRow.spending - prevSpending) / prevSpending) * 100
-        : currentRow.spending - prevSpending
-      : 0;
-    const savings = validRows
-      ? showPercents
-        ? ((currentRow.savings - prevSavings) / prevSavings) * 100
-        : currentRow.savings - prevSavings
-      : 0;
-
-    return { income, spending, savings };
-    // return { prevIncome, prevSpending, prevSavings, income, spending, savings };
-  };
 
   const viewReport = (report) => {
     setOpenReport(report);
@@ -256,22 +216,12 @@ export default function History() {
                     .map((row, index) => ({ ...row, index }))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
-                      const comparativeStats = generateComparativePeriod(row);
-                      // const {
-                      //   prevIncome,
-                      //   prevSpending,
-                      //   prevSavings,
-                      //   income,
-                      //   spending,
-                      //   savings,
-                      // } = comparativeStats;
-                      // console.log(
-                      //   row.index,
-                      //   "prev",
-                      //   prevIncome,
-                      //   "calc",
-                      //   income
-                      // );
+                      const comparativeStats = generateComparativePeriod(
+                        row,
+                        filteredHistory,
+                        comparePeriod,
+                        showPercents
+                      );
                       return (
                         <TableRow
                           key={index}
@@ -381,7 +331,14 @@ export default function History() {
                               component="label"
                               variant="contained"
                               sx={{ width: "25px", height: "30px" }}
-                              onClick={() => viewReport(row)}
+                              onClick={() =>
+                                viewReport({
+                                  ...row,
+                                  prevIncome: comparativeStats.income,
+                                  prevSpending: comparativeStats.spending,
+                                  prevSavings: comparativeStats.savings,
+                                })
+                              }
                             >
                               <PageviewIcon />
                             </Button>
