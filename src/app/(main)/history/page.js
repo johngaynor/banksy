@@ -138,7 +138,7 @@ export default function History() {
           flexDirection: "column",
         }}
       >
-        <Grid item sx={{ width: "90%", position: "relative" }}>
+        <Grid item sx={{ width: "90%" }}>
           <Grid container>
             <Grid
               item
@@ -146,7 +146,6 @@ export default function History() {
               sx={{
                 display: "flex",
                 alignItems: "flex-end",
-                paddingBottom: "5px",
               }}
             >
               <Button
