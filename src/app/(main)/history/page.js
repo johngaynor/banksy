@@ -5,6 +5,7 @@ import {
   Typography,
   Button,
   Table,
+  Select,
   TableBody,
   TableCell,
   TableContainer,
@@ -17,6 +18,7 @@ import {
   Switch,
   Box,
   CircularProgress,
+  MenuItem,
 } from "@mui/material";
 import PageviewIcon from "@mui/icons-material/Pageview";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -42,7 +44,7 @@ export default function History() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [showPercents, setShowPercents] = useState(false);
   const [openReport, setOpenReport] = useState(false);
-  const [comparePeriod, setComparePeriod] = useState(3);
+  const [comparePeriod, setComparePeriod] = useState(1);
 
   useEffect(() => {
     if (user && !userHistory && !historyLoading) {
@@ -81,9 +83,12 @@ export default function History() {
       index,
     }));
 
-  const viewReport = (report) => {
-    setOpenReport(report);
-  };
+  const comparePeriodOptions = [
+    { text: "Last Month", value: 1 },
+    { text: "Last 3 Months", value: 3 },
+    { text: "Last 6 Months", value: 6 },
+    { text: "Last Year", value: 12 },
+  ];
 
   if (historyLoading || deleteHistoryLoading) {
     return <CircularProgress />;
@@ -133,7 +138,7 @@ export default function History() {
         }}
       >
         <Grid item sx={{ width: "90%", position: "relative" }}>
-          <Grid container spacing={0}>
+          <Grid container>
             <Grid
               item
               xs={4}
@@ -168,10 +173,31 @@ export default function History() {
               sx={{
                 display: "flex",
                 justifyContent: "flex-end",
-                alignItems: "flex-end",
+                alignItems: "center",
+                marginBottom: "-23px",
               }}
             >
-              rest content at the top
+              <Typography variant="subtitle1" sx={{ marginRight: "10px" }}>
+                Compare Period:
+              </Typography>
+              <Select
+                onChange={(e) => setComparePeriod(e.target.value)}
+                value={comparePeriod}
+                sx={{
+                  color: "white",
+                  border: "1px solid white",
+                  "& .MuiSelect-icon": {
+                    color: "white",
+                  },
+                  height: "40px",
+                }}
+              >
+                {comparePeriodOptions.map((o, index) => (
+                  <MenuItem key={index} value={o.value}>
+                    {o.text}
+                  </MenuItem>
+                ))}
+              </Select>
             </Grid>
           </Grid>
 
@@ -332,7 +358,7 @@ export default function History() {
                               variant="contained"
                               sx={{ width: "25px", height: "30px" }}
                               onClick={() =>
-                                viewReport({
+                                setOpenReport({
                                   ...row,
                                   prevIncome: comparativeStats.income,
                                   prevSpending: comparativeStats.spending,
