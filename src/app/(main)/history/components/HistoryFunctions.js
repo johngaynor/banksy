@@ -36,7 +36,7 @@ export function generateComparativePeriod(
     : 0;
   const savings = validRows
     ? showPercents
-      ? ((currentRow.savings - prevSavings) / prevSavings) * 100
+      ? ((currentRow.savings - prevSavings) / Math.abs(prevSavings)) * 100
       : currentRow.savings - prevSavings
     : 0;
 
