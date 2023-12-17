@@ -43,7 +43,7 @@ export function generateComparativePeriod(
   return { income, spending, savings };
 }
 
-export function generateCategoryObj(userHistory, setActiveCategory) {
+export function generateCategoryObj(userHistory) {
   const categoryObj = userHistory?.reduce((acc, row) => {
     const retObj = { ...acc };
 

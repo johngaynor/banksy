@@ -1,5 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import Link from "next/link";
 import {
   Grid,
@@ -16,6 +26,7 @@ import {
   Card,
   CardContent,
 } from "@mui/material";
+import moment from "moment";
 
 import { useGlobalState } from "@/app/components/context";
 import { getHistory } from "../actions";
@@ -34,7 +45,7 @@ export default function CategoryView() {
     user,
   } = useGlobalState();
   const [activeCategory, setActiveCategory] = useState(null);
-  const [statsPeriod, setStatsPeriod] = useState(3);
+  const [statsPeriod, setStatsPeriod] = useState(6);
 
   useEffect(() => {
     if (user && !userHistory && !historyLoading) {
@@ -42,14 +53,33 @@ export default function CategoryView() {
     }
   }, [userHistory, user]);
 
-  const categoryObj = userHistory
-    ? generateCategoryObj(userHistory, setActiveCategory)
-    : null;
+  const categoryObj = userHistory ? generateCategoryObj(userHistory) : null;
+
+  useEffect(() => {
+    if (!activeCategory && categoryObj) {
+      setActiveCategory(Object.keys(categoryObj)[0]);
+    }
+  }, [categoryObj]);
+
   const categoryStats = categoryObj
     ? generateCategoryStats(categoryObj, activeCategory, statsPeriod)
     : null;
 
-  //   console.log(categoryObj);
+  const tableData = activeCategory
+    ? categoryObj[activeCategory]
+        .slice(0, statsPeriod)
+        .sort((a, b) => {
+          const dateA = moment(a.date, "mm-yyyy").format("yyyymm");
+          const dateB = moment(b.date, "mm-yyyy").format("yyyymm");
+          return dateA - dateB;
+        })
+        .map((a) => ({
+          ...a,
+          date: moment(a.date, "MM-YYYY").format("MMM YY"),
+          amount: a.value,
+        }))
+    : null;
+  //   console.log(tableData);
 
   const statsPeriodOptions = [
     { text: "Last 3 Months", value: 3 },
@@ -101,8 +131,6 @@ export default function CategoryView() {
             sx={{
               display: "flex",
               alignItems: "flex-end",
-              //   justifyContent: "center",
-              //   backgroundColor: "red",
             }}
           >
             <Box>
@@ -187,7 +215,6 @@ export default function CategoryView() {
         {/* this starts the main content for the stats */}
         <Grid
           container
-          spacing={2}
           sx={{
             padding: "20px 0",
             display: "flex",
@@ -200,7 +227,7 @@ export default function CategoryView() {
             sx={{
               display: "flex",
               flexWrap: "wrap",
-              paddingRight: "10px",
+              paddingRight: "20px",
             }}
           >
             <Grid container spacing={2}>
@@ -319,8 +346,44 @@ export default function CategoryView() {
           <Grid
             item
             xs={6}
-            sx={{ border: "2px solid beige", paddingLeft: "10px" }}
-          ></Grid>
+            sx={{
+              border: "2px solid white",
+              borderRadius: "3px",
+            }}
+          >
+            <ResponsiveContainer
+              width="95%"
+              height="95%"
+              style={{ padding: "10px" }}
+            >
+              <LineChart
+                width={500}
+                height={300}
+                data={tableData}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+                style={{ color: "white" }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" tick={{ fill: "white" }} />
+                <YAxis tick={{ fill: "white" }} />
+                <Tooltip />
+                <Legend wrapperStyle={{ color: "white" }} />
+                <Line
+                  type="monotone"
+                  dataKey="amount"
+                  stroke="#8884d8"
+                  activeDot={{ r: 8 }}
+                  strokeWidth={3}
+                />
+                {/* <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
+              </LineChart>
+            </ResponsiveContainer>
+          </Grid>
         </Grid>
       </Grid>
     </Box>
