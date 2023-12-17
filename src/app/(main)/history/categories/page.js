@@ -62,6 +62,15 @@ export default function CategoryView() {
     ? generateCategoryStats(categoryObj, activeCategory, statsPeriod, 0)
     : null;
 
+  const lastMonthStats = categoryObj
+    ? generateCategoryStats(categoryObj, activeCategory, statsPeriod, 1)
+    : null;
+  const compareStats = {
+    avg3: categoryStats?.avg3 - lastMonthStats?.avg3,
+    avg6: categoryStats?.avg6 - lastMonthStats?.avg6,
+    avg12: categoryStats?.avg12 - lastMonthStats?.avg12,
+  };
+
   const tableData = activeCategory
     ? categoryObj[activeCategory]
         .slice(0, statsPeriod)
@@ -76,7 +85,6 @@ export default function CategoryView() {
           amount: a.value,
         }))
     : null;
-  //   console.log(tableData);
 
   const statsPeriodOptions = [
     { text: "Last 3 Months", value: 3 },
@@ -236,15 +244,39 @@ export default function CategoryView() {
                   sx={{ backgroundColor: "#242424", border: "2px solid white" }}
                 >
                   <CardContent>
-                    <Typography variant="subtitle1" sx={{ color: "white" }}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ color: "white", marginTop: "-5px" }}
+                    >
                       3 Month Average
                     </Typography>
-                    <Typography
-                      variant="h3"
-                      sx={{ color: "white", marginTop: "5px" }}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: { xs: "column", xl: "row" },
+                        alignItems: { xs: "flex-start", xl: "flex-end" },
+                      }}
                     >
-                      ${categoryStats.avg3.toFixed(2)}
-                    </Typography>
+                      <Typography
+                        variant="h3"
+                        sx={{
+                          color: "white",
+                          margin: "5px 5px 0 0",
+                        }}
+                      >
+                        ${categoryStats.avg3.toFixed(2)}
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          color: compareStats.avg3 > 0 ? "#D32E2E" : "#2E7D32",
+                          marginBottom: "4px",
+                        }}
+                      >
+                        {compareStats.avg3 > 0 ? "+" : "-"}$
+                        {Math.abs(compareStats.avg3).toFixed(2)}
+                      </Typography>
+                    </Box>
                   </CardContent>
                 </Card>
               </Grid>
@@ -256,12 +288,33 @@ export default function CategoryView() {
                     <Typography variant="subtitle1" sx={{ color: "white" }}>
                       6 Month Average
                     </Typography>
-                    <Typography
-                      variant="h3"
-                      sx={{ color: "white", marginTop: "5px" }}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: { xs: "column", xl: "row" },
+                        alignItems: { xs: "flex-start", xl: "flex-end" },
+                      }}
                     >
-                      ${categoryStats.avg6.toFixed(2)}
-                    </Typography>
+                      <Typography
+                        variant="h3"
+                        sx={{
+                          color: "white",
+                          margin: "5px 5px 0 0",
+                        }}
+                      >
+                        ${categoryStats.avg6.toFixed(2)}
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          color: compareStats.avg6 > 0 ? "#D32E2E" : "#2E7D32",
+                          marginBottom: "4px",
+                        }}
+                      >
+                        {compareStats.avg6 > 0 ? "+" : "-"}$
+                        {Math.abs(compareStats.avg6).toFixed(2)}
+                      </Typography>
+                    </Box>
                   </CardContent>
                 </Card>
               </Grid>
@@ -273,12 +326,33 @@ export default function CategoryView() {
                     <Typography variant="subtitle1" sx={{ color: "white" }}>
                       1 Year Average
                     </Typography>
-                    <Typography
-                      variant="h3"
-                      sx={{ color: "white", marginTop: "5px" }}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: { xs: "column", xl: "row" },
+                        alignItems: { xs: "flex-start", xl: "flex-end" },
+                      }}
                     >
-                      ${categoryStats.avg12.toFixed(2)}
-                    </Typography>
+                      <Typography
+                        variant="h3"
+                        sx={{
+                          color: "white",
+                          margin: "5px 5px 0 0",
+                        }}
+                      >
+                        ${categoryStats.avg12.toFixed(2)}
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          color: compareStats.avg12 > 0 ? "#D32E2E" : "#2E7D32",
+                          marginBottom: "4px",
+                        }}
+                      >
+                        {compareStats.avg12 > 0 ? "+" : "-"}$
+                        {Math.abs(compareStats.avg12).toFixed(2)}
+                      </Typography>
+                    </Box>
                   </CardContent>
                 </Card>
               </Grid>
@@ -290,18 +364,41 @@ export default function CategoryView() {
                     <Typography variant="subtitle1" sx={{ color: "white" }}>
                       Category Ranking*
                     </Typography>
-                    <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-                      <Typography
-                        variant="h3"
-                        sx={{ color: "white", marginTop: "5px" }}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: { xs: "column", xl: "row" },
+                        alignItems: { xs: "flex-start", xl: "flex-end" },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "flex-end",
+                          marginRight: "7px",
+                        }}
                       >
-                        #{categoryStats.rank}
-                      </Typography>
+                        <Typography
+                          variant="h3"
+                          sx={{ color: "white", marginTop: "5px" }}
+                        >
+                          #{categoryStats.rank}
+                        </Typography>
+                        <Typography
+                          variant="h6"
+                          sx={{ color: "white", marginBottom: "3px" }}
+                        >
+                          /{categoryStats.maxRank}
+                        </Typography>
+                      </Box>
                       <Typography
                         variant="h6"
-                        sx={{ color: "white", marginBottom: "3px" }}
+                        sx={{
+                          color: "white",
+                          marginBottom: "4px",
+                        }}
                       >
-                        /{categoryStats.maxRank}
+                        --
                       </Typography>
                     </Box>
                   </CardContent>
@@ -315,12 +412,32 @@ export default function CategoryView() {
                     <Typography variant="subtitle1" sx={{ color: "white" }}>
                       Average % of Income*
                     </Typography>
-                    <Typography
-                      variant="h3"
-                      sx={{ color: "white", marginTop: "5px" }}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: { xs: "column", xl: "row" },
+                        alignItems: { xs: "flex-start", xl: "flex-end" },
+                      }}
                     >
-                      {categoryStats.avgIncome.toFixed(2)}%
-                    </Typography>
+                      <Typography
+                        variant="h3"
+                        sx={{
+                          color: "white",
+                          margin: "5px 5px 0 0",
+                        }}
+                      >
+                        {categoryStats.avgIncome.toFixed(2)}%
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          color: "white",
+                          marginBottom: "4px",
+                        }}
+                      >
+                        --
+                      </Typography>
+                    </Box>
                   </CardContent>
                 </Card>
               </Grid>
@@ -332,12 +449,32 @@ export default function CategoryView() {
                     <Typography variant="subtitle1" sx={{ color: "white" }}>
                       Average % of Spending*
                     </Typography>
-                    <Typography
-                      variant="h3"
-                      sx={{ color: "white", marginTop: "5px" }}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: { xs: "column", xl: "row" },
+                        alignItems: { xs: "flex-start", xl: "flex-end" },
+                      }}
                     >
-                      {categoryStats.avgSpending.toFixed(2)}%
-                    </Typography>
+                      <Typography
+                        variant="h3"
+                        sx={{
+                          color: "white",
+                          margin: "5px 5px 0 0",
+                        }}
+                      >
+                        {categoryStats.avgSpending.toFixed(2)}%
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          color: "white",
+                          marginBottom: "4px",
+                        }}
+                      >
+                        --
+                      </Typography>
+                    </Box>
                   </CardContent>
                 </Card>
               </Grid>
@@ -390,7 +527,6 @@ export default function CategoryView() {
                   activeDot={{ r: 8 }}
                   strokeWidth={3}
                 />
-                {/* <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
               </LineChart>
             </ResponsiveContainer>
           </Grid>
