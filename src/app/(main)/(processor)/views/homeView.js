@@ -64,8 +64,6 @@ export default function Home({ setFormStep }) {
     }
   }, [userBanks, userCategories, userViews]);
 
-  console.log(userCategories);
-
   return (
     <Grid container spacing={1}>
       <Grid

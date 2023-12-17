@@ -181,7 +181,6 @@ export default function ReportModal({
                   {report.categories
                     ?.slice(0, Math.floor(report.categories.length / 2))
                     .map((cat, index) => {
-                      // const prevReport = userHistory[report.index + 1];
                       const prevCategoryAmt = prevReport?.categories.find(
                         (r) => r.category_name == cat.category_name
                       )?.value;
@@ -233,7 +232,6 @@ export default function ReportModal({
                   {report.categories
                     ?.slice(Math.floor(report.categories.length / 2))
                     .map((cat, index) => {
-                      // const prevReport = userHistory[report.index + 1];
                       const prevCategoryAmt = prevReport?.categories.find(
                         (r) => r.category_name == cat.category_name
                       )?.value;
@@ -281,6 +279,16 @@ export default function ReportModal({
                 </List>
               </Grid>
             </Grid>
+            <Typography
+              variant="subtitle1"
+              sx={{
+                color: "white",
+                textAlign: "center",
+                paddingTop: "20px",
+              }}
+            >
+              Categories are compared to last month.
+            </Typography>
           </DialogContent>
           <DialogActions sx={{ backgroundColor: "#121212" }}>
             <Button onClick={onClose}>Close</Button>
