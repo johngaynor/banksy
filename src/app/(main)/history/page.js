@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   Grid,
   Typography,
@@ -120,6 +121,7 @@ export default function History() {
         backgroundColor: "#121212",
         minHeight: "100vh",
         display: "flex",
+        justifyContent: "center",
       }}
     >
       <ReportModal
@@ -129,145 +131,134 @@ export default function History() {
         userHistory={userHistory}
         showPercents={showPercents}
       />
-      <Grid
-        container
-        spacing={1}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          marginTop: "30px",
-          flexDirection: "column",
-        }}
-      >
-        <Grid item sx={{ width: "90%" }}>
-          <Grid container>
-            <Grid
-              item
-              xs={4}
-              sx={{
-                display: "flex",
-                alignItems: "flex-end",
-              }}
-            >
+
+      <Grid item sx={{ width: "90%" }}>
+        <Grid container>
+          <Grid
+            item
+            xs={4}
+            sx={{
+              display: "flex",
+              alignItems: "flex-end",
+            }}
+          >
+            <Link href="/history/categories">
               <Button
-                onClick={() =>
-                  alert("Sorry, this feature is not available yet. (PDF)")
-                }
                 component="label"
                 variant="contained"
                 sx={{ marginTop: "20px" }}
               >
-                Yearly Summary
+                Category View
               </Button>
-            </Grid>
-            <Grid
-              item
-              xs={4}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "flex-end",
-              }}
-            >
-              <Typography
-                variant="h4"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                {filteredHistory
-                  ? moment(filteredHistory[0].month_year, "MM-YYYY").format(
-                      "MMMM YYYY"
-                    )
-                  : null}
-                <Button
-                  component="label"
-                  variant="contained"
-                  sx={{ width: "25px", height: "30px", marginLeft: "10px" }}
-                  onClick={() =>
-                    setOpenReport({
-                      ...filteredHistory[0],
-                      prevIncome: headerStatistics.income,
-                      prevSpending: headerStatistics.spending,
-                      prevSavings: headerStatistics.savings,
-                    })
-                  }
-                >
-                  <PageviewIcon />
-                </Button>
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={4}
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "center",
-                marginBottom: "-10px",
-              }}
-            >
-              <Typography variant="subtitle1" sx={{ marginRight: "10px" }}>
-                Compare Period:
-              </Typography>
-              <Select
-                onChange={(e) => setComparePeriod(e.target.value)}
-                value={comparePeriod}
-                sx={{
-                  color: "white",
-                  border: "1px solid white",
-                  "& .MuiSelect-icon": {
-                    color: "white",
-                  },
-                  height: "40px",
-                }}
-              >
-                {comparePeriodOptions.map((o, index) => (
-                  <MenuItem key={index} value={o.value}>
-                    {o.text}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
+            </Link>
           </Grid>
-          {filteredHistory ? (
-            <StatisticsHeader
-              filteredHistory={filteredHistory}
-              headerStatistics={headerStatistics}
-              showPercents={showPercents}
-            />
-          ) : null}
-
-          <HistoryTable
-            filteredHistory={filteredHistory}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            setOpenReport={setOpenReport}
-            handleChangePage={handleChangePage}
-            handleDelete={handleDelete}
-            handleChangeRowsPerPage={handleChangeRowsPerPage}
-            userHistory={userHistory}
-            comparePeriod={comparePeriod}
-            showPercents={showPercents}
-            generateComparativePeriod={generateComparativePeriod}
-          />
-
           <Grid
+            item
+            xs={4}
             sx={{
-              marginTop: "10px",
               display: "flex",
-              justifyContent: "flex-end",
+              justifyContent: "center",
+              alignItems: "flex-end",
             }}
           >
-            <FormGroup>
-              <FormControlLabel
-                control={<Switch checked={showPercents} />}
-                label="Show percents?"
-                onChange={(e) => setShowPercents(e.target.checked)}
-              />
-            </FormGroup>
+            <Typography
+              variant="h4"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              {filteredHistory
+                ? moment(filteredHistory[0].month_year, "MM-YYYY").format(
+                    "MMMM YYYY"
+                  )
+                : null}
+              <Button
+                component="label"
+                variant="contained"
+                sx={{ width: "25px", height: "30px", marginLeft: "10px" }}
+                onClick={() =>
+                  setOpenReport({
+                    ...filteredHistory[0],
+                    prevIncome: headerStatistics.income,
+                    prevSpending: headerStatistics.spending,
+                    prevSavings: headerStatistics.savings,
+                  })
+                }
+              >
+                <PageviewIcon />
+              </Button>
+            </Typography>
           </Grid>
+          <Grid
+            item
+            xs={4}
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              marginBottom: "-10px",
+            }}
+          >
+            <Typography variant="subtitle1" sx={{ marginRight: "10px" }}>
+              Compare Period:
+            </Typography>
+            <Select
+              onChange={(e) => setComparePeriod(e.target.value)}
+              value={comparePeriod}
+              sx={{
+                color: "white",
+                border: "1px solid white",
+                "& .MuiSelect-icon": {
+                  color: "white",
+                },
+                height: "40px",
+              }}
+            >
+              {comparePeriodOptions.map((o, index) => (
+                <MenuItem key={index} value={o.value}>
+                  {o.text}
+                </MenuItem>
+              ))}
+            </Select>
+          </Grid>
+        </Grid>
+        {filteredHistory ? (
+          <StatisticsHeader
+            filteredHistory={filteredHistory}
+            headerStatistics={headerStatistics}
+            showPercents={showPercents}
+          />
+        ) : null}
+
+        <HistoryTable
+          filteredHistory={filteredHistory}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          setOpenReport={setOpenReport}
+          handleChangePage={handleChangePage}
+          handleDelete={handleDelete}
+          handleChangeRowsPerPage={handleChangeRowsPerPage}
+          userHistory={userHistory}
+          comparePeriod={comparePeriod}
+          showPercents={showPercents}
+          generateComparativePeriod={generateComparativePeriod}
+        />
+
+        <Grid
+          sx={{
+            marginTop: "10px",
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <FormGroup>
+            <FormControlLabel
+              control={<Switch checked={showPercents} />}
+              label="Show percents?"
+              onChange={(e) => setShowPercents(e.target.checked)}
+            />
+          </FormGroup>
         </Grid>
       </Grid>
     </Box>

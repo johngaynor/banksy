@@ -42,3 +42,109 @@ export function generateComparativePeriod(
 
   return { income, spending, savings };
 }
+
+export function generateCategoryObj(userHistory) {
+  const categoryObj = userHistory?.reduce((acc, row) => {
+    const retObj = { ...acc };
+
+    row.categories.forEach((cat) => {
+      if (!retObj[cat.category_name]) {
+        retObj[cat.category_name] = [];
+      }
+
+      const categoryData = {
+        date: row.month_year,
+        value: cat.value,
+        percentSpending: (cat.value / row.spending) * 100,
+        percentIncome: (cat.value / row.income) * 100,
+      };
+      retObj[cat.category_name].push(categoryData);
+    });
+
+    return retObj;
+  }, {});
+
+  // generating 3/6/12 month stats for all rows
+  // console.log(categoryObj);
+  const obj = Object.keys(categoryObj).reduce((acc, category) => {
+    const retObj = { ...acc };
+
+    categoryObj[category].forEach((row, index) => {
+      const { avg3, avg6, avg12 } = generateCategoryStats(
+        categoryObj,
+        category,
+        false,
+        index
+      );
+      retObj[category][index] = { ...row, avg3, avg6, avg12 };
+    });
+
+    return retObj;
+  }, categoryObj);
+
+  // return categoryObj;
+  return obj;
+}
+
+export function generateCategoryStats(
+  categoryObj,
+  activeCategory,
+  statsPeriod,
+  startingIndex
+) {
+  // stats to return: last 3/6/12 month avg, avg % of income, avg % of spending, category ranking among all avg spending. assume dates are already lined up
+  const category = activeCategory ?? Object.keys(categoryObj)[0];
+  const getAvg = (cat, duration, type) => {
+    const historyRange = categoryObj[cat].slice(
+      startingIndex,
+      startingIndex + duration
+    );
+    let total = 0;
+    let validRows = 0;
+    for (const h of historyRange) {
+      total += h[type]; // type is the key to access for the amount
+      validRows += 1;
+    }
+    return total / validRows;
+  };
+  const avg3 = getAvg(category, 3, "value");
+  const avg6 = getAvg(category, 6, "value");
+  const avg12 = getAvg(category, 12, "value");
+
+  // quick escape for generating categoryObj stats for graphs
+  if (!statsPeriod) {
+    return { avg3, avg6, avg12 };
+  }
+
+  const avgSpending = getAvg(category, statsPeriod, "percentSpending");
+  const avgIncome = getAvg(category, statsPeriod, "percentIncome");
+
+  const getRanking = (cat, duration) => {
+    const rankingArray = Object.keys(categoryObj).reduce((acc, c) => {
+      const retArr = [...acc];
+      let value = 0;
+      for (let i = 0; i < duration; i++) {
+        if (categoryObj[c][i]) {
+          value += categoryObj[c][i].value;
+        }
+      }
+
+      retArr.push({ name: c, value });
+
+      return retArr;
+    }, []);
+
+    const rankedCategories = rankingArray
+      .sort((a, b) => b.value - a.value)
+      .map((r, index) => ({ name: r.name, ranking: index + 1 }));
+
+    const rank = rankedCategories.find((r) => r.name === cat).ranking;
+
+    return { rank, maxRank: rankedCategories.length };
+  };
+
+  const { rank, maxRank } = getRanking(category, statsPeriod);
+
+  // console.log(category, avg3, avg6, avg12, rank, maxRank, avgSpending, avgIncome);
+  return { avg3, avg6, avg12, rank, maxRank, avgSpending, avgIncome };
+}
