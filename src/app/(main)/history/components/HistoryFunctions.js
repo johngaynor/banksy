@@ -95,7 +95,9 @@ export function generateCategoryStats(
       const retArr = [...acc];
       let value = 0;
       for (let i = 0; i < duration; i++) {
-        value += categoryObj[c][i].value;
+        if (categoryObj[c][i]) {
+          value += categoryObj[c][i].value;
+        }
       }
 
       retArr.push({ name: c, value });

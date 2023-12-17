@@ -34,7 +34,6 @@ export default function History() {
     setDeleteHistoryLoading,
     user,
   } = useGlobalState();
-  // const router = useRouter();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [showPercents, setShowPercents] = useState(false);

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   Grid,
   Typography,
@@ -8,6 +9,7 @@ import {
   FormGroup,
   FormControlLabel,
   Switch,
+  InputLabel,
   Box,
   CircularProgress,
   MenuItem,
@@ -47,7 +49,13 @@ export default function CategoryView() {
     ? generateCategoryStats(categoryObj, activeCategory, statsPeriod)
     : null;
 
-  console.log(categoryStats);
+  //   console.log(categoryObj);
+
+  const statsPeriodOptions = [
+    { text: "Last 3 Months", value: 3 },
+    { text: "Last 6 Months", value: 6 },
+    { text: "Last Year", value: 12 },
+  ];
 
   if (!user) {
     return (
@@ -93,50 +101,90 @@ export default function CategoryView() {
             sx={{
               display: "flex",
               alignItems: "flex-end",
+              //   justifyContent: "center",
+              //   backgroundColor: "red",
             }}
           >
-            <Button
-              onClick={() =>
-                alert("Sorry, this feature is not available yet. (PDF)")
-              }
-              component="label"
-              variant="contained"
-              sx={{ marginTop: "20px" }}
-            >
-              Category View
-            </Button>
+            <Box>
+              <InputLabel htmlFor="select-category" sx={{ color: "white" }}>
+                Category:
+              </InputLabel>
+              <Select
+                id="select-category"
+                onChange={(e) => setActiveCategory(e.target.value)}
+                value={activeCategory ?? Object.keys(categoryObj)[0]}
+                sx={{
+                  color: "white",
+                  border: "1px solid white",
+                  width: "200px",
+                  "& .MuiSelect-icon": {
+                    color: "white",
+                  },
+                  height: "40px",
+                }}
+              >
+                {Object.keys(categoryObj).map((o, index) => (
+                  <MenuItem key={index} value={o}>
+                    {o}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Box>
+            <Box sx={{ margin: "0 10px" }}>
+              <InputLabel htmlFor="select-stats-period" sx={{ color: "white" }}>
+                Time Period*:
+              </InputLabel>
+              <Select
+                id="select-stats-period"
+                onChange={(e) => setStatsPeriod(e.target.value)}
+                value={statsPeriod}
+                sx={{
+                  color: "white",
+                  border: "1px solid white",
+                  "& .MuiSelect-icon": {
+                    color: "white",
+                  },
+                  height: "40px",
+                }}
+              >
+                {statsPeriodOptions.map((o, index) => (
+                  <MenuItem key={index} value={o.value}>
+                    {o.text}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Box>
           </Grid>
-          <Grid
-            item
-            xs={4}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              backgroundColor: "red",
-              //   alignItems: "flex-end",
-            }}
-          >
+          <Grid item xs={4}>
             <Typography
-              variant="h4"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-              }}
+              variant="h3"
+              sx={{ textAlign: "center", marginTop: "8px" }}
             >
-              Categories (specific category)
+              Category Statistics
             </Typography>
           </Grid>
+
           <Grid
             item
             xs={4}
             sx={{
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "flex-end",
               alignItems: "flex-end",
-              backgroundColor: "blue",
             }}
-          ></Grid>
+          >
+            <Link href="/history">
+              <Button
+                component="label"
+                variant="contained"
+                sx={{ marginTop: "20px" }}
+              >
+                View History
+              </Button>
+            </Link>
+          </Grid>
         </Grid>
+        {/* this starts the main content for the stats */}
         <Grid
           container
           spacing={2}
@@ -150,13 +198,12 @@ export default function CategoryView() {
             item
             xs={6}
             sx={{
-              backgroundColor: "purple",
               display: "flex",
               flexWrap: "wrap",
               paddingRight: "10px",
             }}
           >
-            <Grid container sx={{ backgroundColor: "aqua" }} spacing={2}>
+            <Grid container spacing={2}>
               <Grid item xs={6}>
                 <Card
                   sx={{ backgroundColor: "#242424", border: "2px solid white" }}
@@ -214,7 +261,7 @@ export default function CategoryView() {
                 >
                   <CardContent>
                     <Typography variant="subtitle1" sx={{ color: "white" }}>
-                      Category Ranking
+                      Category Ranking*
                     </Typography>
                     <Box sx={{ display: "flex", alignItems: "flex-end" }}>
                       <Typography
@@ -239,7 +286,7 @@ export default function CategoryView() {
                 >
                   <CardContent>
                     <Typography variant="subtitle1" sx={{ color: "white" }}>
-                      Average % of Income
+                      Average % of Income*
                     </Typography>
                     <Typography
                       variant="h3"
@@ -256,7 +303,7 @@ export default function CategoryView() {
                 >
                   <CardContent>
                     <Typography variant="subtitle1" sx={{ color: "white" }}>
-                      Average % of Spending
+                      Average % of Spending*
                     </Typography>
                     <Typography
                       variant="h3"
@@ -272,7 +319,7 @@ export default function CategoryView() {
           <Grid
             item
             xs={6}
-            sx={{ backgroundColor: "beige", paddingLeft: "10px" }}
+            sx={{ border: "2px solid beige", paddingLeft: "10px" }}
           ></Grid>
         </Grid>
       </Grid>
