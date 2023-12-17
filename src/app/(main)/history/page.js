@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   Grid,
   Typography,
@@ -33,6 +34,7 @@ export default function History() {
     setDeleteHistoryLoading,
     user,
   } = useGlobalState();
+  // const router = useRouter();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [showPercents, setShowPercents] = useState(false);
@@ -141,16 +143,15 @@ export default function History() {
               alignItems: "flex-end",
             }}
           >
-            <Button
-              onClick={() =>
-                alert("Sorry, this feature is not available yet. (PDF)")
-              }
-              component="label"
-              variant="contained"
-              sx={{ marginTop: "20px" }}
-            >
-              Category View
-            </Button>
+            <Link href="/history/categories">
+              <Button
+                component="label"
+                variant="contained"
+                sx={{ marginTop: "20px" }}
+              >
+                Category View
+              </Button>
+            </Link>
           </Grid>
           <Grid
             item

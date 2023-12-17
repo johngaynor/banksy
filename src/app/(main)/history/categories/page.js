@@ -11,6 +11,8 @@ import {
   Box,
   CircularProgress,
   MenuItem,
+  Card,
+  CardContent,
 } from "@mui/material";
 
 import { useGlobalState } from "@/app/components/context";
@@ -63,7 +65,7 @@ export default function CategoryView() {
     );
   }
 
-  if (historyLoading || !categoryObj) {
+  if (historyLoading || !categoryStats) {
     return <CircularProgress />;
   }
 
@@ -133,6 +135,144 @@ export default function CategoryView() {
               alignItems: "flex-end",
               backgroundColor: "blue",
             }}
+          ></Grid>
+        </Grid>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            padding: "20px 0",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <Grid
+            item
+            xs={6}
+            sx={{
+              backgroundColor: "purple",
+              display: "flex",
+              flexWrap: "wrap",
+              paddingRight: "10px",
+            }}
+          >
+            <Grid container sx={{ backgroundColor: "aqua" }} spacing={2}>
+              <Grid item xs={6}>
+                <Card
+                  sx={{ backgroundColor: "#242424", border: "2px solid white" }}
+                >
+                  <CardContent>
+                    <Typography variant="subtitle1" sx={{ color: "white" }}>
+                      3 Month Average
+                    </Typography>
+                    <Typography
+                      variant="h3"
+                      sx={{ color: "white", marginTop: "5px" }}
+                    >
+                      ${categoryStats.avg3.toFixed(2)}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={6}>
+                <Card
+                  sx={{ backgroundColor: "#242424", border: "2px solid white" }}
+                >
+                  <CardContent>
+                    <Typography variant="subtitle1" sx={{ color: "white" }}>
+                      6 Month Average
+                    </Typography>
+                    <Typography
+                      variant="h3"
+                      sx={{ color: "white", marginTop: "5px" }}
+                    >
+                      ${categoryStats.avg6.toFixed(2)}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={6}>
+                <Card
+                  sx={{ backgroundColor: "#242424", border: "2px solid white" }}
+                >
+                  <CardContent>
+                    <Typography variant="subtitle1" sx={{ color: "white" }}>
+                      1 Year Average
+                    </Typography>
+                    <Typography
+                      variant="h3"
+                      sx={{ color: "white", marginTop: "5px" }}
+                    >
+                      ${categoryStats.avg12.toFixed(2)}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={6}>
+                <Card
+                  sx={{ backgroundColor: "#242424", border: "2px solid white" }}
+                >
+                  <CardContent>
+                    <Typography variant="subtitle1" sx={{ color: "white" }}>
+                      Category Ranking
+                    </Typography>
+                    <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+                      <Typography
+                        variant="h3"
+                        sx={{ color: "white", marginTop: "5px" }}
+                      >
+                        #{categoryStats.rank}
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        sx={{ color: "white", marginBottom: "3px" }}
+                      >
+                        /{categoryStats.maxRank}
+                      </Typography>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={6}>
+                <Card
+                  sx={{ backgroundColor: "#242424", border: "2px solid white" }}
+                >
+                  <CardContent>
+                    <Typography variant="subtitle1" sx={{ color: "white" }}>
+                      Average % of Income
+                    </Typography>
+                    <Typography
+                      variant="h3"
+                      sx={{ color: "white", marginTop: "5px" }}
+                    >
+                      {categoryStats.avgIncome.toFixed(2)}%
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={6}>
+                <Card
+                  sx={{ backgroundColor: "#242424", border: "2px solid white" }}
+                >
+                  <CardContent>
+                    <Typography variant="subtitle1" sx={{ color: "white" }}>
+                      Average % of Spending
+                    </Typography>
+                    <Typography
+                      variant="h3"
+                      sx={{ color: "white", marginTop: "5px" }}
+                    >
+                      {categoryStats.avgSpending.toFixed(2)}%
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sx={{ backgroundColor: "beige", paddingLeft: "10px" }}
           ></Grid>
         </Grid>
       </Grid>
