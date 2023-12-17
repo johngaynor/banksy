@@ -24,7 +24,8 @@ export default function StatisticsHeader({
             <Box
               sx={{
                 display: "flex",
-                alignItems: "flex-end",
+                flexDirection: { xs: "column", xl: "row" },
+                alignItems: { xs: "flex-start", xl: "flex-end" },
               }}
             >
               <Typography
@@ -59,7 +60,8 @@ export default function StatisticsHeader({
             <Box
               sx={{
                 display: "flex",
-                alignItems: "flex-end",
+                flexDirection: { xs: "column", xl: "row" },
+                alignItems: { xs: "flex-start", xl: "flex-end" },
               }}
             >
               <Typography
@@ -94,7 +96,8 @@ export default function StatisticsHeader({
             <Box
               sx={{
                 display: "flex",
-                alignItems: "flex-end",
+                flexDirection: { xs: "column", xl: "row" },
+                alignItems: { xs: "flex-start", xl: "flex-end" },
               }}
             >
               <Typography
@@ -129,7 +132,8 @@ export default function StatisticsHeader({
             <Box
               sx={{
                 display: "flex",
-                alignItems: "flex-end",
+                flexDirection: { xs: "column", xl: "row" },
+                alignItems: { xs: "flex-start", xl: "flex-end" },
               }}
             >
               <Typography
