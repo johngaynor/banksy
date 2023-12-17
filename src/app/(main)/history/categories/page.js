@@ -16,9 +16,6 @@ import {
   Typography,
   Button,
   Select,
-  FormGroup,
-  FormControlLabel,
-  Switch,
   InputLabel,
   Box,
   CircularProgress,
@@ -54,9 +51,6 @@ export default function CategoryView() {
   }, [userHistory, user]);
 
   const categoryObj = userHistory ? generateCategoryObj(userHistory) : null;
-  //   const categoryObj = null;
-
-  console.log(categoryObj);
 
   useEffect(() => {
     if (!activeCategory && categoryObj) {
