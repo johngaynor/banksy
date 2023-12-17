@@ -54,6 +54,9 @@ export default function CategoryView() {
   }, [userHistory, user]);
 
   const categoryObj = userHistory ? generateCategoryObj(userHistory) : null;
+  //   const categoryObj = null;
+
+  console.log(categoryObj);
 
   useEffect(() => {
     if (!activeCategory && categoryObj) {
@@ -62,7 +65,7 @@ export default function CategoryView() {
   }, [categoryObj]);
 
   const categoryStats = categoryObj
-    ? generateCategoryStats(categoryObj, activeCategory, statsPeriod)
+    ? generateCategoryStats(categoryObj, activeCategory, statsPeriod, 0)
     : null;
 
   const tableData = activeCategory
@@ -183,13 +186,16 @@ export default function CategoryView() {
               </Select>
             </Box>
           </Grid>
-          <Grid item xs={4}>
-            <Typography
-              variant="h3"
-              sx={{ textAlign: "center", marginTop: "8px" }}
-            >
-              Category Statistics
-            </Typography>
+          <Grid
+            item
+            xs={4}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "flex-end",
+            }}
+          >
+            <Typography variant="h4">Category Statistics</Typography>
           </Grid>
 
           <Grid
@@ -349,11 +355,21 @@ export default function CategoryView() {
             sx={{
               border: "2px solid white",
               borderRadius: "3px",
+              backgroundColor: "#242424",
             }}
           >
+            <Typography
+              variant="subtitle1"
+              sx={{ color: "white", padding: "15px 0 5px 30px" }}
+            >
+              {activeCategory?.charAt(0).toUpperCase() +
+                activeCategory?.slice(1)}{" "}
+              Spending over{" "}
+              {statsPeriodOptions.find((r) => r.value === statsPeriod).text}
+            </Typography>
             <ResponsiveContainer
               width="95%"
-              height="95%"
+              height="80%"
               style={{ padding: "10px" }}
             >
               <LineChart
@@ -381,6 +397,72 @@ export default function CategoryView() {
                   strokeWidth={3}
                 />
                 {/* <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
+              </LineChart>
+            </ResponsiveContainer>
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              backgroundColor: "#242424",
+              border: "2px solid white",
+              borderRadius: "3px",
+            }}
+          >
+            <Typography
+              variant="subtitle1"
+              sx={{ color: "white", padding: "15px 0 5px 30px" }}
+            >
+              {activeCategory?.charAt(0).toUpperCase() +
+                activeCategory?.slice(1)}{" "}
+              3, 6, 12 Rolling Averages over{" "}
+              {statsPeriodOptions.find((r) => r.value === statsPeriod).text}
+            </Typography>
+            <ResponsiveContainer
+              width="95%"
+              height="80%"
+              style={{ padding: "10px" }}
+            >
+              <LineChart
+                width={500}
+                height={300}
+                data={tableData}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+                style={{ color: "white" }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" tick={{ fill: "white" }} />
+                <YAxis tick={{ fill: "white" }} />
+                <Tooltip />
+                <Legend wrapperStyle={{ color: "white" }} />
+                <Line
+                  type="monotone"
+                  dataKey="avg3"
+                  stroke="#ea515f"
+                  activeDot={{ r: 8 }}
+                  strokeWidth={3}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="avg6"
+                  stroke="#82ca9d"
+                  activeDot={{ r: 8 }}
+                  strokeWidth={3}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="avg12"
+                  stroke="#ffc658"
+                  activeDot={{ r: 8 }}
+                  strokeWidth={3}
+                />
               </LineChart>
             </ResponsiveContainer>
           </Grid>

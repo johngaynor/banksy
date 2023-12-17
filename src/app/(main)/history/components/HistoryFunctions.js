@@ -64,18 +64,41 @@ export function generateCategoryObj(userHistory) {
     return retObj;
   }, {});
 
-  return categoryObj;
+  // generating 3/6/12 month stats for all rows
+  // console.log(categoryObj);
+  const obj = Object.keys(categoryObj).reduce((acc, category) => {
+    const retObj = { ...acc };
+
+    categoryObj[category].forEach((row, index) => {
+      const { avg3, avg6, avg12 } = generateCategoryStats(
+        categoryObj,
+        category,
+        false,
+        index
+      );
+      retObj[category][index] = { ...row, avg3, avg6, avg12 };
+    });
+
+    return retObj;
+  }, categoryObj);
+
+  // return categoryObj;
+  return obj;
 }
 
 export function generateCategoryStats(
   categoryObj,
   activeCategory,
-  statsPeriod
+  statsPeriod,
+  startingIndex
 ) {
   // stats to return: last 3/6/12 month avg, avg % of income, avg % of spending, category ranking among all avg spending. assume dates are already lined up
   const category = activeCategory ?? Object.keys(categoryObj)[0];
   const getAvg = (cat, duration, type) => {
-    const historyRange = categoryObj[cat].slice(0, duration);
+    const historyRange = categoryObj[cat].slice(
+      startingIndex,
+      startingIndex + duration
+    );
     let total = 0;
     let validRows = 0;
     for (const h of historyRange) {
@@ -87,6 +110,12 @@ export function generateCategoryStats(
   const avg3 = getAvg(category, 3, "value");
   const avg6 = getAvg(category, 6, "value");
   const avg12 = getAvg(category, 12, "value");
+
+  // quick escape for generating categoryObj stats for graphs
+  if (!statsPeriod) {
+    return { avg3, avg6, avg12 };
+  }
+
   const avgSpending = getAvg(category, statsPeriod, "percentSpending");
   const avgIncome = getAvg(category, statsPeriod, "percentIncome");
 
