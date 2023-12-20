@@ -27,4 +27,18 @@ export const authFunctions = {
       throw new Error("There is no token stored in cookies.");
     }
   },
+
+  registerUser: async function (email, password, fname, lname) {
+    try {
+      const hash = new SHA512().b64(password);
+      const { result } = await sql`
+      insert into users (first_name, last_name, email, password, account_status, date_created) values 
+      ("${fname}", "${lname}", "${email}", "${hash}", 0, CURRENT_TIMESTAMP)
+      returning user_id, first_name, email;
+      `;
+      return result;
+    } catch (error) {
+      return { error: `DB operation failed: ${error}` };
+    }
+  },
 };

@@ -6,11 +6,13 @@ import CreditCardOffIcon from "@mui/icons-material/CreditCardOff";
 import axios from "axios";
 import Link from "next/link";
 
-import LoginForm from "@/app/components/auth";
+import LoginForm from "@/app/components/auth/login";
+import RegisterForm from "@/app/components/auth/register";
 import { useGlobalState } from "./context";
 
 export default function Navbar() {
   const [openLogin, setOpenLogin] = useState(false);
+  const [openRegister, setOpenRegister] = useState(false);
   const { user, setUser, addMsg } = useGlobalState();
   const path = usePathname();
 
@@ -117,24 +119,47 @@ export default function Navbar() {
           >
             <Link href="/db">DATABASE</Link>
           </Grid>
-          <Grid
-            item
-            sx={{
-              marginLeft: "50px",
-            }}
-          >
-            {user ? (
+          {user ? (
+            <Grid
+              item
+              sx={{
+                marginLeft: "50px",
+              }}
+            >
               <Link href="#" onClick={handleLogout}>
                 LOGOUT
               </Link>
-            ) : (
-              <Link href="#" onClick={() => setOpenLogin(true)}>
-                LOGIN
-              </Link>
-            )}
-          </Grid>
+            </Grid>
+          ) : (
+            <>
+              <Grid
+                item
+                sx={{
+                  marginLeft: "50px",
+                }}
+              >
+                <Link href="#" onClick={() => setOpenLogin(true)}>
+                  LOGIN
+                </Link>
+              </Grid>{" "}
+              <Grid
+                item
+                sx={{
+                  marginLeft: "50px",
+                }}
+              >
+                <Link href="#" onClick={() => setOpenSignup(true)}>
+                  REGISTER
+                </Link>
+              </Grid>
+            </>
+          )}
         </Grid>
       </Grid>
+      <RegisterForm
+        openRegister={openRegister}
+        setOpenRegister={setOpenRegister}
+      />
       <LoginForm openLogin={openLogin} setOpenLogin={setOpenLogin} />
     </Box>
   );
