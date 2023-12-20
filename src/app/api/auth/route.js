@@ -29,7 +29,7 @@ export async function GET(request) {
         },
         process.env.JWT_SECRET_KEY,
         {
-          expiresIn: "1h",
+          expiresIn: "6h",
         }
       );
       const expirationDate = new Date(Date.now() + 3600 * 1000);

@@ -66,10 +66,6 @@ export default function LoginForm({ openLogin, setOpenLogin }) {
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button type="submit" variant="contained" fullWidth>
               Sign In
             </Button>
