@@ -21,17 +21,29 @@ export const processorFunctions = {
   getUserCategories: async function (userId) {
     const { rows: categories } = await sql`
     select * from processor_categories
-    where user_id = ${userId}
+    where user_id = 0
   `;
+
+    let keywords = [];
 
     const { rows: keys } = await sql`
     select * from processor_keywords
   `;
 
+    keywords = [...keywords, ...keys];
+
+    if (userId) {
+      const { rows: userKeys } = await sql`
+    select category_id, keyword from processor_user_keywords
+    where user_id = ${userId};
+    `;
+      keywords = [...keywords, ...userKeys];
+    }
+
     const sortedCategories = {};
 
     for (const category of categories) {
-      const keyArr = keys
+      const keyArr = keywords
         .filter((key) => key.category_id === category.category_id)
         .map((key) => key.keyword);
 
@@ -112,6 +124,18 @@ export const processorFunctions = {
         income,
         spending,
       };
+    } catch (error) {
+      return { error: `DB operation failed: ${error}` };
+    }
+  },
+
+  addKeyword: async function (userId, categoryId, keyword) {
+    try {
+      const { rows } = await sql`
+      insert into processor_user_keywords (user_id, category_id, keyword) values
+      (${userId}, ${categoryId}, ${keyword});
+      `;
+      return rows;
     } catch (error) {
       return { error: `DB operation failed: ${error}` };
     }

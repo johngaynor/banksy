@@ -93,3 +93,30 @@ export async function submitSummary(
   }
   setSubmitSummaryLoading(false);
 }
+
+export async function addKeyword(
+  userId,
+  categoryId,
+  keyword,
+  setAddKeywordLoading,
+  addMsg
+) {
+  try {
+    setAddKeywordLoading(true);
+    const response = await axios.post("/api/processor?action=addkeyword", {
+      userId,
+      categoryId,
+      keyword,
+    });
+
+    if (response.status === 200) {
+      addMsg("success", "Successfully added keyword!");
+    } else {
+      addMsg("error", `error adding keyword, please try again later`);
+    }
+  } catch (error) {
+    addMsg("error", `error adding keyword: ${error}`);
+  }
+
+  setAddKeywordLoading(false);
+}
