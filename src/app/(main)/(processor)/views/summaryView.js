@@ -12,12 +12,12 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  CircularProgress,
 } from "@mui/material";
 import StorageIcon from "@mui/icons-material/Storage";
 import { useRouter } from "next/navigation";
 
 import { submitSummary } from "../actions";
+import Spinner from "@/app/components/spinner";
 import { useProcessorState } from "../context";
 import { useGlobalState } from "../../../components/context";
 
@@ -29,10 +29,6 @@ export default function SummaryView() {
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const router = useRouter();
-
-  if (!data) {
-    return <CircularProgress />;
-  }
 
   useEffect(() => {
     const sortedCategories = () => {
@@ -144,6 +140,7 @@ export default function SummaryView() {
             alignItems: "flex-end",
           }}
         >
+          {!data ? <Spinner /> : null}
           <FormControl>
             <InputLabel sx={{ color: "white" }}>Month</InputLabel>
             <Select

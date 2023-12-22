@@ -18,7 +18,6 @@ import {
   Select,
   InputLabel,
   Box,
-  CircularProgress,
   MenuItem,
   Card,
   CardContent,
@@ -27,6 +26,7 @@ import moment from "moment";
 
 import { useGlobalState } from "@/app/components/context";
 import { getHistory } from "../actions";
+import Spinner from "@/app/components/spinner";
 import {
   generateCategoryObj,
   generateCategoryStats,
@@ -118,7 +118,20 @@ export default function CategoryView() {
   }
 
   if (historyLoading) {
-    return <CircularProgress />;
+    return (
+      <Box
+        sx={{
+          flexGrow: 1,
+          padding: 4,
+          backgroundColor: "#121212",
+          minHeight: "100vh",
+          display: "flex",
+        }}
+      >
+        <Spinner />
+        <h3>History is loading...</h3>
+      </Box>
+    );
   }
 
   if (!categoryStats) {
@@ -164,9 +177,7 @@ export default function CategoryView() {
             }}
           >
             <Box>
-              <InputLabel htmlFor="select-category" sx={{ color: "white" }}>
-                Category:
-              </InputLabel>
+              <InputLabel sx={{ color: "white" }}>Category:</InputLabel>
               <Select
                 id="select-category"
                 onChange={(e) => setActiveCategory(e.target.value)}
@@ -189,9 +200,7 @@ export default function CategoryView() {
               </Select>
             </Box>
             <Box sx={{ margin: "0 10px" }}>
-              <InputLabel htmlFor="select-stats-period" sx={{ color: "white" }}>
-                Time Period*:
-              </InputLabel>
+              <InputLabel sx={{ color: "white" }}>Time Period*:</InputLabel>
               <Select
                 id="select-stats-period"
                 onChange={(e) => setStatsPeriod(e.target.value)}

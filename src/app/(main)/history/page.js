@@ -10,7 +10,6 @@ import {
   FormControlLabel,
   Switch,
   Box,
-  CircularProgress,
   MenuItem,
 } from "@mui/material";
 import PageviewIcon from "@mui/icons-material/Pageview";
@@ -18,6 +17,7 @@ import moment from "moment";
 
 import { getHistory, deleteHistory } from "./actions";
 import { generateComparativePeriod } from "./components/HistoryFunctions";
+import Spinner from "@/app/components/spinner";
 import { useGlobalState } from "@/app/components/context";
 import ReportModal from "./components/ReportModal";
 import StatisticsHeader from "./components/StatisticsHeader";
@@ -95,7 +95,20 @@ export default function History() {
   ];
 
   if (historyLoading || deleteHistoryLoading) {
-    return <CircularProgress />;
+    return (
+      <Box
+        sx={{
+          flexGrow: 1,
+          padding: 4,
+          backgroundColor: "#121212",
+          minHeight: "100vh",
+          display: "flex",
+        }}
+      >
+        <Spinner />
+        <h3>History is loading...</h3>
+      </Box>
+    );
   }
 
   if (!user) {
