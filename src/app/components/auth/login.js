@@ -27,16 +27,16 @@ export default function LoginForm({ openLogin, setOpenLogin }) {
       const response = await axios.get(
         `/api/auth?action=login&email=${email}&password=${password}`
       );
-      if (response.status === 200) {
+      if (!response) {
+        addMsg("error", "Error signing in, incorrect username or password.");
+      } else if (response.status === 200) {
         setOpenLogin(false);
         setUser(response.data.user);
         addMsg("success", "Successfully logged in!");
       } else {
-        console.log("status not 200", response.data);
         addMsg("error", `Login failed: ${response.data.error}`);
       }
     } catch (error) {
-      console.log("catch block called", response.data, error);
       addMsg("error", `Login failed: ${error.response.data.error}`);
     }
   };

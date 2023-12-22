@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Avatar,
@@ -8,28 +8,80 @@ import {
   ListItemIcon,
   Divider,
   IconButton,
-  Typography,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff";
+import axios from "axios";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import LoginForm from "@/app/components/auth/login";
+import RegisterForm from "@/app/components/auth/register";
+import { useGlobalState } from "./context";
+
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  const [openLogin, setOpenLogin] = useState(false);
+  const [openRegister, setOpenRegister] = useState(false);
+  const { user, setUser, addMsg } = useGlobalState();
+
+  const open = Boolean(anchorEl); // used to manage state of profile dropdown
   const path = usePathname();
-  const handleClick = (event) => {
+
+  useEffect(() => {
+    // check to see if there are cookies for a current user and, if so, log them in
+    if (!user) {
+      const checkCookies = async () => {
+        try {
+          const response = await axios.get("/api/auth?action=autologin");
+          if (response.status === 200) {
+            if (response.data.user_id) {
+              const { user_id, first_name, email } = response.data;
+              setUser({ user_id, first_name, email });
+            } else {
+            }
+          }
+        } catch (error) {
+          addMsg("error", `error checking cookies for user: ${error}`);
+        }
+      };
+
+      checkCookies();
+    }
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.get("/api/auth?action=logout");
+      if (response.status === 200) {
+        addMsg("success", "Successfully logged out!");
+        setUser(null);
+      } else {
+        addMsg("error", `error logging out: ${response.data.error}`);
+      }
+    } catch (error) {
+      addMsg("error", `error logging out: ${error}`);
+    }
+  };
+
+  const handleClickUser = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleCloserUser = () => {
     setAnchorEl(null);
   };
+
   return (
     <React.Fragment>
+      <RegisterForm
+        openRegister={openRegister}
+        setOpenRegister={setOpenRegister}
+      />
+      <LoginForm openLogin={openLogin} setOpenLogin={setOpenLogin} />
       <Box
         paddingLeft={4}
         paddingRight={4}
@@ -61,26 +113,51 @@ export default function Navbar() {
           >
             HISTORY
           </Link>
-          <Tooltip title="Account settings">
-            <IconButton
-              onClick={handleClick}
-              size="small"
-              sx={{ ml: 2, marginLeft: "50px" }}
-              aria-controls={open ? "account-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-            >
-              <Avatar sx={{ width: 32, height: 32 }}>X</Avatar>
-            </IconButton>
-          </Tooltip>
+          {user ? (
+            <Tooltip title="Account settings">
+              <IconButton
+                onClick={handleClickUser}
+                size="small"
+                sx={{ ml: 2, marginLeft: "50px" }}
+                aria-controls={open ? "account-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+              >
+                <Avatar sx={{ width: 32, height: 32 }}>
+                  {user.first_name[0]}
+                </Avatar>
+              </IconButton>
+            </Tooltip>
+          ) : (
+            <>
+              <Link
+                href="#"
+                style={{
+                  marginLeft: "50px",
+                }}
+                onClick={() => setOpenLogin(true)}
+              >
+                LOGIN
+              </Link>
+              <Link
+                href="#"
+                style={{
+                  marginLeft: "50px",
+                }}
+                onClick={() => setOpenRegister(true)}
+              >
+                REGISTER
+              </Link>
+            </>
+          )}
         </Box>
       </Box>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
         open={open}
-        onClose={handleClose}
-        onClick={handleClose}
+        onClose={handleCloserUser}
+        onClick={handleCloserUser}
         PaperProps={{
           elevation: 0,
           sx: {
@@ -110,26 +187,30 @@ export default function Navbar() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleClose}>
+        <Typography
+          variant="subtitle1"
+          sx={{ padding: "5px", marginLeft: "10px" }}
+        >
+          Welcome, {user.first_name}
+        </Typography>
+        <MenuItem onClick={handleCloserUser}>
           <Avatar /> Profile
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleCloserUser}>
           <Avatar /> My account
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-          Add another account
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={() =>
+            alert("Sorry, the settings feature is not available yet.")
+          }
+        >
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
