@@ -42,12 +42,10 @@ export default function RegisterForm({ openRegister, setOpenRegister }) {
         setUser(response.data.user);
         addMsg("success", "Successfully registered user!");
       } else {
-        console.log("status not 200", response.data);
         addMsg("error", `Register failed: ${response.data.error}`);
       }
     } catch (error) {
-      console.log("catch block called", error);
-      addMsg("error", `Register failed: ${error.response.data}`);
+      addMsg("error", `Register failed: ${error.response.data.error}`);
     }
   };
 

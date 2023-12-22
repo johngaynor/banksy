@@ -8,6 +8,8 @@ export const authFunctions = {
     const { rows } =
       await sql`SELECT user_id, first_name, email FROM users where email = ${email} and password = ${hash};`;
 
+    console.log("rows", rows);
+
     return rows.length === 1 ? rows[0] : null;
   },
 
@@ -38,7 +40,18 @@ export const authFunctions = {
 
       return rows;
     } catch (error) {
-      return { error: `DB operation failed: ${error}` };
+      return { error: `DB operation failed (345572): ${error}` };
+    }
+  },
+
+  checkEmail: async function (email) {
+    try {
+      const { rows } = await sql`
+      select * from users where email = ${email};
+      `;
+      return rows;
+    } catch (error) {
+      return { error: `DB operation failed (612634): ${error}` };
     }
   },
 };

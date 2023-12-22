@@ -13,6 +13,7 @@ export async function GET(request) {
   }
 
   if (action === "login") {
+    console.log("hit login route");
     if (!email || !password) {
       return NextResponse.json(
         { error: "Email and password are required." },
@@ -20,6 +21,7 @@ export async function GET(request) {
       );
     }
     const user = await authFunctions.login(email, password);
+    console.log("user", user);
     if (user) {
       const token = sign(
         {
@@ -102,6 +104,14 @@ export async function POST(request) {
     if (!res.email || !res.password || !res.fname || !res.lname) {
       return NextResponse.json(
         { error: "missing parameters" },
+        { status: 400 }
+      );
+    }
+
+    const existingEmail = await authFunctions.checkEmail(res.email);
+    if (existingEmail) {
+      return NextResponse.json(
+        { error: "Email already exists in our system." },
         { status: 400 }
       );
     }
