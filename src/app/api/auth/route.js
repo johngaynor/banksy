@@ -109,7 +109,8 @@ export async function POST(request) {
     }
 
     const existingEmail = await authFunctions.checkEmail(res.email);
-    if (existingEmail) {
+    console.log(existingEmail);
+    if (existingEmail.length !== 0) {
       return NextResponse.json(
         { error: "Email already exists in our system." },
         { status: 400 }
