@@ -5,17 +5,26 @@ import {
   Button,
   LinearProgress,
   TextField,
+  Box,
 } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 
 import { processFile } from "../components/processorFunctions";
-import { addKeyword } from "../actions";
+import { addKeyword, getCategories } from "../actions";
 import { useGlobalState } from "@/app/components/context";
 import { useProcessorState } from "../context";
 import Spinner from "@/app/components/spinner";
 
 export default function Categories({ setFormStep }) {
-  const { addMsg, userBanks, userCategories, user } = useGlobalState();
+  const {
+    addMsg,
+    userBanks,
+    userCategories,
+    user,
+    setUserCategories,
+    categoriesLoading,
+    setCategoriesLoading,
+  } = useGlobalState();
   const { rawFile, data, setData } = useProcessorState();
   const [flaggedIndex, setFlaggedIndex] = useState(0);
   const [openKeyword, setOpenKeyword] = useState(false);
@@ -23,21 +32,34 @@ export default function Categories({ setFormStep }) {
   const [addKeywordLoading, setAddKeywordLoading] = useState(false);
 
   useEffect(() => {
-    const initProcess = async () => {
-      try {
-        const transactions = await processFile(
-          rawFile,
-          userBanks,
-          userCategories
-        );
+    if (!userCategories && !categoriesLoading) {
+      getCategories(
+        setUserCategories,
+        setCategoriesLoading,
+        addMsg,
+        user ? user.user_id : false
+      );
+    }
+  }, [userCategories]);
 
-        setData(transactions);
-      } catch (error) {
-        addMsg("error", `error: ${error}`);
-      }
-    };
-    initProcess();
-  }, []);
+  useEffect(() => {
+    if (userCategories) {
+      const initProcess = async () => {
+        try {
+          const transactions = await processFile(
+            rawFile,
+            userBanks,
+            userCategories
+          );
+
+          setData(transactions);
+        } catch (error) {
+          addMsg("error", `error: ${error}`);
+        }
+      };
+      initProcess();
+    }
+  }, [userCategories]);
 
   const assignCategory = async (cat) => {
     if (openKeyword && keyword !== "") {
@@ -75,6 +97,22 @@ export default function Categories({ setFormStep }) {
       setOpenKeyword(!openKeyword);
     }
   };
+
+  if (!userCategories || categoriesLoading) {
+    return (
+      <Box
+        sx={{
+          flexGrow: 1,
+          padding: 4,
+          backgroundColor: "#121212",
+          minHeight: "100vh",
+          display: "flex",
+        }}
+      >
+        <h3>Categories are loading...</h3>
+      </Box>
+    );
+  }
 
   const flaggedPrompts = () => {
     if (!data || !data.flagged) {

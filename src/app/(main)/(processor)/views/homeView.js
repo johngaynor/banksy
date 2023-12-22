@@ -7,7 +7,7 @@ import Image from "next/image";
 
 import { useGlobalState } from "@/app/components/context";
 import { useProcessorState } from "../context";
-import { getBanks, getCategories, getViews } from "../actions";
+import { getBanks, getViews } from "../actions";
 
 const VisuallyHiddenInput = styled("input")({
   clipPath: "inset(50%)",
@@ -27,10 +27,6 @@ export default function Home({ setFormStep }) {
     setUserBanks,
     banksLoading,
     setBanksLoading,
-    userCategories,
-    setUserCategories,
-    categoriesLoading,
-    setCategoriesLoading,
     userViews,
     setUserViews,
     viewsLoading,
@@ -54,14 +50,11 @@ export default function Home({ setFormStep }) {
       getBanks(setUserBanks, setBanksLoading, addMsg, 0);
       // 0 will change to user ? user.user_id : 0 when custom functionality is built
     }
-    if (!userCategories && !categoriesLoading) {
-      getCategories(setUserCategories, setCategoriesLoading, addMsg, 0);
-    }
 
     if (!userViews && !viewsLoading) {
       getViews(setUserViews, setViewsLoading, addMsg, 0);
     }
-  }, [userBanks, userCategories, userViews]);
+  }, [userBanks, userViews]);
 
   return (
     <Grid container spacing={1}>
@@ -91,9 +84,7 @@ export default function Home({ setFormStep }) {
             width: "200px",
             height: "50px",
             backgroundColor:
-              !userViews || !userCategories || !userBanks
-                ? "#47759a"
-                : "primary.main",
+              !userViews || !userBanks ? "#47759a" : "primary.main",
           }}
         >
           Upload file
