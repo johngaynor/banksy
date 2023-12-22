@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Grid, Typography, Button, LinearProgress } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Button,
+  LinearProgress,
+  TextField,
+} from "@mui/material";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 
 import { processFile } from "../components/processorFunctions";
 import { useGlobalState } from "@/app/components/context";
@@ -9,6 +16,10 @@ export default function Categories({ setFormStep }) {
   const { addMsg, userBanks, userCategories } = useGlobalState();
   const { rawFile, data, setData } = useProcessorState();
   const [flaggedIndex, setFlaggedIndex] = useState(0);
+  const [addKeyword, setAddKeyword] = useState(false);
+  const [keyword, setKeyword] = useState("");
+
+  console.log(keyword);
 
   useEffect(() => {
     const initProcess = async () => {
@@ -28,6 +39,10 @@ export default function Categories({ setFormStep }) {
   }, []);
 
   const assignCategory = (cat) => {
+    if (addKeyword && keyword !== "") {
+      setAddKeyword(false);
+      setKeyword("");
+    }
     const updatedData = { ...data };
     if (updatedData.flagged.length > flaggedIndex) {
       updatedData.flagged[flaggedIndex].category = cat;
@@ -85,6 +100,44 @@ export default function Categories({ setFormStep }) {
               <Typography variant="h6">{cat}</Typography>
             </Button>
           ))}
+        </Grid>
+        <Grid
+          container
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "25px",
+          }}
+        >
+          <Button
+            onClick={() => setAddKeyword(!addKeyword)}
+            component="label"
+            variant={addKeyword ? "outlined" : "contained"}
+            sx={{
+              height: "50px",
+              backgroundColor: addKeyword ? "" : "#90caf9",
+            }}
+            startIcon={<AddBoxIcon />}
+          >
+            Add Keyword
+          </Button>
+          {addKeyword ? (
+            <TextField
+              variant="outlined"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              sx={{
+                // height: "30px",
+                border: "1px solid white",
+                borderRadius: "5px",
+                "& input": {
+                  height: "15px",
+                  color: "white",
+                },
+                // width: "85%",
+              }}
+            />
+          ) : null}
         </Grid>
       </>
     );

@@ -87,7 +87,14 @@ export default function Home({ setFormStep }) {
           component="label"
           variant="contained"
           startIcon={<CloudUploadIcon />}
-          sx={{ width: "200px", height: "50px" }}
+          sx={{
+            width: "200px",
+            height: "50px",
+            backgroundColor:
+              !userViews || !userCategories || !userBanks
+                ? "#47759a"
+                : "primary.main",
+          }}
         >
           Upload file
           <VisuallyHiddenInput type="file" onChange={handleFileChange} />
