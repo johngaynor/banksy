@@ -113,12 +113,12 @@ export async function POST(request) {
       res.lname
     );
 
-    if (user) {
+    if (user[0]) {
       const token = sign(
         {
-          user_id: user.user_id,
-          first_name: user.first_name,
-          email: user.email,
+          user_id: user[0].user_id,
+          first_name: user[0].first_name,
+          email: user[0].email,
         },
         process.env.JWT_SECRET_KEY,
         {
@@ -127,7 +127,7 @@ export async function POST(request) {
       );
       const expirationDate = new Date(Date.now() + 3600 * 1000);
       return NextResponse.json(
-        { user },
+        { user: user[0] },
         {
           status: 200,
           headers: {

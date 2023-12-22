@@ -148,7 +148,7 @@ export default function Navbar() {
                   marginLeft: "50px",
                 }}
               >
-                <Link href="#" onClick={() => setOpenSignup(true)}>
+                <Link href="#" onClick={() => setOpenRegister(true)}>
                   REGISTER
                 </Link>
               </Grid>
