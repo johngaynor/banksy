@@ -11,7 +11,6 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff";
@@ -191,13 +190,15 @@ export default function Navbar() {
           variant="subtitle1"
           sx={{ padding: "5px", marginLeft: "10px" }}
         >
-          Welcome, {user.first_name}
+          Welcome, {user?.first_name}
         </Typography>
-        <MenuItem onClick={handleCloserUser}>
-          <Avatar /> Profile
-        </MenuItem>
-        <MenuItem onClick={handleCloserUser}>
-          <Avatar /> My account
+        <MenuItem
+          onClick={() =>
+            alert("Sorry, the profile feature is not available yet.")
+          }
+        >
+          <Avatar />
+          My Profile
         </MenuItem>
         <Divider />
         <MenuItem
