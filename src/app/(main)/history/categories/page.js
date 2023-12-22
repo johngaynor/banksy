@@ -66,9 +66,15 @@ export default function CategoryView() {
     ? generateCategoryStats(categoryObj, activeCategory, statsPeriod, 1)
     : null;
   const compareStats = {
-    avg3: categoryStats?.avg3 - lastMonthStats?.avg3,
-    avg6: categoryStats?.avg6 - lastMonthStats?.avg6,
-    avg12: categoryStats?.avg12 - lastMonthStats?.avg12,
+    avg3: lastMonthStats.avg3
+      ? categoryStats?.avg3 - lastMonthStats?.avg3
+      : "--",
+    avg6: lastMonthStats.avg6
+      ? categoryStats?.avg6 - lastMonthStats?.avg6
+      : "--",
+    avg12: lastMonthStats.avg12
+      ? categoryStats?.avg12 - lastMonthStats?.avg12
+      : "--",
   };
 
   const tableData = activeCategory
@@ -269,12 +275,20 @@ export default function CategoryView() {
                       <Typography
                         variant="h6"
                         sx={{
-                          color: compareStats.avg3 > 0 ? "#D32E2E" : "#2E7D32",
+                          color:
+                            compareStats.avg3 === "--"
+                              ? "white"
+                              : compareStats.avg3 > 0
+                              ? "#D32E2E"
+                              : "#2E7D32",
                           marginBottom: "4px",
                         }}
                       >
-                        {compareStats.avg3 > 0 ? "+" : "-"}$
-                        {Math.abs(compareStats.avg3).toFixed(2)}
+                        {compareStats.avg3 === "--"
+                          ? "--"
+                          : compareStats.avg3 > 0
+                          ? "+" + Math.abs(compareStats.avg3).toFixed(2)
+                          : "-" + Math.abs(compareStats.avg3).toFixed(2)}
                       </Typography>
                     </Box>
                   </CardContent>
@@ -307,12 +321,20 @@ export default function CategoryView() {
                       <Typography
                         variant="h6"
                         sx={{
-                          color: compareStats.avg6 > 0 ? "#D32E2E" : "#2E7D32",
+                          color:
+                            compareStats.avg6 === "--"
+                              ? "white"
+                              : compareStats.avg6 > 0
+                              ? "#D32E2E"
+                              : "#2E7D32",
                           marginBottom: "4px",
                         }}
                       >
-                        {compareStats.avg6 > 0 ? "+" : "-"}$
-                        {Math.abs(compareStats.avg6).toFixed(2)}
+                        {compareStats.avg6 === "--"
+                          ? "--"
+                          : compareStats.avg6 > 0
+                          ? "+" + Math.abs(compareStats.avg6).toFixed(2)
+                          : "-" + Math.abs(compareStats.avg6).toFixed(2)}
                       </Typography>
                     </Box>
                   </CardContent>
@@ -345,12 +367,20 @@ export default function CategoryView() {
                       <Typography
                         variant="h6"
                         sx={{
-                          color: compareStats.avg12 > 0 ? "#D32E2E" : "#2E7D32",
+                          color:
+                            compareStats.avg12 === "--"
+                              ? "white"
+                              : compareStats.avg12 > 0
+                              ? "#D32E2E"
+                              : "#2E7D32",
                           marginBottom: "4px",
                         }}
                       >
-                        {compareStats.avg12 > 0 ? "+" : "-"}$
-                        {Math.abs(compareStats.avg12).toFixed(2)}
+                        {compareStats.avg12 === "--"
+                          ? "--"
+                          : compareStats.avg12 > 0
+                          ? "+" + Math.abs(compareStats.avg12).toFixed(2)
+                          : "-" + Math.abs(compareStats.avg12).toFixed(2)}
                       </Typography>
                     </Box>
                   </CardContent>
