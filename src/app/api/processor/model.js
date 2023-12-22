@@ -116,4 +116,16 @@ export const processorFunctions = {
       return { error: `DB operation failed: ${error}` };
     }
   },
+
+  addKeyword: async function (userId, categoryId, keyword) {
+    try {
+      const { rows } = await sql`
+      insert into processor_user_keywords (user_id, category_id, keyword) values
+      (${userId}, ${categoryId}, ${keyword});
+      `;
+      return rows;
+    } catch (error) {
+      return { error: `DB operation failed: ${error}` };
+    }
+  },
 };

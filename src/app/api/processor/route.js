@@ -54,4 +54,28 @@ export async function POST(request) {
 
     return NextResponse.json(summary, { status: 200 });
   }
+
+  if (action === "addkeyword") {
+    if (!res.userId || !res.categoryId || !res.keyword) {
+      return NextResponse.json(
+        { error: "missing parameters" },
+        { status: 400 }
+      );
+    }
+
+    const keyword = await processorFunctions.addKeyword(
+      res.userId,
+      res.categoryId,
+      res.keyword
+    );
+
+    if (!keyword || keyword.error) {
+      return NextResponse.json(
+        { error: "failed to add keyword" },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json(keyword, { status: 200 });
+  }
 }
