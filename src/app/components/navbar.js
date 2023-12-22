@@ -1,163 +1,141 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
-import { Box, Grid } from "@mui/material";
+import * as React from "react";
+import {
+  Box,
+  Avatar,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  Divider,
+  IconButton,
+  Typography,
+  Tooltip,
+} from "@mui/material";
+import PersonAdd from "@mui/icons-material/PersonAdd";
+import Settings from "@mui/icons-material/Settings";
+import Logout from "@mui/icons-material/Logout";
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff";
-import axios from "axios";
 import Link from "next/link";
-
-import LoginForm from "@/app/components/auth/login";
-import RegisterForm from "@/app/components/auth/register";
-import { useGlobalState } from "./context";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
-  const [openLogin, setOpenLogin] = useState(false);
-  const [openRegister, setOpenRegister] = useState(false);
-  const { user, setUser, addMsg } = useGlobalState();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
   const path = usePathname();
-
-  useEffect(() => {
-    // check to see if there are cookies for a current user and, if so, log them in
-    if (!user) {
-      const checkCookies = async () => {
-        try {
-          const response = await axios.get("/api/auth?action=autologin");
-          if (response.status === 200) {
-            if (response.data.user_id) {
-              const { user_id, first_name, email } = response.data;
-              setUser({ user_id, first_name, email });
-            } else {
-            }
-          }
-        } catch (error) {
-          addMsg("error", `error checking cookies for user: ${error}`);
-        }
-      };
-
-      checkCookies();
-    }
-  }, []);
-
-  const handleLogout = async () => {
-    try {
-      const response = await axios.get("/api/auth?action=logout");
-      if (response.status === 200) {
-        addMsg("success", "Successfully logged out!");
-        setUser(null);
-      } else {
-        addMsg("error", `error logging out: ${response.data.error}`);
-      }
-    } catch (error) {
-      addMsg("error", `error logging out: ${error}`);
-    }
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
   };
-
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
-    <Box
-      paddingLeft={4}
-      paddingRight={4}
-      sx={{
-        height: "70px",
-        display: "flex",
-        backgroundColor: "#121212",
-      }}
-    >
-      <Grid container>
-        <Grid
-          item
-          xs={4}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <CreditCardOffIcon sx={{ fontSize: 40 }} />
-        </Grid>
-        <Grid item xs={2} />
-        <Grid
-          item
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}
-          xs={6}
-        >
-          <Grid item>
-            <Link
-              href="/"
-              style={{
-                borderBottom: path === "/" ? "1px solid white" : "",
-              }}
-            >
-              CSV PROCESSOR
-            </Link>
-          </Grid>
-          <Grid
-            item
-            sx={{
+    <React.Fragment>
+      <Box
+        paddingLeft={4}
+        paddingRight={4}
+        sx={{
+          height: "70px",
+          display: "flex",
+          backgroundColor: "#121212",
+          alignItems: "center",
+          textAlign: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <CreditCardOffIcon sx={{ fontSize: 40 }} />
+        <Box>
+          <Link
+            href="/"
+            style={{
+              borderBottom: path === "/" ? "1px solid white" : "",
+            }}
+          >
+            CSV PROCESSOR
+          </Link>
+          <Link
+            href="/history"
+            style={{
+              borderBottom: path === "/history" ? "1px solid white" : "",
               marginLeft: "50px",
             }}
           >
-            <Link
-              href="/history"
-              style={{
-                borderBottom: path === "/history" ? "1px solid white" : "",
-              }}
+            HISTORY
+          </Link>
+          <Tooltip title="Account settings">
+            <IconButton
+              onClick={handleClick}
+              size="small"
+              sx={{ ml: 2, marginLeft: "50px" }}
+              aria-controls={open ? "account-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
             >
-              HISTORY
-            </Link>
-          </Grid>
-          {/* <Grid
-            item
-            sx={{
-              marginLeft: "50px",
-            }}
-          >
-            <Link href="/db">DATABASE</Link>
-          </Grid> */}
-          {user ? (
-            <Grid
-              item
-              sx={{
-                marginLeft: "50px",
-              }}
-            >
-              <Link href="#" onClick={handleLogout}>
-                LOGOUT
-              </Link>
-            </Grid>
-          ) : (
-            <>
-              <Grid
-                item
-                sx={{
-                  marginLeft: "50px",
-                }}
-              >
-                <Link href="#" onClick={() => setOpenLogin(true)}>
-                  LOGIN
-                </Link>
-              </Grid>{" "}
-              <Grid
-                item
-                sx={{
-                  marginLeft: "50px",
-                }}
-              >
-                <Link href="#" onClick={() => setOpenRegister(true)}>
-                  REGISTER
-                </Link>
-              </Grid>
-            </>
-          )}
-        </Grid>
-      </Grid>
-      <RegisterForm
-        openRegister={openRegister}
-        setOpenRegister={setOpenRegister}
-      />
-      <LoginForm openLogin={openLogin} setOpenLogin={setOpenLogin} />
-    </Box>
+              <Avatar sx={{ width: 32, height: 32 }}>X</Avatar>
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </Box>
+      <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={open}
+        onClose={handleClose}
+        onClick={handleClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: "visible",
+            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+            mt: 1.5,
+            "& .MuiAvatar-root": {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            "&:before": {
+              content: '""',
+              display: "block",
+              position: "absolute",
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <MenuItem onClick={handleClose}>
+          <Avatar /> Profile
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Avatar /> My account
+        </MenuItem>
+        <Divider />
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <PersonAdd fontSize="small" />
+          </ListItemIcon>
+          Add another account
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <Settings fontSize="small" />
+          </ListItemIcon>
+          Settings
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
+          Logout
+        </MenuItem>
+      </Menu>
+    </React.Fragment>
   );
 }
