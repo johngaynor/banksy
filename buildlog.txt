@@ -2,3 +2,4 @@
 1.0.1 - fixed delete bug
 1.1.0 - individual summary modal
 1.2.0 - category statistics view
+2.0.0 - register functionality
