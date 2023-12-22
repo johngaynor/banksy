@@ -58,39 +58,42 @@ export default function CategoryView() {
     }
   }, [categoryObj]);
 
-  const categoryStats = categoryObj
-    ? generateCategoryStats(categoryObj, activeCategory, statsPeriod, 0)
-    : null;
+  const categoryStats =
+    categoryObj && activeCategory
+      ? generateCategoryStats(categoryObj, activeCategory, statsPeriod, 0)
+      : null;
 
-  const lastMonthStats = categoryObj
-    ? generateCategoryStats(categoryObj, activeCategory, statsPeriod, 1)
-    : null;
+  const lastMonthStats =
+    categoryObj && activeCategory
+      ? generateCategoryStats(categoryObj, activeCategory, statsPeriod, 1)
+      : null;
   const compareStats = {
-    avg3: lastMonthStats.avg3
+    avg3: lastMonthStats?.avg3
       ? categoryStats?.avg3 - lastMonthStats?.avg3
       : "--",
-    avg6: lastMonthStats.avg6
+    avg6: lastMonthStats?.avg6
       ? categoryStats?.avg6 - lastMonthStats?.avg6
       : "--",
-    avg12: lastMonthStats.avg12
+    avg12: lastMonthStats?.avg12
       ? categoryStats?.avg12 - lastMonthStats?.avg12
       : "--",
   };
 
-  const tableData = activeCategory
-    ? categoryObj[activeCategory]
-        .slice(0, statsPeriod)
-        .sort((a, b) => {
-          const dateA = moment(a.date, "mm-yyyy").format("yyyymm");
-          const dateB = moment(b.date, "mm-yyyy").format("yyyymm");
-          return dateA - dateB;
-        })
-        .map((a) => ({
-          ...a,
-          date: moment(a.date, "MM-YYYY").format("MMM YY"),
-          amount: a.value,
-        }))
-    : null;
+  const tableData =
+    activeCategory && categoryObj
+      ? categoryObj[activeCategory]
+          .slice(0, statsPeriod)
+          .sort((a, b) => {
+            const dateA = moment(a.date, "mm-yyyy").format("yyyymm");
+            const dateB = moment(b.date, "mm-yyyy").format("yyyymm");
+            return dateA - dateB;
+          })
+          .map((a) => ({
+            ...a,
+            date: moment(a.date, "MM-YYYY").format("MMM YY"),
+            amount: a.value,
+          }))
+      : null;
 
   const statsPeriodOptions = [
     { text: "Last 3 Months", value: 3 },
@@ -114,8 +117,24 @@ export default function CategoryView() {
     );
   }
 
-  if (historyLoading || !categoryStats) {
+  if (historyLoading) {
     return <CircularProgress />;
+  }
+
+  if (!categoryStats) {
+    return (
+      <Box
+        sx={{
+          flexGrow: 1,
+          padding: 4,
+          backgroundColor: "#121212",
+          minHeight: "100vh",
+          display: "flex",
+        }}
+      >
+        <h3>Please submit a report before analyzing categories.</h3>
+      </Box>
+    );
   }
 
   return (

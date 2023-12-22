@@ -147,6 +147,7 @@ export default function History() {
         report={openReport}
         userHistory={userHistory}
         showPercents={showPercents}
+        handleDelete={handleDelete}
       />
 
       <Grid item sx={{ width: "90%" }}>
