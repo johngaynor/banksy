@@ -9,17 +9,18 @@ import {
 import AddBoxIcon from "@mui/icons-material/AddBox";
 
 import { processFile } from "../components/processorFunctions";
+import { addKeyword } from "../actions";
 import { useGlobalState } from "@/app/components/context";
 import { useProcessorState } from "../context";
+import Spinner from "@/app/components/spinner";
 
 export default function Categories({ setFormStep }) {
-  const { addMsg, userBanks, userCategories } = useGlobalState();
+  const { addMsg, userBanks, userCategories, user } = useGlobalState();
   const { rawFile, data, setData } = useProcessorState();
   const [flaggedIndex, setFlaggedIndex] = useState(0);
-  const [addKeyword, setAddKeyword] = useState(false);
+  const [openKeyword, setOpenKeyword] = useState(false);
   const [keyword, setKeyword] = useState("");
-
-  console.log(keyword);
+  const [addKeywordLoading, setAddKeywordLoading] = useState(false);
 
   useEffect(() => {
     const initProcess = async () => {
@@ -38,11 +39,19 @@ export default function Categories({ setFormStep }) {
     initProcess();
   }, []);
 
-  const assignCategory = (cat) => {
-    if (addKeyword && keyword !== "") {
-      setAddKeyword(false);
+  const assignCategory = async (cat) => {
+    if (openKeyword && keyword !== "") {
+      await addKeyword(
+        user.user_id,
+        userCategories[cat].ref,
+        keyword,
+        setAddKeywordLoading,
+        addMsg
+      );
+      setOpenKeyword(false);
       setKeyword("");
     }
+
     const updatedData = { ...data };
     if (updatedData.flagged.length > flaggedIndex) {
       updatedData.flagged[flaggedIndex].category = cat;
@@ -56,6 +65,14 @@ export default function Categories({ setFormStep }) {
         return;
       }
       setData(updatedData);
+    }
+  };
+
+  const handleOpenKeyword = () => {
+    if (!user) {
+      alert("Please log in before adding keywords for a category.");
+    } else {
+      setOpenKeyword(!openKeyword);
     }
   };
 
@@ -110,31 +127,29 @@ export default function Categories({ setFormStep }) {
           }}
         >
           <Button
-            onClick={() => setAddKeyword(!addKeyword)}
+            onClick={handleOpenKeyword}
             component="label"
-            variant={addKeyword ? "outlined" : "contained"}
+            variant={openKeyword ? "outlined" : "contained"}
             sx={{
               height: "50px",
-              backgroundColor: addKeyword ? "" : "#90caf9",
+              backgroundColor: openKeyword ? "" : "#90caf9",
             }}
             startIcon={<AddBoxIcon />}
           >
             Add Keyword
           </Button>
-          {addKeyword ? (
+          {openKeyword ? (
             <TextField
               variant="outlined"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               sx={{
-                // height: "30px",
                 border: "1px solid white",
                 borderRadius: "5px",
                 "& input": {
                   height: "15px",
                   color: "white",
                 },
-                // width: "85%",
               }}
             />
           ) : null}
@@ -154,6 +169,7 @@ export default function Categories({ setFormStep }) {
           marginTop: "50px",
         }}
       >
+        {addKeywordLoading ? <Spinner /> : null}
         <Grid item>
           <Typography variant="h3" sx={{ textAlign: "center" }}>
             First, let's take a look at some transactions.
