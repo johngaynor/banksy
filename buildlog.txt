@@ -3,3 +3,4 @@
 1.1.0 - individual summary modal
 1.2.0 - category statistics view
 2.0.0 - register functionality
+2.0.1 - fixed bug where registering users always hit the 'email already exists' catch
