@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
-import { CircularProgress, Box } from "@mui/material";
+import { Box } from "@mui/material";
 
 import HomeView from "./views/homeView";
 import CategoryView from "./views/categoryView";
 import TableView from "./views/tableView";
 import SummaryView from "./views/summaryView";
+import Spinner from "@/app/components/spinner";
 
 import { ProcessorContextProvider } from "./context";
 import { useGlobalState } from "@/app/components/context";
@@ -31,15 +32,6 @@ export default function Processor() {
     }
   };
 
-  if (
-    banksLoading ||
-    categoriesLoading ||
-    viewsLoading ||
-    submitSummaryLoading
-  ) {
-    return <CircularProgress />;
-  }
-
   return (
     <ProcessorContextProvider>
       <Box
@@ -49,6 +41,12 @@ export default function Processor() {
           minHeight: "100vh",
         }}
       >
+        {banksLoading ||
+        categoriesLoading ||
+        viewsLoading ||
+        submitSummaryLoading ? (
+          <Spinner />
+        ) : null}
         {activePage()}
       </Box>
     </ProcessorContextProvider>

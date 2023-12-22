@@ -1,14 +1,15 @@
 import React from "react";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+} from "@mui/material";
+
 import axios from "axios";
-import { useGlobalState } from "./context";
+import { useGlobalState } from "../context";
 
 export default function LoginForm({ openLogin, setOpenLogin }) {
   const { setUser, addMsg } = useGlobalState();
@@ -43,7 +44,7 @@ export default function LoginForm({ openLogin, setOpenLogin }) {
   return (
     <React.Fragment>
       <Dialog open={openLogin} onClose={onClose}>
-        <DialogTitle>Sign In</DialogTitle>
+        <DialogTitle>Login</DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit}>
             <TextField
@@ -65,10 +66,7 @@ export default function LoginForm({ openLogin, setOpenLogin }) {
               type="password"
               id="password"
               autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              sx={{ marginBottom: "28px" }}
             />
             <Button type="submit" variant="contained" fullWidth>
               Sign In

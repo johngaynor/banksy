@@ -18,7 +18,6 @@ import {
   Select,
   InputLabel,
   Box,
-  CircularProgress,
   MenuItem,
   Card,
   CardContent,
@@ -27,6 +26,7 @@ import moment from "moment";
 
 import { useGlobalState } from "@/app/components/context";
 import { getHistory } from "../actions";
+import Spinner from "@/app/components/spinner";
 import {
   generateCategoryObj,
   generateCategoryStats,
@@ -58,33 +58,42 @@ export default function CategoryView() {
     }
   }, [categoryObj]);
 
-  const categoryStats = categoryObj
-    ? generateCategoryStats(categoryObj, activeCategory, statsPeriod, 0)
-    : null;
+  const categoryStats =
+    categoryObj && activeCategory
+      ? generateCategoryStats(categoryObj, activeCategory, statsPeriod, 0)
+      : null;
 
-  const lastMonthStats = categoryObj
-    ? generateCategoryStats(categoryObj, activeCategory, statsPeriod, 1)
-    : null;
+  const lastMonthStats =
+    categoryObj && activeCategory
+      ? generateCategoryStats(categoryObj, activeCategory, statsPeriod, 1)
+      : null;
   const compareStats = {
-    avg3: categoryStats?.avg3 - lastMonthStats?.avg3,
-    avg6: categoryStats?.avg6 - lastMonthStats?.avg6,
-    avg12: categoryStats?.avg12 - lastMonthStats?.avg12,
+    avg3: lastMonthStats?.avg3
+      ? categoryStats?.avg3 - lastMonthStats?.avg3
+      : "--",
+    avg6: lastMonthStats?.avg6
+      ? categoryStats?.avg6 - lastMonthStats?.avg6
+      : "--",
+    avg12: lastMonthStats?.avg12
+      ? categoryStats?.avg12 - lastMonthStats?.avg12
+      : "--",
   };
 
-  const tableData = activeCategory
-    ? categoryObj[activeCategory]
-        .slice(0, statsPeriod)
-        .sort((a, b) => {
-          const dateA = moment(a.date, "mm-yyyy").format("yyyymm");
-          const dateB = moment(b.date, "mm-yyyy").format("yyyymm");
-          return dateA - dateB;
-        })
-        .map((a) => ({
-          ...a,
-          date: moment(a.date, "MM-YYYY").format("MMM YY"),
-          amount: a.value,
-        }))
-    : null;
+  const tableData =
+    activeCategory && categoryObj
+      ? categoryObj[activeCategory]
+          .slice(0, statsPeriod)
+          .sort((a, b) => {
+            const dateA = moment(a.date, "mm-yyyy").format("yyyymm");
+            const dateB = moment(b.date, "mm-yyyy").format("yyyymm");
+            return dateA - dateB;
+          })
+          .map((a) => ({
+            ...a,
+            date: moment(a.date, "MM-YYYY").format("MMM YY"),
+            amount: a.value,
+          }))
+      : null;
 
   const statsPeriodOptions = [
     { text: "Last 3 Months", value: 3 },
@@ -108,8 +117,37 @@ export default function CategoryView() {
     );
   }
 
-  if (historyLoading || !categoryStats) {
-    return <CircularProgress />;
+  if (historyLoading) {
+    return (
+      <Box
+        sx={{
+          flexGrow: 1,
+          padding: 4,
+          backgroundColor: "#121212",
+          minHeight: "100vh",
+          display: "flex",
+        }}
+      >
+        <Spinner />
+        <h3>History is loading...</h3>
+      </Box>
+    );
+  }
+
+  if (!categoryStats) {
+    return (
+      <Box
+        sx={{
+          flexGrow: 1,
+          padding: 4,
+          backgroundColor: "#121212",
+          minHeight: "100vh",
+          display: "flex",
+        }}
+      >
+        <h3>Please submit a report before analyzing categories.</h3>
+      </Box>
+    );
   }
 
   return (
@@ -139,9 +177,7 @@ export default function CategoryView() {
             }}
           >
             <Box>
-              <InputLabel htmlFor="select-category" sx={{ color: "white" }}>
-                Category:
-              </InputLabel>
+              <InputLabel sx={{ color: "white" }}>Category:</InputLabel>
               <Select
                 id="select-category"
                 onChange={(e) => setActiveCategory(e.target.value)}
@@ -164,9 +200,7 @@ export default function CategoryView() {
               </Select>
             </Box>
             <Box sx={{ margin: "0 10px" }}>
-              <InputLabel htmlFor="select-stats-period" sx={{ color: "white" }}>
-                Time Period*:
-              </InputLabel>
+              <InputLabel sx={{ color: "white" }}>Time Period*:</InputLabel>
               <Select
                 id="select-stats-period"
                 onChange={(e) => setStatsPeriod(e.target.value)}
@@ -269,12 +303,20 @@ export default function CategoryView() {
                       <Typography
                         variant="h6"
                         sx={{
-                          color: compareStats.avg3 > 0 ? "#D32E2E" : "#2E7D32",
+                          color:
+                            compareStats.avg3 === "--"
+                              ? "white"
+                              : compareStats.avg3 > 0
+                              ? "#D32E2E"
+                              : "#2E7D32",
                           marginBottom: "4px",
                         }}
                       >
-                        {compareStats.avg3 > 0 ? "+" : "-"}$
-                        {Math.abs(compareStats.avg3).toFixed(2)}
+                        {compareStats.avg3 === "--"
+                          ? "--"
+                          : compareStats.avg3 > 0
+                          ? "+" + Math.abs(compareStats.avg3).toFixed(2)
+                          : "-" + Math.abs(compareStats.avg3).toFixed(2)}
                       </Typography>
                     </Box>
                   </CardContent>
@@ -307,12 +349,20 @@ export default function CategoryView() {
                       <Typography
                         variant="h6"
                         sx={{
-                          color: compareStats.avg6 > 0 ? "#D32E2E" : "#2E7D32",
+                          color:
+                            compareStats.avg6 === "--"
+                              ? "white"
+                              : compareStats.avg6 > 0
+                              ? "#D32E2E"
+                              : "#2E7D32",
                           marginBottom: "4px",
                         }}
                       >
-                        {compareStats.avg6 > 0 ? "+" : "-"}$
-                        {Math.abs(compareStats.avg6).toFixed(2)}
+                        {compareStats.avg6 === "--"
+                          ? "--"
+                          : compareStats.avg6 > 0
+                          ? "+" + Math.abs(compareStats.avg6).toFixed(2)
+                          : "-" + Math.abs(compareStats.avg6).toFixed(2)}
                       </Typography>
                     </Box>
                   </CardContent>
@@ -345,12 +395,20 @@ export default function CategoryView() {
                       <Typography
                         variant="h6"
                         sx={{
-                          color: compareStats.avg12 > 0 ? "#D32E2E" : "#2E7D32",
+                          color:
+                            compareStats.avg12 === "--"
+                              ? "white"
+                              : compareStats.avg12 > 0
+                              ? "#D32E2E"
+                              : "#2E7D32",
                           marginBottom: "4px",
                         }}
                       >
-                        {compareStats.avg12 > 0 ? "+" : "-"}$
-                        {Math.abs(compareStats.avg12).toFixed(2)}
+                        {compareStats.avg12 === "--"
+                          ? "--"
+                          : compareStats.avg12 > 0
+                          ? "+" + Math.abs(compareStats.avg12).toFixed(2)
+                          : "-" + Math.abs(compareStats.avg12).toFixed(2)}
                       </Typography>
                     </Box>
                   </CardContent>

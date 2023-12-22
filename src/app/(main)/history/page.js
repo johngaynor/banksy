@@ -10,7 +10,6 @@ import {
   FormControlLabel,
   Switch,
   Box,
-  CircularProgress,
   MenuItem,
 } from "@mui/material";
 import PageviewIcon from "@mui/icons-material/Pageview";
@@ -18,6 +17,7 @@ import moment from "moment";
 
 import { getHistory, deleteHistory } from "./actions";
 import { generateComparativePeriod } from "./components/HistoryFunctions";
+import Spinner from "@/app/components/spinner";
 import { useGlobalState } from "@/app/components/context";
 import ReportModal from "./components/ReportModal";
 import StatisticsHeader from "./components/StatisticsHeader";
@@ -77,14 +77,15 @@ export default function History() {
       index,
     }));
 
-  const headerStatistics = filteredHistory
-    ? generateComparativePeriod(
-        filteredHistory[0],
-        filteredHistory,
-        comparePeriod,
-        showPercents
-      )
-    : null;
+  const headerStatistics =
+    filteredHistory && filteredHistory.length !== 0
+      ? generateComparativePeriod(
+          filteredHistory[0],
+          filteredHistory,
+          comparePeriod,
+          showPercents
+        )
+      : null;
 
   const comparePeriodOptions = [
     { text: "Last Month", value: 1 },
@@ -94,7 +95,20 @@ export default function History() {
   ];
 
   if (historyLoading || deleteHistoryLoading) {
-    return <CircularProgress />;
+    return (
+      <Box
+        sx={{
+          flexGrow: 1,
+          padding: 4,
+          backgroundColor: "#121212",
+          minHeight: "100vh",
+          display: "flex",
+        }}
+      >
+        <Spinner />
+        <h3>History is loading...</h3>
+      </Box>
+    );
   }
 
   if (!user) {
@@ -109,6 +123,22 @@ export default function History() {
         }}
       >
         <h3>Please sign in to view history tab.</h3>
+      </Box>
+    );
+  }
+
+  if (!filteredHistory || filteredHistory.length === 0) {
+    return (
+      <Box
+        sx={{
+          flexGrow: 1,
+          padding: 4,
+          backgroundColor: "#121212",
+          minHeight: "100vh",
+          display: "flex",
+        }}
+      >
+        <h3>You have not submitted any reports.</h3>
       </Box>
     );
   }
@@ -130,6 +160,7 @@ export default function History() {
         report={openReport}
         userHistory={userHistory}
         showPercents={showPercents}
+        handleDelete={handleDelete}
       />
 
       <Grid item sx={{ width: "90%" }}>

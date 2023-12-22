@@ -10,7 +10,6 @@ import { useProcessorState } from "../context";
 import { getBanks, getCategories, getViews } from "../actions";
 
 const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",
   height: 1,
   overflow: "hidden",
