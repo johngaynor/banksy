@@ -8,6 +8,8 @@ export const authFunctions = {
     const { rows } =
       await sql`SELECT user_id, first_name, email FROM users where email = ${email} and password = ${hash};`;
 
+    console.log("rows", rows);
+
     return rows.length === 1 ? rows[0] : null;
   },
 
@@ -25,6 +27,31 @@ export const authFunctions = {
       return verified.payload;
     } catch (error) {
       throw new Error("There is no token stored in cookies.");
+    }
+  },
+
+  registerUser: async function (email, password, fname, lname) {
+    try {
+      const hash = new SHA512().b64(password);
+      const { rows } = await sql`
+      insert into users (first_name, last_name, email, password, account_status, date_created) values
+      (${fname}, ${lname}, ${email}, ${hash}, 0, CURRENT_TIMESTAMP)
+      returning user_id, first_name, email;`;
+
+      return rows;
+    } catch (error) {
+      return { error: `DB operation failed (345572): ${error}` };
+    }
+  },
+
+  checkEmail: async function (email) {
+    try {
+      const { rows } = await sql`
+      select * from users where email = ${email};
+      `;
+      return rows;
+    } catch (error) {
+      return { error: `DB operation failed (612634): ${error}` };
     }
   },
 };

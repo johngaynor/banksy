@@ -13,6 +13,7 @@ export async function GET(request) {
   }
 
   if (action === "login") {
+    console.log("hit login route");
     if (!email || !password) {
       return NextResponse.json(
         { error: "Email and password are required." },
@@ -20,6 +21,7 @@ export async function GET(request) {
       );
     }
     const user = await authFunctions.login(email, password);
+    console.log("user", user);
     if (user) {
       const token = sign(
         {
@@ -29,7 +31,7 @@ export async function GET(request) {
         },
         process.env.JWT_SECRET_KEY,
         {
-          expiresIn: "1h",
+          expiresIn: "6h",
         }
       );
       const expirationDate = new Date(Date.now() + 3600 * 1000);
@@ -85,6 +87,69 @@ export async function GET(request) {
     } catch (error) {
       // console.log(error);
       return NextResponse.json({ msg: "error on backend" }, { status: 400 });
+    }
+  }
+}
+
+export async function POST(request) {
+  const { searchParams } = new URL(request.url);
+  const { action } = Object.fromEntries(searchParams);
+  const res = await request.json();
+
+  if (!action) {
+    return NextResponse.json({ error: "action is required" }, { status: 400 });
+  }
+
+  if (action === "register") {
+    if (!res.email || !res.password || !res.fname || !res.lname) {
+      return NextResponse.json(
+        { error: "missing parameters" },
+        { status: 400 }
+      );
+    }
+
+    const existingEmail = await authFunctions.checkEmail(res.email);
+    if (existingEmail) {
+      return NextResponse.json(
+        { error: "Email already exists in our system." },
+        { status: 400 }
+      );
+    }
+
+    const user = await authFunctions.registerUser(
+      res.email,
+      res.password,
+      res.fname,
+      res.lname
+    );
+
+    if (user[0]) {
+      const token = sign(
+        {
+          user_id: user[0].user_id,
+          first_name: user[0].first_name,
+          email: user[0].email,
+        },
+        process.env.JWT_SECRET_KEY,
+        {
+          expiresIn: "6h",
+        }
+      );
+      const expirationDate = new Date(Date.now() + 3600 * 1000);
+      return NextResponse.json(
+        { user: user[0] },
+        {
+          status: 200,
+          headers: {
+            "Set-Cookie": `jwt-token=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Expires=${expirationDate.toUTCString()}`,
+          },
+        }
+      );
+    } else {
+      return NextResponse.json(
+        { error: "Something went wrong on our end." },
+        { status: 401 }
+      );
     }
   }
 }

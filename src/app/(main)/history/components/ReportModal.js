@@ -13,6 +13,7 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
 
 export default function ReportModal({
@@ -21,6 +22,7 @@ export default function ReportModal({
   report,
   showPercents,
   userHistory,
+  handleDelete,
 }) {
   const onClose = () => {
     setOpenReport(false);
@@ -290,7 +292,22 @@ export default function ReportModal({
               Categories are compared to last month.
             </Typography>
           </DialogContent>
-          <DialogActions sx={{ backgroundColor: "#121212" }}>
+          <DialogActions
+            sx={{
+              backgroundColor: "#121212",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Button
+              component="label"
+              variant="contained"
+              color="error"
+              sx={{ width: "25px", height: "30px" }}
+              onClick={() => handleDelete(report.month_year)}
+            >
+              <DeleteIcon />
+            </Button>
             <Button onClick={onClose}>Close</Button>
           </DialogActions>
         </Dialog>
