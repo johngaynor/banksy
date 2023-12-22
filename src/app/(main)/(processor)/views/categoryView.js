@@ -37,7 +37,7 @@ export default function Categories({ setFormStep }) {
         setUserCategories,
         setCategoriesLoading,
         addMsg,
-        user ? user.user_id : false
+        user ? user.user_id : 0
       );
     }
   }, [userCategories]);

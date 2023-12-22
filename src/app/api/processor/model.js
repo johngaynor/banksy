@@ -32,7 +32,7 @@ export const processorFunctions = {
 
     keywords = [...keywords, ...keys];
 
-    if (userId) {
+    if (userId !== "0") {
       const { rows: userKeys } = await sql`
     select category_id, keyword from processor_user_keywords
     where user_id = ${userId};
