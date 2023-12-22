@@ -27,11 +27,10 @@ export default function Navbar() {
               const { user_id, first_name, email } = response.data;
               setUser({ user_id, first_name, email });
             } else {
-              // console.log("no user to be set");
             }
           }
         } catch (error) {
-          // addMsg("error", `error checking cookies for user: ${error}`);
+          addMsg("error", `error checking cookies for user: ${error}`);
         }
       };
 
@@ -46,8 +45,7 @@ export default function Navbar() {
         addMsg("success", "Successfully logged out!");
         setUser(null);
       } else {
-        // addMsg("error", `error logging out: ${response.data.error}`);
-        console.log(response.data);
+        addMsg("error", `error logging out: ${response.data.error}`);
       }
     } catch (error) {
       addMsg("error", `error logging out: ${error}`);
@@ -56,7 +54,6 @@ export default function Navbar() {
 
   return (
     <Box
-      // container
       paddingLeft={4}
       paddingRight={4}
       sx={{
@@ -108,17 +105,17 @@ export default function Navbar() {
                 borderBottom: path === "/history" ? "1px solid white" : "",
               }}
             >
-              STATISTICS
+              HISTORY
             </Link>
           </Grid>
-          <Grid
+          {/* <Grid
             item
             sx={{
               marginLeft: "50px",
             }}
           >
             <Link href="/db">DATABASE</Link>
-          </Grid>
+          </Grid> */}
           {user ? (
             <Grid
               item
