@@ -231,7 +231,9 @@ export default function CategoryView() {
               alignItems: "flex-end",
             }}
           >
-            <Typography variant="h4">Category Statistics</Typography>
+            <Typography variant="h4" sx={{ color: "white" }}>
+              Category Statistics
+            </Typography>
           </Grid>
 
           <Grid

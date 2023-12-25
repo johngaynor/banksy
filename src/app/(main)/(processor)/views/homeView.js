@@ -65,6 +65,7 @@ export default function Home({ setFormStep }) {
           display: "flex",
           flexDirection: "column",
           marginTop: "60px",
+          color: "white",
         }}
       >
         <Typography variant="h2">

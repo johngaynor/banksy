@@ -93,12 +93,13 @@ export default function Navbar() {
           justifyContent: "space-between",
         }}
       >
-        <CreditCardOffIcon sx={{ fontSize: 40 }} />
+        <CreditCardOffIcon sx={{ fontSize: 40, color: "white" }} />
         <Box>
           <Link
             href="/"
             style={{
               borderBottom: path === "/" ? "1px solid white" : "",
+              color: "white",
             }}
           >
             CSV PROCESSOR
@@ -107,6 +108,7 @@ export default function Navbar() {
             href="/history"
             style={{
               borderBottom: path === "/history" ? "1px solid white" : "",
+              color: "white",
               marginLeft: "50px",
             }}
           >
@@ -133,6 +135,7 @@ export default function Navbar() {
                 href="#"
                 style={{
                   marginLeft: "50px",
+                  color: "white",
                 }}
                 onClick={() => setOpenLogin(true)}
               >
@@ -142,6 +145,7 @@ export default function Navbar() {
                 href="#"
                 style={{
                   marginLeft: "50px",
+                  color: "white",
                 }}
                 onClick={() => setOpenRegister(true)}
               >

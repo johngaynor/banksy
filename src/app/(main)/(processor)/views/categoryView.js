@@ -107,6 +107,7 @@ export default function Categories({ setFormStep }) {
           backgroundColor: "#121212",
           minHeight: "100vh",
           display: "flex",
+          color: "white",
         }}
       >
         <h3>Categories are loading...</h3>
@@ -205,6 +206,7 @@ export default function Categories({ setFormStep }) {
           display: "flex",
           justifyContent: "center",
           marginTop: "50px",
+          color: "white",
         }}
       >
         {addKeywordLoading ? <Spinner /> : null}
