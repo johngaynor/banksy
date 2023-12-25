@@ -4,3 +4,4 @@
 1.2.0 - category statistics view
 2.0.0 - register functionality
 2.0.1 - fixed bug where registering users always hit the 'email already exists' catch
+2.0.2 - fixed bug where category page errored out on certain browsers
