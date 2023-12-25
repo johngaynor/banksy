@@ -298,25 +298,25 @@ export default function CategoryView() {
                           margin: "5px 5px 0 0",
                         }}
                       >
-                        ${categoryStats.avg3.toFixed(2)}
+                        ${categoryStats?.avg3.toFixed(2)}
                       </Typography>
                       <Typography
                         variant="h6"
                         sx={{
                           color:
-                            compareStats.avg3 === "--"
+                            compareStats?.avg3 === "--"
                               ? "white"
-                              : compareStats.avg3 > 0
+                              : compareStats?.avg3 > 0
                               ? "#D32E2E"
                               : "#2E7D32",
                           marginBottom: "4px",
                         }}
                       >
-                        {compareStats.avg3 === "--"
+                        {compareStats?.avg3 === "--"
                           ? "--"
-                          : compareStats.avg3 > 0
-                          ? "+" + Math.abs(compareStats.avg3).toFixed(2)
-                          : "-" + Math.abs(compareStats.avg3).toFixed(2)}
+                          : compareStats?.avg3 > 0
+                          ? "+" + Math.abs(compareStats?.avg3).toFixed(2)
+                          : "-" + Math.abs(compareStats?.avg3).toFixed(2)}
                       </Typography>
                     </Box>
                   </CardContent>
@@ -344,25 +344,25 @@ export default function CategoryView() {
                           margin: "5px 5px 0 0",
                         }}
                       >
-                        ${categoryStats.avg6.toFixed(2)}
+                        ${categoryStats?.avg6.toFixed(2)}
                       </Typography>
                       <Typography
                         variant="h6"
                         sx={{
                           color:
-                            compareStats.avg6 === "--"
+                            compareStats?.avg6 === "--"
                               ? "white"
-                              : compareStats.avg6 > 0
+                              : compareStats?.avg6 > 0
                               ? "#D32E2E"
                               : "#2E7D32",
                           marginBottom: "4px",
                         }}
                       >
-                        {compareStats.avg6 === "--"
+                        {compareStats?.avg6 === "--"
                           ? "--"
-                          : compareStats.avg6 > 0
-                          ? "+" + Math.abs(compareStats.avg6).toFixed(2)
-                          : "-" + Math.abs(compareStats.avg6).toFixed(2)}
+                          : compareStats?.avg6 > 0
+                          ? "+" + Math.abs(compareStats?.avg6).toFixed(2)
+                          : "-" + Math.abs(compareStats?.avg6).toFixed(2)}
                       </Typography>
                     </Box>
                   </CardContent>
@@ -390,25 +390,25 @@ export default function CategoryView() {
                           margin: "5px 5px 0 0",
                         }}
                       >
-                        ${categoryStats.avg12.toFixed(2)}
+                        ${categoryStats?.avg12.toFixed(2)}
                       </Typography>
                       <Typography
                         variant="h6"
                         sx={{
                           color:
-                            compareStats.avg12 === "--"
+                            compareStats?.avg12 === "--"
                               ? "white"
-                              : compareStats.avg12 > 0
+                              : compareStats?.avg12 > 0
                               ? "#D32E2E"
                               : "#2E7D32",
                           marginBottom: "4px",
                         }}
                       >
-                        {compareStats.avg12 === "--"
+                        {compareStats?.avg12 === "--"
                           ? "--"
-                          : compareStats.avg12 > 0
-                          ? "+" + Math.abs(compareStats.avg12).toFixed(2)
-                          : "-" + Math.abs(compareStats.avg12).toFixed(2)}
+                          : compareStats?.avg12 > 0
+                          ? "+" + Math.abs(compareStats?.avg12).toFixed(2)
+                          : "-" + Math.abs(compareStats?.avg12).toFixed(2)}
                       </Typography>
                     </Box>
                   </CardContent>
@@ -440,13 +440,13 @@ export default function CategoryView() {
                           variant="h3"
                           sx={{ color: "white", marginTop: "5px" }}
                         >
-                          #{categoryStats.rank}
+                          #{categoryStats?.rank}
                         </Typography>
                         <Typography
                           variant="h6"
                           sx={{ color: "white", marginBottom: "3px" }}
                         >
-                          /{categoryStats.maxRank}
+                          /{categoryStats?.maxRank}
                         </Typography>
                       </Box>
                       <Typography
@@ -484,7 +484,7 @@ export default function CategoryView() {
                           margin: "5px 5px 0 0",
                         }}
                       >
-                        {categoryStats.avgIncome.toFixed(2)}%
+                        {categoryStats?.avgIncome.toFixed(2)}%
                       </Typography>
                       <Typography
                         variant="h6"
@@ -521,7 +521,7 @@ export default function CategoryView() {
                           margin: "5px 5px 0 0",
                         }}
                       >
-                        {categoryStats.avgSpending.toFixed(2)}%
+                        {categoryStats?.avgSpending.toFixed(2)}%
                       </Typography>
                       <Typography
                         variant="h6"
