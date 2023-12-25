@@ -70,7 +70,7 @@ export function processFile(file, userBanks) {
 
         if (!bank) {
           // console.log("No default bank found");
-          resolve({ headers });
+          resolve({ csv: results, headers });
         } else {
           // console.log("Bank found");
           resolve({ csv: results, bank });

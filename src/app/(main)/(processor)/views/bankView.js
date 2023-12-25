@@ -5,6 +5,7 @@ import {
   processFile,
   assignCategories,
 } from "../components/processorFunctions";
+import { BankForm } from "../components/bankForm";
 import { getCategories } from "../actions";
 import { useGlobalState } from "@/app/components/context";
 import { useProcessorState } from "../context";
@@ -20,7 +21,7 @@ export default function BankView({ setFormStep }) {
     categoriesLoading,
     setCategoriesLoading,
   } = useGlobalState();
-  const { rawFile, data, setData } = useProcessorState();
+  const { rawFile, setData, data } = useProcessorState();
   const [headers, setHeaders] = useState({
     amount: null,
     date: null,
@@ -45,8 +46,7 @@ export default function BankView({ setFormStep }) {
         try {
           const result = await processFile(rawFile, userBanks);
 
-          if (result.csv) {
-            // handle workflow process for assigning new bank
+          if (result.bank) {
             const transactions = assignCategories(
               result.csv,
               result.bank,
@@ -70,13 +70,18 @@ export default function BankView({ setFormStep }) {
   }, [userCategories]);
 
   const headerWorkflow = () => {
-    if (headers.amount && headers.date && headers.description && headers.csv) {
+    const missingHeaders = Object.keys(headers).filter(
+      (f) => f !== "csv" && headers[f] === null
+    );
+
+    if (!missingHeaders.length) {
       console.log("FINISHED ASSIGNING HEADERS, PROCESSING DATA");
       const bankHeaders = {
         amount: headers.amount,
         date: headers.date,
         description: headers.description,
       };
+
       const transactions = assignCategories(
         headers.csv,
         bankHeaders,
@@ -86,28 +91,17 @@ export default function BankView({ setFormStep }) {
       setFormStep(2);
     }
 
-    const missingHeaders = Object.keys(headers).filter(
-      (f) => f !== "csv" && headers[f] === null
-    );
-
-    console.log(missingHeaders);
-
-    const shiftArr = (h) => {
+    const setHeader = (header, val) => {
       const newHeader = { ...headers };
-      newHeader[h] = true;
+      newHeader[header] = val;
       setHeaders(newHeader);
     };
 
-    while (missingHeaders.length) {
-      return (
-        <Box sx={{ color: "white" }}>
-          missing header: {missingHeaders[0]}
-          <Button onClick={() => shiftArr(missingHeaders[0])}>
-            Click me to move on
-          </Button>
-        </Box>
-      );
-    }
+    const current = missingHeaders[0];
+
+    return (
+      <BankForm current={current} setHeader={setHeader} headers={headers} />
+    );
   };
 
   if (!userCategories || categoriesLoading) {
@@ -128,20 +122,18 @@ export default function BankView({ setFormStep }) {
     );
   }
 
-  if (!data && (!headers.amount || !headers.date || !headers.description)) {
-    return (
-      <Box
-        sx={{
-          flexGrow: 1,
-          padding: 4,
-          backgroundColor: "#121212",
-          minHeight: "100vh",
-          display: "flex",
-          color: "white",
-        }}
-      >
-        {headerWorkflow()}
-      </Box>
-    );
-  }
+  return (
+    <Box
+      sx={{
+        flexGrow: 1,
+        padding: 4,
+        backgroundColor: "#121212",
+        minHeight: "100vh",
+        display: "flex",
+        color: "white",
+      }}
+    >
+      {headerWorkflow()}
+    </Box>
+  );
 }
