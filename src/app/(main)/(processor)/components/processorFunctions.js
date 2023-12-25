@@ -11,68 +11,61 @@ import axios from "axios";
 export function processFile(file, userBanks, userCategories) {
   return new Promise(async (resolve, reject) => {
     try {
-      const assignCategories = (results) => {
-        const transactions = results.data.filter(
-          (row) => row.DatePosted !== ""
-        );
+      const standardizeHeaders = (results) => {
+        const transactions = results.data;
         const headers = Object.keys(transactions[0]);
-        const bank = userBanks.find(
-          (bank) =>
-            headers.includes(bank.date) &&
-            headers.includes(bank.description) &&
-            headers.includes(bank.amount)
+        let bank = userBanks.find(
+          (b) =>
+            headers.includes(b.date) &&
+            headers.includes(b.description) &&
+            headers.includes(b.amount)
         );
 
-        if (!bank) {
-          reject("no bank was found");
-        }
+        return bank;
+      };
 
-        for (const transaction of transactions) {
-          let category;
+      const assignCategories = (results) => {
+        const bank = standardizeHeaders(results);
+
+        const csv = results.data
+          .filter((r) => r[bank.date] && r[bank.description] && r[bank.amount])
+          .map((f) => {
+            const t = {};
+            t.date = f[bank.date];
+            t.description = f[bank.description].toLowerCase();
+            t.amount = parseFloat(
+              f[bank.amount].replace("-", "").replace("$", "").replace(",", "")
+            );
+            t.type = f[bank.amount].includes("-") ? "withdrawal" : "deposit";
+            t.category = null;
+            return t;
+          });
+
+        for (const transaction of csv) {
+          let category = null;
           for (const categoryName in userCategories) {
             const match = userCategories[categoryName].keys.find((key) =>
-              transaction[bank.description].toLowerCase().includes(key)
+              transaction.description.includes(key)
             );
+
+            // checking for income, does this mean i can get rid of income keywords?
+            if (transaction.type === "deposit") {
+              category = "income";
+              break;
+            }
 
             if (match) {
               category = categoryName;
               break;
             }
-
-            if (!transaction[bank.amount].includes("-")) {
-              category = "income";
-              break;
-            }
           }
 
-          transaction["category"] = category ?? "flag";
-
-          // sanitizing row
-          const desc = transaction[bank.description].toLowerCase();
-          const type = transaction[bank.amount].includes("-")
-            ? "withdrawal"
-            : "deposit";
-          const amount = parseFloat(
-            transaction[bank.amount]
-              .replace("-", "")
-              .replace("$", "")
-              .replace(",", "")
-          );
-
-          // setting up column structure
-          transaction.date = transaction[bank.date];
-          transaction.amount = amount;
-          transaction.description = desc;
-          transaction.type = type;
-          // deleting old columns
-          delete transaction[bank.date];
-          delete transaction[bank.amount];
-          delete transaction[bank.description];
+          transaction.category = category;
         }
 
         const filteredTransactions = {
-          filtered: transactions.filter((t) => t.category !== "flag"),
-          flagged: transactions.filter((t) => t.category === "flag"),
+          filtered: csv.filter((t) => t.category !== null),
+          flagged: csv.filter((t) => t.category === null),
         };
 
         resolve(filteredTransactions);
@@ -184,3 +177,14 @@ export function generateSummary(userViews, data, userCategories) {
 
   return summary;
 }
+
+// for (const t of transactions) {
+// }
+
+// if (!bank) {
+//   reject("no bank was found");
+//   // start workflow for entering custom headers
+//   bank = { date: "test", description: "test desc", amount: 1232 };
+// }
+
+// console.log(bank);
