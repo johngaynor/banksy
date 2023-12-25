@@ -8,10 +8,57 @@ import axios from "axios";
 // 4. if a category is found, set it, otherwise set it to flagged
 // 5. standardize transactions to have date/amount/type/description format
 // 6. put any flagged transactions in separate object to process
-export function processFile(file, userBanks, userCategories) {
+
+export function assignCategories(results, bank, userCategories) {
+  // console.log(results, bank, userCategories);
+  const csv = results.data
+    .filter((r) => r[bank.date] && r[bank.description] && r[bank.amount])
+    .map((f) => {
+      const t = {};
+      t.date = f[bank.date];
+      t.description = f[bank.description].toLowerCase();
+      t.amount = parseFloat(
+        f[bank.amount].replace("-", "").replace("$", "").replace(",", "")
+      );
+      t.type = f[bank.amount].includes("-") ? "withdrawal" : "deposit";
+      t.category = null;
+      return t;
+    });
+
+  for (const transaction of csv) {
+    let category = null;
+    for (const categoryName in userCategories) {
+      const match = userCategories[categoryName].keys.find((key) =>
+        transaction.description.includes(key)
+      );
+
+      // checking for income, does this mean i can get rid of income keywords?
+      if (transaction.type === "deposit") {
+        category = "income";
+        break;
+      }
+
+      if (match) {
+        category = categoryName;
+        break;
+      }
+    }
+
+    transaction.category = category;
+  }
+
+  const filteredTransactions = {
+    filtered: csv.filter((t) => t.category !== null),
+    flagged: csv.filter((t) => t.category === null),
+  };
+
+  return filteredTransactions;
+}
+
+export function processFile(file, userBanks) {
   return new Promise(async (resolve, reject) => {
     try {
-      const standardizeHeaders = (results) => {
+      const matchBank = (results) => {
         const transactions = results.data;
         const headers = Object.keys(transactions[0]);
         let bank = userBanks.find(
@@ -21,59 +68,18 @@ export function processFile(file, userBanks, userCategories) {
             headers.includes(b.amount)
         );
 
-        return bank;
-      };
-
-      const assignCategories = (results) => {
-        const bank = standardizeHeaders(results);
-
-        const csv = results.data
-          .filter((r) => r[bank.date] && r[bank.description] && r[bank.amount])
-          .map((f) => {
-            const t = {};
-            t.date = f[bank.date];
-            t.description = f[bank.description].toLowerCase();
-            t.amount = parseFloat(
-              f[bank.amount].replace("-", "").replace("$", "").replace(",", "")
-            );
-            t.type = f[bank.amount].includes("-") ? "withdrawal" : "deposit";
-            t.category = null;
-            return t;
-          });
-
-        for (const transaction of csv) {
-          let category = null;
-          for (const categoryName in userCategories) {
-            const match = userCategories[categoryName].keys.find((key) =>
-              transaction.description.includes(key)
-            );
-
-            // checking for income, does this mean i can get rid of income keywords?
-            if (transaction.type === "deposit") {
-              category = "income";
-              break;
-            }
-
-            if (match) {
-              category = categoryName;
-              break;
-            }
-          }
-
-          transaction.category = category;
+        if (!bank) {
+          // console.log("No default bank found");
+          resolve({ headers });
+        } else {
+          // console.log("Bank found");
+          resolve({ csv: results, bank });
         }
-
-        const filteredTransactions = {
-          filtered: csv.filter((t) => t.category !== null),
-          flagged: csv.filter((t) => t.category === null),
-        };
-
-        resolve(filteredTransactions);
       };
 
       Papa.parse(file, {
         header: true,
-        complete: assignCategories,
+        complete: matchBank,
       });
     } catch (error) {
       reject(error);
