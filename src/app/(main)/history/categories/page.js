@@ -117,7 +117,7 @@ export default function CategoryView() {
     );
   }
 
-  if (historyLoading) {
+  if (historyLoading || !categoryObj) {
     return (
       <Box
         sx={{
@@ -134,7 +134,7 @@ export default function CategoryView() {
     );
   }
 
-  if (!categoryStats) {
+  if (!compareStats || !categoryStats) {
     return (
       <Box
         sx={{
