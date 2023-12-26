@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Grid, Typography, LinearProgress, Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 
 import {
   processFile,
@@ -21,13 +21,15 @@ export default function BankView({ setFormStep }) {
     categoriesLoading,
     setCategoriesLoading,
   } = useGlobalState();
-  const { rawFile, setData, data } = useProcessorState();
+  const { rawFile, setData, setNewBankLoading } = useProcessorState();
   const [headers, setHeaders] = useState({
     amount: null,
     date: null,
     description: null,
     csv: null,
   });
+  const [openBank, setOpenBank] = useState(false);
+  const [bankName, setBankName] = useState("");
 
   useEffect(() => {
     if (!userCategories && !categoriesLoading) {
@@ -69,6 +71,14 @@ export default function BankView({ setFormStep }) {
     }
   }, [userCategories]);
 
+  const handleOpenBank = () => {
+    if (!user) {
+      alert("Please log in before adding a bank configuration.");
+    } else {
+      setOpenBank(!openBank);
+    }
+  };
+
   const headerWorkflow = () => {
     const missingHeaders = Object.keys(headers).filter(
       (f) => f !== "csv" && headers[f] === null
@@ -100,7 +110,16 @@ export default function BankView({ setFormStep }) {
     const current = missingHeaders[0];
 
     return (
-      <BankForm current={current} setHeader={setHeader} headers={headers} />
+      <BankForm
+        current={current}
+        setHeader={setHeader}
+        headers={headers}
+        handleOpenBank={handleOpenBank}
+        openBank={openBank}
+        user={user}
+        bankName={bankName}
+        setBankName={setBankName}
+      />
     );
   };
 

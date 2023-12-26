@@ -53,7 +53,7 @@ export default function TableView({ setFormStep }) {
   const handleSubmit = () => {
     const summary = generateSummary(userViews, data, userCategories);
     setData(summary);
-    setFormStep(3);
+    setFormStep(4);
   };
 
   return (

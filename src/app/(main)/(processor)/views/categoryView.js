@@ -13,11 +13,11 @@ import Spinner from "@/app/components/spinner";
 
 export default function Categories({ setFormStep }) {
   const { addMsg, userCategories, user } = useGlobalState();
-  const { data, setData } = useProcessorState();
+  const { data, setData, addKeywordLoading, setAddKeywordLoading } =
+    useProcessorState();
   const [flaggedIndex, setFlaggedIndex] = useState(0);
   const [openKeyword, setOpenKeyword] = useState(false);
   const [keyword, setKeyword] = useState("");
-  const [addKeywordLoading, setAddKeywordLoading] = useState(false);
 
   const assignCategory = async (cat) => {
     if (openKeyword && keyword !== "") {
@@ -41,7 +41,7 @@ export default function Categories({ setFormStep }) {
       if (flaggedIndex === updatedData.flagged.length - 1) {
         setData([...updatedData.filtered]);
         addMsg("success", "All transactions have been processed!");
-        setFormStep(2);
+        setFormStep(3);
         return;
       }
       setData(updatedData);
@@ -86,7 +86,7 @@ export default function Categories({ setFormStep }) {
       {addKeywordLoading ? <Spinner /> : null}
       <Grid item>
         <Typography variant="h3" sx={{ textAlign: "center" }}>
-          First, let's take a look at some transactions.
+          Let's take a look at some transactions.
         </Typography>
 
         <LinearProgress

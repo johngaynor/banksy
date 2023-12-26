@@ -10,7 +10,6 @@ import axios from "axios";
 // 6. put any flagged transactions in separate object to process
 
 export function assignCategories(results, bank, userCategories) {
-  // console.log(results, bank, userCategories);
   const csv = results.data
     .filter((r) => r[bank.date] && r[bank.description] && r[bank.amount])
     .map((f) => {
@@ -32,7 +31,6 @@ export function assignCategories(results, bank, userCategories) {
         transaction.description.includes(key)
       );
 
-      // checking for income, does this mean i can get rid of income keywords?
       if (transaction.type === "deposit") {
         category = "income";
         break;

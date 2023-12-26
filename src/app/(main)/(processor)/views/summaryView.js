@@ -22,8 +22,8 @@ import { useProcessorState } from "../context";
 import { useGlobalState } from "../../../components/context";
 
 export default function SummaryView() {
-  const { data } = useProcessorState();
-  const { addMsg, setSubmitSummaryLoading, user } = useGlobalState();
+  const { data, setSubmitSummaryLoading } = useProcessorState();
+  const { addMsg, user } = useGlobalState();
   const [categories, setCategories] = useState([]);
   const [macros, setMacros] = useState([]);
   const [month, setMonth] = useState("");

@@ -81,11 +81,13 @@ export default function Home({ setFormStep }) {
           component="label"
           variant="contained"
           startIcon={<CloudUploadIcon />}
+          disabled={!userViews || !userBanks}
           sx={{
             width: "200px",
             height: "50px",
-            backgroundColor:
-              !userViews || !userBanks ? "#47759a" : "primary.main",
+            "&.Mui-disabled": {
+              backgroundColor: "#47759a",
+            },
           }}
         >
           Upload file
