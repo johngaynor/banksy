@@ -11,14 +11,12 @@ export function BankForm({
   current,
   setHeader,
   headers,
-  handleOpenBank,
   openBank,
   user,
   bankName,
   setBankName,
+  setOpenBank,
 }) {
-  // console.log(current, headers);
-
   const usedHeaders = headers.fileHeaders?.reduce((acc, currentValue) => {
     const retArr = [...acc];
 
@@ -94,7 +92,7 @@ export function BankForm({
         >
           {usedHeaders?.length === 2 ? (
             <Button
-              onClick={handleOpenBank}
+              onClick={() => setOpenBank(!openBank)}
               component="label"
               variant={openBank ? "outlined" : "contained"}
               disabled={!user}

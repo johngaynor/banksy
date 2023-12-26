@@ -1,10 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Grid, Typography, LinearProgress, Box } from "@mui/material";
 
-import {
-  processFile,
-  assignCategories,
-} from "../components/processorFunctions";
 import { CategoryForm } from "../components/categoryForm";
 import { addKeyword, getCategories } from "../actions";
 import { useGlobalState } from "@/app/components/context";
@@ -48,14 +44,6 @@ export default function Categories({ setFormStep }) {
     }
   };
 
-  const handleOpenKeyword = () => {
-    if (!user) {
-      alert("Please log in before adding keywords for a category.");
-    } else {
-      setOpenKeyword(!openKeyword);
-    }
-  };
-
   const flaggedPrompts = () => {
     if (data && data.flagged) {
       const current = data.flagged[flaggedIndex];
@@ -63,10 +51,12 @@ export default function Categories({ setFormStep }) {
         <CategoryForm
           current={current}
           userCategories={userCategories}
-          handleOpenKeyword={handleOpenKeyword}
           openKeyword={openKeyword}
+          keyword={keyword}
+          setOpenKeyword={setOpenKeyword}
           setKeyword={setKeyword}
           assignCategory={assignCategory}
+          user={user}
         />
       );
     }

@@ -71,14 +71,6 @@ export default function BankView({ setFormStep }) {
     }
   }, [userCategories]);
 
-  const handleOpenBank = () => {
-    if (!user) {
-      alert("Please log in before adding a bank configuration.");
-    } else {
-      setOpenBank(!openBank);
-    }
-  };
-
   const headerWorkflow = () => {
     const missingHeaders = Object.keys(headers).filter(
       (f) => f !== "csv" && headers[f] === null
@@ -114,11 +106,11 @@ export default function BankView({ setFormStep }) {
         current={current}
         setHeader={setHeader}
         headers={headers}
-        handleOpenBank={handleOpenBank}
         openBank={openBank}
         user={user}
         bankName={bankName}
         setBankName={setBankName}
+        setOpenBank={setOpenBank}
       />
     );
   };

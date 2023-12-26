@@ -4,10 +4,12 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 export function CategoryForm({
   current,
   userCategories,
-  handleOpenKeyword,
   openKeyword,
+  keyword,
+  setOpenKeyword,
   setKeyword,
   assignCategory,
+  user,
 }) {
   return (
     <>
@@ -50,12 +52,16 @@ export function CategoryForm({
         }}
       >
         <Button
-          onClick={handleOpenKeyword}
+          onClick={() => setOpenKeyword(!openKeyword)}
           component="label"
           variant={openKeyword ? "outlined" : "contained"}
+          disabled={!user}
           sx={{
             height: "50px",
             backgroundColor: openKeyword ? "" : "#90caf9",
+            "&.Mui-disabled": {
+              backgroundColor: "#47759a",
+            },
           }}
           startIcon={<AddBoxIcon />}
         >
