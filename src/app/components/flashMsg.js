@@ -36,7 +36,7 @@ export default function FlashMsg() {
   return (
     <Snackbar
       open={currentMsg ? true : false}
-      autoHideDuration={2000}
+      autoHideDuration={1000}
       onClose={handleClose}
     >
       <Alert

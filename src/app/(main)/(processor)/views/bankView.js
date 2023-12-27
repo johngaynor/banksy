@@ -78,6 +78,7 @@ export default function BankView({ setFormStep }) {
               userCategories
             );
             setData(transactions);
+            addMsg("success", `Found "${result.bank.bank_name}" CSV`);
             setFormStep(2);
           } else {
             setHeaders({
