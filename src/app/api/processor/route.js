@@ -55,7 +55,7 @@ export async function POST(request) {
     return NextResponse.json(summary, { status: 200 });
   }
 
-  if (action === "addkeyword") {
+  if (action === "keyword") {
     if (!res.userId || !res.categoryId || !res.keyword) {
       return NextResponse.json(
         { error: "missing parameters" },
@@ -77,5 +77,37 @@ export async function POST(request) {
     }
 
     return NextResponse.json(keyword, { status: 200 });
+  }
+
+  if (action === "bank") {
+    if (
+      !res.userId ||
+      !res.name ||
+      !res.date ||
+      !res.description ||
+      !res.amount
+    ) {
+      return NextResponse.json(
+        { error: "missing parameters" },
+        { status: 400 }
+      );
+    }
+
+    const bank = await processorFunctions.addBank(
+      res.userId,
+      res.name,
+      res.date,
+      res.description,
+      res.amount
+    );
+
+    if (!bank || bank.error) {
+      return NextResponse.json(
+        { error: "failed to add bank" },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json(bank, { status: 200 });
   }
 }

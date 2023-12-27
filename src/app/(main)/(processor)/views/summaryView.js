@@ -22,8 +22,8 @@ import { useProcessorState } from "../context";
 import { useGlobalState } from "../../../components/context";
 
 export default function SummaryView() {
-  const { data } = useProcessorState();
-  const { addMsg, setSubmitSummaryLoading, user } = useGlobalState();
+  const { data, setSubmitSummaryLoading } = useProcessorState();
+  const { addMsg, user } = useGlobalState();
   const [categories, setCategories] = useState([]);
   const [macros, setMacros] = useState([]);
   const [month, setMonth] = useState("");
@@ -54,7 +54,6 @@ export default function SummaryView() {
       }
 
       setCategories(sorted);
-      // console.log(sorted);
     };
 
     sortedCategories();
@@ -131,7 +130,7 @@ export default function SummaryView() {
 
   return (
     <>
-      <Grid container spacing={0}>
+      <Grid container spacing={0} sx={{ color: "white" }}>
         <Grid
           item
           xs={4}
@@ -346,7 +345,7 @@ export default function SummaryView() {
         }}
       >
         <Grid item style={{ backgroundColor: "#242424" }}>
-          <Typography variant="h5" padding={2}>
+          <Typography variant="h5" padding={2} sx={{ color: "white" }}>
             Wants/Needs/Savings
           </Typography>
           <PieChart width={600} height={400}>
@@ -387,7 +386,7 @@ export default function SummaryView() {
           </PieChart>
         </Grid>
         <Grid item sx={{ backgroundColor: "#242424" }}>
-          <Typography variant="h5" padding={2}>
+          <Typography variant="h5" padding={2} sx={{ color: "white" }}>
             All Categories
           </Typography>
           <PieChart width={600} height={400}>
