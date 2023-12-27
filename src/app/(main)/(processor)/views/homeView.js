@@ -7,7 +7,7 @@ import Image from "next/image";
 
 import { useGlobalState } from "@/app/components/context";
 import { useProcessorState } from "../context";
-import { getBanks, getViews } from "../actions";
+import { getViews } from "../actions";
 
 const VisuallyHiddenInput = styled("input")({
   clipPath: "inset(50%)",
@@ -24,10 +24,6 @@ export default function Home({ setFormStep }) {
   const {
     addMsg,
     user,
-    userBanks,
-    setUserBanks,
-    banksLoading,
-    setBanksLoading,
     userViews,
     setUserViews,
     viewsLoading,
@@ -47,15 +43,10 @@ export default function Home({ setFormStep }) {
   };
 
   useEffect(() => {
-    if (!userBanks && !banksLoading) {
-      getBanks(setUserBanks, setBanksLoading, addMsg, user ? user.user_id : 0);
-      // having a problem with this because the user id is not loading in before this action gets called
-    }
-
     if (!userViews && !viewsLoading) {
-      getViews(setUserViews, setViewsLoading, addMsg, 0);
+      getViews(setUserViews, setViewsLoading, addMsg, user ? user.user_id : 0);
     }
-  }, [userBanks, userViews]);
+  }, [userViews]);
 
   return (
     <Grid container spacing={1}>
@@ -82,7 +73,7 @@ export default function Home({ setFormStep }) {
           component="label"
           variant="contained"
           startIcon={<CloudUploadIcon />}
-          disabled={!userViews || !userBanks}
+          disabled={!userViews}
           sx={{
             width: "200px",
             height: "50px",

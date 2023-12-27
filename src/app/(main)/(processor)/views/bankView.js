@@ -6,7 +6,7 @@ import {
   assignCategories,
 } from "../components/processorFunctions";
 import { BankForm } from "../components/bankForm";
-import { getCategories, addBank } from "../actions";
+import { getCategories, getBanks, addBank } from "../actions";
 import { useGlobalState } from "@/app/components/context";
 import { useProcessorState } from "../context";
 import Spinner from "@/app/components/spinner";
@@ -14,12 +14,15 @@ import Spinner from "@/app/components/spinner";
 export default function BankView({ setFormStep }) {
   const {
     addMsg,
-    userBanks,
-    userCategories,
     user,
+    userCategories,
     setUserCategories,
     categoriesLoading,
     setCategoriesLoading,
+    userBanks,
+    setUserBanks,
+    banksLoading,
+    setBanksLoading,
   } = useGlobalState();
   const { rawFile, setData, setAddBankLoading } = useProcessorState();
   const [headers, setHeaders] = useState({
@@ -40,7 +43,11 @@ export default function BankView({ setFormStep }) {
         user ? user.user_id : 0
       );
     }
-  }, [userCategories]);
+
+    if (!userBanks && !banksLoading) {
+      getBanks(setUserBanks, setBanksLoading, addMsg, user ? user.user_id : 0);
+    }
+  }, [userCategories, userBanks]);
 
   useEffect(() => {
     if (
@@ -66,7 +73,7 @@ export default function BankView({ setFormStep }) {
   }, [headers]);
 
   useEffect(() => {
-    if (userCategories) {
+    if (userCategories && userBanks) {
       const initProcess = async () => {
         try {
           const result = await processFile(rawFile, userBanks);
