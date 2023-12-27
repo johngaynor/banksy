@@ -23,6 +23,7 @@ const VisuallyHiddenInput = styled("input")({
 export default function Home({ setFormStep }) {
   const {
     addMsg,
+    user,
     userBanks,
     setUserBanks,
     banksLoading,
@@ -47,8 +48,8 @@ export default function Home({ setFormStep }) {
 
   useEffect(() => {
     if (!userBanks && !banksLoading) {
-      getBanks(setUserBanks, setBanksLoading, addMsg, 0);
-      // 0 will change to user ? user.user_id : 0 when custom functionality is built
+      getBanks(setUserBanks, setBanksLoading, addMsg, user ? user.user_id : 0);
+      // having a problem with this because the user id is not loading in before this action gets called
     }
 
     if (!userViews && !viewsLoading) {

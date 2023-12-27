@@ -6,7 +6,7 @@ import {
   assignCategories,
 } from "../components/processorFunctions";
 import { BankForm } from "../components/bankForm";
-import { getCategories } from "../actions";
+import { getCategories, addBank } from "../actions";
 import { useGlobalState } from "@/app/components/context";
 import { useProcessorState } from "../context";
 import Spinner from "@/app/components/spinner";
@@ -21,7 +21,7 @@ export default function BankView({ setFormStep }) {
     categoriesLoading,
     setCategoriesLoading,
   } = useGlobalState();
-  const { rawFile, setData, setNewBankLoading } = useProcessorState();
+  const { rawFile, setData, setAddBankLoading } = useProcessorState();
   const [headers, setHeaders] = useState({
     amount: null,
     date: null,
@@ -41,6 +41,29 @@ export default function BankView({ setFormStep }) {
       );
     }
   }, [userCategories]);
+
+  useEffect(() => {
+    if (
+      headers.amount &&
+      headers.date &&
+      headers.description &&
+      openBank &&
+      bankName !== ""
+    ) {
+      const submitBank = async () => {
+        await addBank(
+          user.user_id,
+          bankName,
+          headers.description,
+          headers.date,
+          headers.amount,
+          setAddBankLoading,
+          addMsg
+        );
+      };
+      submitBank();
+    }
+  }, [headers]);
 
   useEffect(() => {
     if (userCategories) {

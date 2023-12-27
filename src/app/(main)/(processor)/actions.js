@@ -103,7 +103,7 @@ export async function addKeyword(
 ) {
   try {
     setAddKeywordLoading(true);
-    const response = await axios.post("/api/processor?action=addkeyword", {
+    const response = await axios.post("/api/processor?action=keyword", {
       userId,
       categoryId,
       keyword,
@@ -119,4 +119,35 @@ export async function addKeyword(
   }
 
   setAddKeywordLoading(false);
+}
+export async function addBank(
+  userId,
+  name,
+  description,
+  date,
+  amount,
+  setAddBankLoading,
+  addMsg
+) {
+  try {
+    setAddBankLoading(true);
+    console.log(userId, name, description, date, amount);
+    const response = await axios.post("/api/processor?action=bank", {
+      userId,
+      name,
+      description,
+      date,
+      amount,
+    });
+
+    if (response.status === 200) {
+      addMsg("success", "Successfully added bank!");
+    } else {
+      addMsg("error", `error adding bank, please try again later`);
+    }
+  } catch (error) {
+    addMsg("error", `error adding bank: ${error}`);
+  }
+
+  setAddBankLoading(false);
 }

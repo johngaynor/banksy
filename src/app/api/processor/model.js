@@ -2,18 +2,13 @@ import { sql } from "@vercel/postgres";
 
 export const processorFunctions = {
   getUserBanks: async function (userId) {
+    // const { rows } = await sql`
+    // select * from processor_banks
+    // where user_id = ${userId} or user_id = 0
+    // `;
     const { rows } = await sql`
-      select
-          b.bank_id, 
-          b.bank_name, 
-          h."date", 
-          h.description, 
-          h.amount 
-          from processor_banks b 
-      left join processor_banks_headers h 
-          on b.bank_id = h.bank_id
-      where b.user_id = ${userId}
-      `;
+    select * from processor_banks
+    `;
 
     return rows;
   },
@@ -134,6 +129,18 @@ export const processorFunctions = {
       const { rows } = await sql`
       insert into processor_user_keywords (user_id, category_id, keyword) values
       (${userId}, ${categoryId}, ${keyword});
+      `;
+      return rows;
+    } catch (error) {
+      return { error: `DB operation failed: ${error}` };
+    }
+  },
+
+  addBank: async function (userId, name, date, description, amount) {
+    try {
+      const { rows } = await sql`
+      insert into processor_banks (user_id, bank_name, amount, date, description, last_updated) values
+      (${userId}, ${name}, ${amount}, ${date}, ${description}, current_timestamp);
       `;
       return rows;
     } catch (error) {
