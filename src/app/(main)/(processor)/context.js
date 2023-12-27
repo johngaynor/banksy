@@ -5,6 +5,9 @@ const ProcessorContext = createContext();
 const ProcessorContextProvider = ({ children }) => {
   const [rawFile, setRawFile] = useState(null);
   const [data, setData] = useState(null);
+  const [addBankLoading, setAddBankLoading] = useState(false);
+  const [addKeywordLoading, setAddKeywordLoading] = useState(false);
+  const [submitSummaryLoading, setSubmitSummaryLoading] = useState(false);
 
   return (
     <ProcessorContext.Provider
@@ -13,6 +16,12 @@ const ProcessorContextProvider = ({ children }) => {
         setRawFile,
         data,
         setData,
+        addBankLoading,
+        setAddBankLoading,
+        addKeywordLoading,
+        setAddKeywordLoading,
+        submitSummaryLoading,
+        setSubmitSummaryLoading,
       }}
     >
       {children}

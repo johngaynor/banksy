@@ -14,7 +14,6 @@ const GlobalContextProvider = ({ children }) => {
   const [banksLoading, setBanksLoading] = useState(false);
   const [categoriesLoading, setCategoriesLoading] = useState(false);
   const [viewsLoading, setViewsLoading] = useState(false);
-  const [submitSummaryLoading, setSubmitSummaryLoading] = useState(false);
   const [historyLoading, setHistoryLoading] = useState(false);
   const [deleteHistoryLoading, setDeleteHistoryLoading] = useState(false);
 
@@ -42,8 +41,6 @@ const GlobalContextProvider = ({ children }) => {
         setUserViews,
         viewsLoading,
         setViewsLoading,
-        submitSummaryLoading,
-        setSubmitSummaryLoading,
         userHistory,
         setUserHistory,
         historyLoading,

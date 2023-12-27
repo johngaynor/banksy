@@ -6,6 +6,7 @@ import HomeView from "./views/homeView";
 import CategoryView from "./views/categoryView";
 import TableView from "./views/tableView";
 import SummaryView from "./views/summaryView";
+import BankView from "./views/bankView";
 import Spinner from "@/app/components/spinner";
 
 import { ProcessorContextProvider } from "./context";
@@ -24,10 +25,12 @@ export default function Processor() {
     if (formStep === 0) {
       return <HomeView setFormStep={setFormStep} />;
     } else if (formStep === 1) {
-      return <CategoryView setFormStep={setFormStep} />;
+      return <BankView setFormStep={setFormStep} />;
     } else if (formStep === 2) {
-      return <TableView setFormStep={setFormStep} />;
+      return <CategoryView setFormStep={setFormStep} />;
     } else if (formStep === 3) {
+      return <TableView setFormStep={setFormStep} />;
+    } else if (formStep === 4) {
       return <SummaryView setFormStep={setFormStep} />;
     }
   };

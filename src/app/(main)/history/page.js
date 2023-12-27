@@ -103,6 +103,7 @@ export default function History() {
           backgroundColor: "#121212",
           minHeight: "100vh",
           display: "flex",
+          color: "white",
         }}
       >
         <Spinner />
@@ -120,6 +121,7 @@ export default function History() {
           backgroundColor: "#121212",
           minHeight: "100vh",
           display: "flex",
+          color: "white",
         }}
       >
         <h3>Please sign in to view history tab.</h3>
@@ -136,6 +138,7 @@ export default function History() {
           backgroundColor: "#121212",
           minHeight: "100vh",
           display: "flex",
+          color: "white",
         }}
       >
         <h3>You have not submitted any reports.</h3>
@@ -152,6 +155,7 @@ export default function History() {
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
+        color: "white",
       }}
     >
       <ReportModal

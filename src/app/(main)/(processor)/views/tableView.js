@@ -53,7 +53,7 @@ export default function TableView({ setFormStep }) {
   const handleSubmit = () => {
     const summary = generateSummary(userViews, data, userCategories);
     setData(summary);
-    setFormStep(3);
+    setFormStep(4);
   };
 
   return (
@@ -92,7 +92,11 @@ export default function TableView({ setFormStep }) {
             <Grid item xs={4}>
               <Typography
                 variant="h3"
-                sx={{ textAlign: "center", marginBottom: "20px" }}
+                sx={{
+                  textAlign: "center",
+                  marginBottom: "20px",
+                  color: "white",
+                }}
               >
                 Transactions
               </Typography>
@@ -111,6 +115,7 @@ export default function TableView({ setFormStep }) {
                   control={<Switch />}
                   label="Show Ignored?"
                   onChange={(e) => setShowIgnore(e.target.checked)}
+                  sx={{ color: "white" }}
                 />
               </FormGroup>
             </Grid>
