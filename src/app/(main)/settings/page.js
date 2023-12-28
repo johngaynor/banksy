@@ -4,30 +4,11 @@ import Link from "next/link";
 import { Grid, Typography, Button, Box, Tabs, Tab } from "@mui/material";
 
 import { useGlobalState } from "@/app/components/context";
+import ProfileTab from "./tabs/ProfileTab";
 
 export default function Settings() {
   const { addMsg, user } = useGlobalState();
   const [tab, setTab] = useState(1);
-  //   const []
-
-  const TabPanel = (props) => {
-    const { children, value, index } = props;
-    // console.log(value, index);
-    return (
-      <Box
-        sx={{
-          padding: "5px",
-          backgroundColor: "red",
-          display: value == index ? "block" : "none",
-        }}
-      >
-        {children}
-      </Box>
-    );
-  };
-
-  const ProfileTab = <Typography variant="h3">Profile</Typography>;
-  const BanksTab = <Typography variant="h3">Banks</Typography>;
 
   if (!user) {
     return (
@@ -60,24 +41,7 @@ export default function Settings() {
     >
       <Grid item sx={{ width: "90%" }}>
         <Grid container>
-          <Grid
-            item
-            xs={4}
-            sx={{
-              display: "flex",
-              alignItems: "flex-end",
-            }}
-          >
-            <Link href="/history/categories">
-              <Button
-                component="label"
-                variant="contained"
-                sx={{ marginTop: "20px" }}
-              >
-                Category View
-              </Button>
-            </Link>
-          </Grid>
+          <Grid item xs={4}></Grid>
           <Grid
             item
             xs={4}
@@ -97,31 +61,15 @@ export default function Settings() {
               User Settings
             </Typography>
           </Grid>
-          <Grid
-            item
-            xs={4}
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-              marginBottom: "-10px",
-            }}
-          >
-            <Typography variant="subtitle1" sx={{ marginRight: "10px" }}>
-              Compare Period:
-            </Typography>
-          </Grid>
+          <Grid item xs={4}></Grid>
         </Grid>
         <Box
           sx={{
             backgroundColor: "#242424",
             border: "2px solid white",
-            margin: "20px 0",
             color: "white",
-            // display: "flex",
-            // justifyContent: "center",
-            // alignItems: "center",
-            // flexDirection: "column",
+            width: "60%",
+            margin: "20px auto",
           }}
         >
           <Tabs
@@ -130,7 +78,7 @@ export default function Settings() {
             textColor="primary"
             indicatorColor="primary"
             sx={{
-              backgroundColor: "blue",
+              //   backgroundColor: "blue",
               display: "flex",
               justifyContent: "center",
             }}
@@ -139,13 +87,16 @@ export default function Settings() {
             <Tab value={2} label="Banks" sx={{ color: "white" }} />
             <Tab value={3} label="Keywords" sx={{ color: "white" }} />
             <Tab value={4} label="Budget" sx={{ color: "white" }} />
+            <Tab value={5} label="Advanced" sx={{ color: "white" }} />
           </Tabs>
-          <TabPanel value={tab} index={1}>
-            {ProfileTab}
-          </TabPanel>
-          <TabPanel value={tab} index={2}>
-            {BanksTab}
-          </TabPanel>
+          <Box
+            sx={{
+              padding: "5px",
+              height: "50vh",
+            }}
+          >
+            <ProfileTab tab={tab} index={1} />
+          </Box>
         </Box>
       </Grid>
     </Box>
