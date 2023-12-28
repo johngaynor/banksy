@@ -205,16 +205,14 @@ export default function Navbar() {
           My Profile
         </MenuItem>
         <Divider />
-        <MenuItem
-          onClick={() =>
-            alert("Sorry, the settings feature is not available yet.")
-          }
-        >
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
+        <Link href="/settings">
+          <MenuItem>
+            <ListItemIcon>
+              <Settings fontSize="small" />
+            </ListItemIcon>
+            Settings
+          </MenuItem>
+        </Link>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
