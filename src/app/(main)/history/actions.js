@@ -41,7 +41,6 @@ export async function deleteHistory(
 
     if (response.status === 200) {
       addMsg("success", "Successfully deleted summary.");
-      console.log(response.data);
     } else {
       addMsg(
         "error",
