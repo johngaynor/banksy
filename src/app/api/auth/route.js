@@ -27,6 +27,7 @@ export async function GET(request) {
         {
           user_id: user.user_id,
           first_name: user.first_name,
+          last_name: user.last_name,
           email: user.email,
         },
         process.env.JWT_SECRET_KEY,
@@ -129,6 +130,7 @@ export async function POST(request) {
         {
           user_id: user[0].user_id,
           first_name: user[0].first_name,
+          last_name: user[0].last_name,
           email: user[0].email,
         },
         process.env.JWT_SECRET_KEY,

@@ -6,7 +6,7 @@ export const authFunctions = {
   login: async function (email, password) {
     const hash = new SHA512().b64(password);
     const { rows } =
-      await sql`SELECT user_id, first_name, email FROM users where email = ${email} and password = ${hash};`;
+      await sql`SELECT user_id, first_name, last_name, email FROM users where email = ${email} and password = ${hash};`;
 
     console.log("rows", rows);
 
@@ -36,7 +36,7 @@ export const authFunctions = {
       const { rows } = await sql`
       insert into users (first_name, last_name, email, password, account_status, date_created) values
       (${fname}, ${lname}, ${email}, ${hash}, 0, CURRENT_TIMESTAMP)
-      returning user_id, first_name, email;`;
+      returning user_id, first_name, last_name, email;`;
 
       return rows;
     } catch (error) {
