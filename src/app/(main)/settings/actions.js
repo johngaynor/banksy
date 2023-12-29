@@ -4,13 +4,14 @@ export async function updateProfile(
   userId,
   firstName,
   lastName,
+  oldPassword,
   newPassword,
   setUpdateProfileLoading,
   addMsg
 ) {
   try {
     setUpdateProfileLoading(true);
-    const payload = { userId, firstName, lastName, newPassword };
+    const payload = { userId, firstName, lastName, oldPassword, newPassword };
     const response = await axios.post("/api/settings?action=profile", payload);
 
     if (response.status === 200) {

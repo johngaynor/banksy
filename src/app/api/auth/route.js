@@ -64,8 +64,11 @@ export async function GET(request) {
       }));
 
     if (verifiedToken) {
-      const { user_id, first_name, email } = verifiedToken;
-      return NextResponse.json({ user_id, first_name, email }, { status: 200 });
+      const { user_id, first_name, last_name, email } = verifiedToken;
+      return NextResponse.json(
+        { user_id, first_name, last_name, email },
+        { status: 200 }
+      );
     } else
       return NextResponse.json(
         { msg: "there was no user in cookies." },

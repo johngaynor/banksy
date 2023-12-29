@@ -39,8 +39,8 @@ export default function Navbar() {
           const response = await axios.get("/api/auth?action=autologin");
           if (response.status === 200) {
             if (response.data.user_id) {
-              const { user_id, first_name, email } = response.data;
-              setUser({ user_id, first_name, email });
+              const { user_id, first_name, last_name, email } = response.data;
+              setUser({ user_id, first_name, last_name, email });
             } else {
             }
           }

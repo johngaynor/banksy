@@ -124,7 +124,7 @@ export default function SummaryView() {
         setSubmitSummaryLoading,
         router,
         user.user_id
-      );
+      ); // should this be async?
     }
   };
 
