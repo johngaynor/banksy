@@ -131,9 +131,10 @@ export default function KeywordTab({ tab, index }) {
                 overflowY: "auto",
               }}
             >
-              {userCategories[activeCategory].keys.map((key) => (
+              {userCategories[activeCategory].keys.map((key, index) => (
                 <ListItem
                   sx={{ height: "35px" }}
+                  key={index}
                   secondaryAction={
                     <IconButton
                       edge="end"

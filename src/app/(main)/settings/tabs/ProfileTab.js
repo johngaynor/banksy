@@ -78,8 +78,7 @@ export default function ProfileTab({ tab, index }) {
                 border: "1px solid white",
                 borderRadius: "5px",
                 "& input": {
-                  // height: "15px",
-                  height: "100%",
+                  padding: "8px 8px 8px 12px",
                   color: "white",
                 },
                 width: "90%",
@@ -113,7 +112,8 @@ export default function ProfileTab({ tab, index }) {
                 border: "1px solid white",
                 borderRadius: "5px",
                 "& input": {
-                  height: "15px",
+                  padding: "8px 8px 8px 12px",
+
                   color: "white",
                 },
                 width: "90%",
@@ -149,7 +149,8 @@ export default function ProfileTab({ tab, index }) {
                 border: "1px solid white",
                 borderRadius: "5px",
                 "& input": {
-                  height: "15px",
+                  padding: "8px 8px 8px 12px",
+
                   color: "white",
                 },
                 width: "90%",
@@ -184,7 +185,7 @@ export default function ProfileTab({ tab, index }) {
                 border: "1px solid white",
                 borderRadius: "5px",
                 "& input": {
-                  height: "15px",
+                  padding: "8px 8px 8px 12px",
                   color: "white",
                 },
                 width: "90%",
