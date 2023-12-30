@@ -8,9 +8,14 @@ import { useProcessorState } from "../context";
 import Spinner from "@/app/components/spinner";
 
 export default function Categories({ setFormStep }) {
-  const { addMsg, userCategories, user } = useGlobalState();
-  const { data, setData, addKeywordLoading, setAddKeywordLoading } =
-    useProcessorState();
+  const {
+    addMsg,
+    userCategories,
+    user,
+    addKeywordLoading,
+    setAddKeywordLoading,
+  } = useGlobalState();
+  const { data, setData } = useProcessorState();
   const [flaggedIndex, setFlaggedIndex] = useState(0);
   const [openKeyword, setOpenKeyword] = useState(false);
   const [keyword, setKeyword] = useState("");

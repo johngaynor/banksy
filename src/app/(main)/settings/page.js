@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { Grid, Typography, Button, Box, Tabs, Tab } from "@mui/material";
+import { Grid, Typography, Box, Tabs, Tab } from "@mui/material";
 import Spinner from "@/app/components/spinner";
 
 import { useGlobalState } from "@/app/components/context";
@@ -22,15 +21,15 @@ export default function Settings() {
   const [tab, setTab] = useState(3);
 
   useEffect(() => {
-    if (!userCategories && !categoriesLoading) {
+    if (!userCategories && !categoriesLoading && user) {
       getCategories(
         setUserCategories,
         setCategoriesLoading,
         addMsg,
-        user ? user.user_id : 0
+        user.user_id
       );
     }
-  }, [userCategories]);
+  }, [userCategories, user]);
 
   if (!user) {
     return (
@@ -48,6 +47,7 @@ export default function Settings() {
       </Box>
     );
   }
+
   if (!userCategories) {
     return (
       <Box
@@ -60,6 +60,7 @@ export default function Settings() {
           color: "white",
         }}
       >
+        {categoriesLoading ? <Spinner /> : null}
         <h3>User categories and keywords loading...</h3>
       </Box>
     );
@@ -117,7 +118,6 @@ export default function Settings() {
             textColor="primary"
             indicatorColor="primary"
             sx={{
-              //   backgroundColor: "blue",
               display: "flex",
               justifyContent: "center",
             }}

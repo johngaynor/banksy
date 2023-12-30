@@ -20,16 +20,20 @@ import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { useGlobalState } from "@/app/components/context";
+import { addKeyword } from "../../(processor)/actions";
 
 export default function KeywordTab({ tab, index }) {
-  const { user, setUser, addMsg, setUpdateProfileLoading, userCategories } =
-    useGlobalState();
+  const {
+    user,
+    addMsg,
+    userCategories,
+    setAddKeywordLoading,
+    setUserCategories,
+  } = useGlobalState();
   const [activeCategory, setActiveCategory] = useState(
     Object.keys(userCategories)[0]
   );
   const [newKeyword, setNewKeyword] = useState("");
-
-  console.log(userCategories);
 
   const handleSubmit = async () => {
     if (newKeyword === "") {
@@ -37,7 +41,21 @@ export default function KeywordTab({ tab, index }) {
       return;
     }
 
-    // add keyword
+    const categoryRef = userCategories[activeCategory].ref;
+
+    await addKeyword(
+      user.user_id,
+      categoryRef,
+      newKeyword,
+      setAddKeywordLoading,
+      addMsg
+    );
+
+    const updatedCategories = { ...userCategories };
+    updatedCategories[activeCategory].keys.push(newKeyword);
+    setUserCategories(updatedCategories);
+
+    setNewKeyword("");
   };
 
   if (tab !== index) {
@@ -155,7 +173,6 @@ export default function KeywordTab({ tab, index }) {
               sx={{
                 width: "90%",
                 display: "flex",
-                // flexDirection: "column",
                 margin: "0 auto",
               }}
             >
