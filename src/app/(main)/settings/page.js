@@ -5,11 +5,32 @@ import { Grid, Typography, Button, Box, Tabs, Tab } from "@mui/material";
 import Spinner from "@/app/components/spinner";
 
 import { useGlobalState } from "@/app/components/context";
+import { getCategories } from "../(processor)/actions";
 import ProfileTab from "./tabs/ProfileTab";
+import KeywordTab from "./tabs/KeywordTab";
 
 export default function Settings() {
-  const { addMsg, user, updateProfileLoading } = useGlobalState();
-  const [tab, setTab] = useState(1);
+  const {
+    addMsg,
+    user,
+    updateProfileLoading,
+    userCategories,
+    setUserCategories,
+    categoriesLoading,
+    setCategoriesLoading,
+  } = useGlobalState();
+  const [tab, setTab] = useState(3);
+
+  useEffect(() => {
+    if (!userCategories && !categoriesLoading) {
+      getCategories(
+        setUserCategories,
+        setCategoriesLoading,
+        addMsg,
+        user ? user.user_id : 0
+      );
+    }
+  }, [userCategories]);
 
   if (!user) {
     return (
@@ -27,6 +48,22 @@ export default function Settings() {
       </Box>
     );
   }
+  if (!userCategories) {
+    return (
+      <Box
+        sx={{
+          flexGrow: 1,
+          padding: 4,
+          backgroundColor: "#121212",
+          minHeight: "100vh",
+          display: "flex",
+          color: "white",
+        }}
+      >
+        <h3>User categories and keywords loading...</h3>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -40,7 +77,7 @@ export default function Settings() {
         color: "white",
       }}
     >
-      {updateProfileLoading ? <Spinner /> : null}
+      {updateProfileLoading || categoriesLoading ? <Spinner /> : null}
       <Grid item sx={{ width: "90%" }}>
         <Grid container>
           <Grid item xs={4}></Grid>
@@ -98,6 +135,7 @@ export default function Settings() {
             }}
           >
             <ProfileTab tab={tab} index={1} />
+            <KeywordTab tab={tab} index={3} />
           </Box>
         </Box>
       </Grid>

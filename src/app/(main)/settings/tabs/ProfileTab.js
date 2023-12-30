@@ -78,7 +78,8 @@ export default function ProfileTab({ tab, index }) {
                 border: "1px solid white",
                 borderRadius: "5px",
                 "& input": {
-                  height: "15px",
+                  // height: "15px",
+                  height: "100%",
                   color: "white",
                 },
                 width: "90%",
