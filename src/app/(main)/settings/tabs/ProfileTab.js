@@ -15,26 +15,35 @@ import { useGlobalState } from "@/app/components/context";
 import { updateProfile } from "../actions";
 
 export default function ProfileTab({ tab, index }) {
-  const { user } = useGlobalState();
+  const { user, setUser, addMsg, setUpdateProfileLoading } = useGlobalState();
   const [firstName, setFirstName] = useState(user.first_name);
   const [lastName, setLastName] = useState(user.last_name);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [showPasswords, setShowPasswords] = useState(false);
-  const [updateProfileLoading, setUpdateProfileLoading] = useState(false);
 
   const handleSubmit = async () => {
-    console.log("hit handle submit");
-
-    await updateProfile(
+    if (firstName === "" || lastName === "") {
+      addMsg("error", "First and last name are required.");
+      return;
+    }
+    const updatedUser = await updateProfile(
       user.user_id,
       firstName,
       lastName,
       oldPassword,
       newPassword,
       setUpdateProfileLoading,
-      addMsg
+      addMsg,
+      setUser
     );
+
+    setNewPassword("");
+    setOldPassword("");
+
+    if (updatedUser) {
+      console.log(updatedUser);
+    }
   };
 
   if (tab !== index) {

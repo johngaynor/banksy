@@ -7,7 +7,8 @@ export async function updateProfile(
   oldPassword,
   newPassword,
   setUpdateProfileLoading,
-  addMsg
+  addMsg,
+  setUser
 ) {
   try {
     setUpdateProfileLoading(true);
@@ -15,12 +16,14 @@ export async function updateProfile(
     const response = await axios.post("/api/settings?action=profile", payload);
 
     if (response.status === 200) {
-      addMsg("success", "Successfully updated profile.");
+      if (response.data.error) {
+        addMsg("error", `error updating profile: ${response.data.error}`);
+      } else {
+        addMsg("success", "Successfully updated profile.");
+        setUser(response.data.user);
+      }
     } else {
-      addMsg(
-        "error",
-        "Something failed, please try again later. (update profile)"
-      );
+      addMsg("error", `Error: error`);
     }
   } catch (error) {
     addMsg("error", `error updating profile: ${error}`);

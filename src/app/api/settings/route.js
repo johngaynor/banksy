@@ -21,9 +21,8 @@ export async function POST(request) {
   }
 
   if (action === "profile") {
-    // returns a user obj with the new info in the headers, will need to update user state
-    if (res.password) {
-      // const pwHash =  will need to hash pw
+    // handle password change
+    if (res.newPassword) {
       const validatePassword = await settingsFunctions.checkPassword(
         res.userId,
         res.oldPassword
@@ -31,7 +30,7 @@ export async function POST(request) {
       if (validatePassword.length === 0) {
         return NextResponse.json(
           { error: "Old password is incorrect." },
-          { status: 400 }
+          { status: 200 }
         );
       }
       const updatePassword = await settingsFunctions.updatePassword(
@@ -44,6 +43,8 @@ export async function POST(request) {
           { error: "Error updating password." },
           { status: 400 }
         );
+      } else {
+        return NextResponse.json({ updatePassword }, { status: 200 });
       }
     }
 
@@ -59,6 +60,7 @@ export async function POST(request) {
           user_id: updatedUser[0].user_id,
           first_name: updatedUser[0].first_name,
           email: updatedUser[0].email,
+          last_name: updatedUser[0].last_name,
         },
         process.env.JWT_SECRET_KEY,
         {
@@ -67,12 +69,13 @@ export async function POST(request) {
       );
       const expirationDate = new Date(Date.now() + 3600 * 1000);
       return NextResponse.json(
-        { user: user[0] },
+        { user: updatedUser[0] },
         {
           status: 200,
           headers: {
             "Set-Cookie": `jwt-token=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Expires=${expirationDate.toUTCString()}`,
           },
+          user: updatedUser[0],
         }
       );
     } else {

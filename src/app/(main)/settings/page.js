@@ -2,12 +2,13 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Grid, Typography, Button, Box, Tabs, Tab } from "@mui/material";
+import Spinner from "@/app/components/spinner";
 
 import { useGlobalState } from "@/app/components/context";
 import ProfileTab from "./tabs/ProfileTab";
 
 export default function Settings() {
-  const { addMsg, user } = useGlobalState();
+  const { addMsg, user, updateProfileLoading } = useGlobalState();
   const [tab, setTab] = useState(1);
 
   if (!user) {
@@ -39,6 +40,7 @@ export default function Settings() {
         color: "white",
       }}
     >
+      {updateProfileLoading ? <Spinner /> : null}
       <Grid item sx={{ width: "90%" }}>
         <Grid container>
           <Grid item xs={4}></Grid>
