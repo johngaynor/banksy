@@ -17,8 +17,10 @@ export default function Settings() {
     setUserCategories,
     categoriesLoading,
     setCategoriesLoading,
+    addKeywordLoading,
+    deleteKeywordLoading,
   } = useGlobalState();
-  const [tab, setTab] = useState(3);
+  const [tab, setTab] = useState(1);
 
   useEffect(() => {
     if (!userCategories && !categoriesLoading && user) {
@@ -78,7 +80,9 @@ export default function Settings() {
         color: "white",
       }}
     >
-      {updateProfileLoading || categoriesLoading ? <Spinner /> : null}
+      {updateProfileLoading || addKeywordLoading || deleteKeywordLoading ? (
+        <Spinner />
+      ) : null}
       <Grid item sx={{ width: "90%" }}>
         <Grid container>
           <Grid item xs={4}></Grid>

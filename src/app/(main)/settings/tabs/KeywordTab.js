@@ -1,13 +1,9 @@
 import { useState } from "react";
 import {
-  InputLabel,
   Box,
   Button,
   TextField,
   Grid,
-  FormGroup,
-  FormControlLabel,
-  Switch,
   Typography,
   Select,
   MenuItem,
@@ -21,6 +17,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import { useGlobalState } from "@/app/components/context";
 import { addKeyword } from "../../(processor)/actions";
+import { deleteKeyword } from "../actions";
 
 export default function KeywordTab({ tab, index }) {
   const {
@@ -29,19 +26,20 @@ export default function KeywordTab({ tab, index }) {
     userCategories,
     setAddKeywordLoading,
     setUserCategories,
+    setDeleteKeywordLoading,
   } = useGlobalState();
   const [activeCategory, setActiveCategory] = useState(
     Object.keys(userCategories)[0]
   );
   const [newKeyword, setNewKeyword] = useState("");
 
+  const categoryRef = userCategories[activeCategory].ref;
+
   const handleSubmit = async () => {
     if (newKeyword === "") {
       addMsg("error", "Cannot add a blank keyword.");
       return;
     }
-
-    const categoryRef = userCategories[activeCategory].ref;
 
     await addKeyword(
       user.user_id,
@@ -56,6 +54,16 @@ export default function KeywordTab({ tab, index }) {
     setUserCategories(updatedCategories);
 
     setNewKeyword("");
+  };
+
+  const handleDelete = async (keyword) => {
+    await deleteKeyword(
+      user.user_id,
+      categoryRef,
+      keyword,
+      setDeleteKeywordLoading,
+      addMsg
+    );
   };
 
   if (tab !== index) {
@@ -140,7 +148,7 @@ export default function KeywordTab({ tab, index }) {
                       edge="end"
                       aria-label="delete"
                       sx={{ color: "white" }}
-                      onClick={() => console.log("click")}
+                      onClick={() => handleDelete(key)}
                     >
                       <DeleteIcon />
                     </IconButton>

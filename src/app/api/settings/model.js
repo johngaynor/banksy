@@ -34,4 +34,12 @@ export const settingsFunctions = {
 
     return rows;
   },
+  deleteKeyword: async function (userId, categoryId, keyword) {
+    const { rows } = await sql`
+    delete from processor_user_keywords
+    where user_id = ${userId} and category_id = ${categoryId} and keyword = ${keyword};
+    `;
+
+    return rows;
+  },
 };

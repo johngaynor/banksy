@@ -7,3 +7,7 @@
 2.0.2 - fixed bug where category page errored out on certain browsers
 2.0.3 - changed color of headers to white for all color settings
 3.0.0 - handle unrecognized csv headers, allow users to save configurations
+
+IN PROGRESS:
+4.0.0 - user settings page
+4.0.1 - app text field input size global change

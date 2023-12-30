@@ -86,3 +86,28 @@ export async function POST(request) {
     }
   }
 }
+
+export async function DELETE(request) {
+  const { action, userId, categoryId, keyword } = await request.json();
+
+  if (!action) {
+    return NextResponse.json({ error: "action is required" }, { status: 400 });
+  }
+
+  if (action === "keyword") {
+    const result = await settingsFunctions.deleteKeyword(
+      userId,
+      categoryId,
+      keyword
+    );
+
+    if (!result) {
+      return NextResponse.json(
+        { error: "Error deleting keyword." },
+        { status: 400 }
+      );
+    } else {
+      return NextResponse.json({ result }, { status: 200 });
+    }
+  }
+}

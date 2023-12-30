@@ -18,6 +18,7 @@ const GlobalContextProvider = ({ children }) => {
   const [deleteHistoryLoading, setDeleteHistoryLoading] = useState(false);
   const [updateProfileLoading, setUpdateProfileLoading] = useState(false);
   const [addKeywordLoading, setAddKeywordLoading] = useState(false);
+  const [deleteKeywordLoading, setDeleteKeywordLoading] = useState(false);
 
   const addMsg = useCallback((type, msgContent) => {
     setMsg((prevArr) => [...prevArr, { type, msg: msgContent }]);
@@ -53,6 +54,8 @@ const GlobalContextProvider = ({ children }) => {
         setUpdateProfileLoading,
         addKeywordLoading,
         setAddKeywordLoading,
+        deleteKeywordLoading,
+        setDeleteKeywordLoading,
       }}
     >
       {children}

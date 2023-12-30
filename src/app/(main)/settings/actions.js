@@ -31,3 +31,30 @@ export async function updateProfile(
 
   setUpdateProfileLoading(false);
 }
+
+export async function deleteKeyword(
+  userId,
+  categoryId,
+  keyword,
+  setDeleteKeywordLoading,
+  addMsg
+) {
+  try {
+    setDeleteKeywordLoading(true);
+    const data = { userId, categoryId, keyword, action: "keyword" };
+    const response = await axios.delete(`/api/settings`, { data });
+
+    if (response.status === 200) {
+      if (response.data.error) {
+        addMsg("error", `error deleting keyword: ${response.data.error}`);
+      } else {
+        addMsg("success", "Successfully deleted keyword.");
+      }
+    } else {
+      addMsg("error", `Error: error`);
+    }
+  } catch (error) {
+    addMsg("error", `error deleting keyword: ${error}`);
+  }
+  setDeleteKeywordLoading(false);
+}
