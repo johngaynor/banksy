@@ -8,8 +8,6 @@ export const authFunctions = {
     const { rows } =
       await sql`SELECT user_id, first_name, last_name, email FROM users where email = ${email} and password = ${hash};`;
 
-    console.log("rows", rows);
-
     return rows.length === 1 ? rows[0] : null;
   },
 

@@ -13,7 +13,6 @@ export async function GET(request) {
   }
 
   if (action === "login") {
-    console.log("hit login route");
     if (!email || !password) {
       return NextResponse.json(
         { error: "Email and password are required." },
@@ -21,7 +20,6 @@ export async function GET(request) {
       );
     }
     const user = await authFunctions.login(email, password);
-    console.log("user", user);
     if (user) {
       const token = sign(
         {
@@ -89,7 +87,7 @@ export async function GET(request) {
         }
       );
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       return NextResponse.json({ msg: "error on backend" }, { status: 400 });
     }
   }
@@ -113,7 +111,6 @@ export async function POST(request) {
     }
 
     const existingEmail = await authFunctions.checkEmail(res.email);
-    console.log(existingEmail);
     if (existingEmail.length !== 0) {
       return NextResponse.json(
         { error: "Email already exists in our system." },

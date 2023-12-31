@@ -29,7 +29,7 @@ export async function middleware(request) {
   const verifiedToken =
     jwtToken &&
     (await verifyAuth(jwtToken).catch((err) => {
-      console.log(err);
+      // console.log(err);
     }));
 
   if (

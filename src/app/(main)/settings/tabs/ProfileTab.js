@@ -40,10 +40,6 @@ export default function ProfileTab({ tab, index }) {
 
     setNewPassword("");
     setOldPassword("");
-
-    if (updatedUser) {
-      console.log(updatedUser);
-    }
   };
 
   if (tab !== index) {

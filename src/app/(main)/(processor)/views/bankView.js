@@ -108,7 +108,6 @@ export default function BankView({ setFormStep }) {
     );
 
     if (!missingHeaders.length) {
-      console.log("FINISHED ASSIGNING HEADERS, PROCESSING DATA");
       const bankHeaders = {
         amount: headers.amount,
         date: headers.date,

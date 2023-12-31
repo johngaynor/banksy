@@ -131,7 +131,6 @@ export async function addBank(
 ) {
   try {
     setAddBankLoading(true);
-    console.log(userId, name, description, date, amount);
     const response = await axios.post("/api/processor?action=bank", {
       userId,
       name,
