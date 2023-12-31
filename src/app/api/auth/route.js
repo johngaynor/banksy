@@ -27,6 +27,7 @@ export async function GET(request) {
           first_name: user.first_name,
           last_name: user.last_name,
           email: user.email,
+          use_default_keywords: user.use_default_keywords,
         },
         process.env.JWT_SECRET_KEY,
         {
@@ -58,13 +59,14 @@ export async function GET(request) {
     const verifiedToken =
       jwtToken &&
       (await authFunctions.verifyAuth(jwtToken, secret).catch((err) => {
-        console.log(err);
+        // console.log(err);
       }));
 
     if (verifiedToken) {
-      const { user_id, first_name, last_name, email } = verifiedToken;
+      const { user_id, first_name, last_name, email, use_default_keywords } =
+        verifiedToken;
       return NextResponse.json(
-        { user_id, first_name, last_name, email },
+        { user_id, first_name, last_name, email, use_default_keywords },
         { status: 200 }
       );
     } else
@@ -87,7 +89,7 @@ export async function GET(request) {
         }
       );
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return NextResponse.json({ msg: "error on backend" }, { status: 400 });
     }
   }
@@ -132,6 +134,7 @@ export async function POST(request) {
           first_name: user[0].first_name,
           last_name: user[0].last_name,
           email: user[0].email,
+          use_default_keywords: user[0].use_default_keywords,
         },
         process.env.JWT_SECRET_KEY,
         {

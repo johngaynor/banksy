@@ -28,7 +28,7 @@ export const settingsFunctions = {
     `;
 
     const { rows } = await sql`
-    select user_id, first_name, last_name, email 
+    select user_id, first_name, last_name, email, use_default_keywords
     from users where user_id = ${userId};
     `;
 

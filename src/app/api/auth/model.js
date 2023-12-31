@@ -6,7 +6,7 @@ export const authFunctions = {
   login: async function (email, password) {
     const hash = new SHA512().b64(password);
     const { rows } =
-      await sql`SELECT user_id, first_name, last_name, email FROM users where email = ${email} and password = ${hash};`;
+      await sql`SELECT user_id, first_name, last_name, email, use_default_keywords FROM users where email = ${email} and password = ${hash};`;
 
     return rows.length === 1 ? rows[0] : null;
   },
@@ -32,9 +32,9 @@ export const authFunctions = {
     try {
       const hash = new SHA512().b64(password);
       const { rows } = await sql`
-      insert into users (first_name, last_name, email, password, account_status, date_created) values
-      (${fname}, ${lname}, ${email}, ${hash}, 0, CURRENT_TIMESTAMP)
-      returning user_id, first_name, last_name, email;`;
+      insert into users (first_name, last_name, email, password, account_status, date_created, use_default_keywords) values
+      (${fname}, ${lname}, ${email}, ${hash}, 0, CURRENT_TIMESTAMP, true)
+      returning user_id, first_name, last_name, email, use_default_keywords;`;
 
       return rows;
     } catch (error) {
@@ -45,7 +45,7 @@ export const authFunctions = {
   checkEmail: async function (email) {
     try {
       const { rows } = await sql`
-      select * from users where email = ${email};
+      select user_id from users where email = ${email};
       `;
       return rows;
     } catch (error) {

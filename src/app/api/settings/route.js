@@ -61,6 +61,7 @@ export async function POST(request) {
           first_name: updatedUser[0].first_name,
           email: updatedUser[0].email,
           last_name: updatedUser[0].last_name,
+          use_default_keywords: updatedUser[0].use_default_keywords,
         },
         process.env.JWT_SECRET_KEY,
         {
