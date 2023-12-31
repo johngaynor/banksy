@@ -112,3 +112,25 @@ export async function DELETE(request) {
     }
   }
 }
+
+export async function PATCH(request) {
+  // console.log(await request.json());
+  const res = await request.json();
+  const { action, userId } = res.data;
+
+  if (!action) {
+    return NextResponse.json({ error: "action is required" }, { status: 400 });
+  }
+
+  if (action === "usedefaultkeywords") {
+    const result = await settingsFunctions.editUseDefaultKeywords(userId);
+    if (!result) {
+      return NextResponse.json(
+        { error: "Error updating user preference." },
+        { status: 400 }
+      );
+    } else {
+      return NextResponse.json({ result }, { status: 200 });
+    }
+  }
+}

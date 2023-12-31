@@ -11,13 +11,16 @@ import {
   ListItem,
   ListItemText,
   IconButton,
+  FormGroup,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { useGlobalState } from "@/app/components/context";
 import { addKeyword } from "../../(processor)/actions";
-import { deleteKeyword } from "../actions";
+import { deleteKeyword, editUseDefaultKeywords } from "../actions";
 
 export default function KeywordTab({ tab, index }) {
   const {
@@ -27,11 +30,15 @@ export default function KeywordTab({ tab, index }) {
     setAddKeywordLoading,
     setUserCategories,
     setDeleteKeywordLoading,
+    setEditUseDefaultKeywordsLoading,
   } = useGlobalState();
   const [activeCategory, setActiveCategory] = useState(
     Object.keys(userCategories)[0]
   );
   const [newKeyword, setNewKeyword] = useState("");
+  const [useDefaultKeywords, setUseDefaultKeywords] = useState(
+    user.use_default_keywords
+  );
 
   const categoryRef = userCategories[activeCategory].ref;
 
@@ -64,6 +71,16 @@ export default function KeywordTab({ tab, index }) {
       setDeleteKeywordLoading,
       addMsg
     );
+  };
+
+  const handleChangeDefaultKeywords = async (val) => {
+    await editUseDefaultKeywords(
+      user.user_id,
+      setEditUseDefaultKeywordsLoading,
+      addMsg
+    );
+
+    setUseDefaultKeywords(val);
   };
 
   if (tab !== index) {
@@ -208,18 +225,21 @@ export default function KeywordTab({ tab, index }) {
                 <SaveIcon />
               </Button>
             </Box>
+            <Box sx={{ width: "90%", margin: "10px auto" }}>
+              <FormGroup>
+                <FormControlLabel
+                  control={<Switch checked={useDefaultKeywords} />}
+                  label="Use default keywords?"
+                  onChange={(e) =>
+                    handleChangeDefaultKeywords(e.target.checked)
+                  }
+                />
+              </FormGroup>
+              <Typography variant="subtitle2">
+                You will need to log out and log back in to see changes.
+              </Typography>
+            </Box>
           </Box>
-        </Grid>
-
-        <Grid item xs={6} sx={{ paddingTop: "20px" }}>
-          <Box
-            sx={{
-              width: "90%",
-              display: "flex",
-              flexDirection: "column",
-              margin: "0 auto",
-            }}
-          ></Box>
         </Grid>
       </Grid>
     </>

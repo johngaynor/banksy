@@ -42,4 +42,20 @@ export const settingsFunctions = {
 
     return rows;
   },
+  editUseDefaultKeywords: async function (userId) {
+    const { rows: prev } = await sql`
+    select use_default_keywords from users where user_id = ${userId};
+    `;
+
+    if (prev.length === 0) {
+      return;
+    }
+    const newVal = prev[0].use_default_keywords === true ? false : true;
+
+    const { rows } = await sql`
+    update users set use_default_keywords = ${newVal} where user_id = ${userId};
+    `;
+
+    return rows;
+  },
 };

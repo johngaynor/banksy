@@ -58,3 +58,31 @@ export async function deleteKeyword(
   }
   setDeleteKeywordLoading(false);
 }
+
+export async function editUseDefaultKeywords(
+  userId,
+  setEditUseDefaultKeywordsLoading,
+  addMsg
+) {
+  try {
+    setEditUseDefaultKeywordsLoading(true);
+    const data = { userId, action: "usedefaultkeywords" };
+    const response = await axios.patch("/api/settings", { data });
+
+    if (response.status === 200) {
+      if (response.data.error) {
+        addMsg(
+          "error",
+          `error editing user preference: ${response.data.error}`
+        );
+      } else {
+        addMsg("success", "Successfully edited user preference.");
+      }
+    } else {
+      addMsg("error", `Error: error`);
+    }
+  } catch (error) {
+    addMsg("error", `error editing preference: ${error}`);
+  }
+  setEditUseDefaultKeywordsLoading(false);
+}

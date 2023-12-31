@@ -19,6 +19,7 @@ export default function Settings() {
     setCategoriesLoading,
     addKeywordLoading,
     deleteKeywordLoading,
+    editUseDefaultKeywordsLoading,
   } = useGlobalState();
   const [tab, setTab] = useState(1);
 
@@ -80,7 +81,10 @@ export default function Settings() {
         color: "white",
       }}
     >
-      {updateProfileLoading || addKeywordLoading || deleteKeywordLoading ? (
+      {updateProfileLoading ||
+      addKeywordLoading ||
+      deleteKeywordLoading ||
+      editUseDefaultKeywordsLoading ? (
         <Spinner />
       ) : null}
       <Grid item sx={{ width: "90%" }}>
